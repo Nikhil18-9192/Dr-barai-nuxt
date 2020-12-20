@@ -7,4 +7,9 @@
 export default {}
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+#login-layout {
+  width: 100%;
+  position: relative;
+}
+</style>
