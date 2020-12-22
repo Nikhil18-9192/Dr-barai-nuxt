@@ -5,25 +5,32 @@
         Dr. Barai’s Clinic
       </h1>
       <div class="login-form p-10 bg-white rounded">
-        <label for="email" class="text-sm font-bold text-gray-800">Email</label>
+        <label for="email" class="text-sm mb-1 font-bold text-gray-800"
+          >Email</label
+        >
         <input
-          class="border rounded border-gray-200 p-2"
+          class="border rounded border-gray-300 p-2"
           type="email"
           placeholder="elonmusk@teslamotors.com"
         />
-        <label class="mt-2 text-sm font-bold text-gray-800" for="password"
+        <label class="mt-2 mb-1 text-sm font-bold text-gray-800" for="password"
           >Password</label
         >
         <input
-          class="border rounded border-gray-200 p-2"
+          class="border rounded border-gray-300 p-2"
           type="password"
           placeholder="Password"
         />
-        <button
-          class="btn bg-blue-500 my-6 rounded text-white text-base shadow-2xl"
-        >
-          Sign In
-        </button>
+        <div class="grid grid-cols-2 my-6">
+          <button
+            class="btn bg-blue-500 rounded text-white text-base shadow-2xl"
+          >
+            Sign In
+          </button>
+          <p class="text-right text-blue-500 font-bold text-sm">
+            Forgot Password?
+          </p>
+        </div>
       </div>
     </div>
   </div>
