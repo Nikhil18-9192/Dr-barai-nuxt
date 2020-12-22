@@ -1,7 +1,10 @@
 <template>
   <div id="dash-view">
     <Drawer />
-    <Nuxt class="nuxt-view" />
+    <div class="nuxt-view">
+      <MenuBar />
+      <Nuxt class="mx-10" />
+    </div>
   </div>
 </template>
 
