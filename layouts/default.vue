@@ -3,7 +3,7 @@
     <Drawer />
     <div class="nuxt-view">
       <MenuBar />
-      <Nuxt class="mx-10" />
+      <Nuxt class="mx-10 my-app" />
     </div>
   </div>
 </template>
@@ -28,6 +28,13 @@ export default {
     width: 100%;
     position: relative;
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    .my-app {
+      max-height: 100%;
+      flex-grow: 1;
+      position: relative;
+    }
   }
 }
 </style>
