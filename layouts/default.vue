@@ -8,11 +8,24 @@
   </div>
 </template>
 
+<script>
+import Cookies from 'js-cookie'
+export default {
+  mounted() {
+    const jwt = Cookies.get('jwt')
+    if (!jwt) {
+      this.$router.push('/login')
+    }
+  },
+}
+</script>
+
 <style lang="scss" scoped>
 #dash-view {
   display: flex;
   position: relative;
   .nuxt-view {
+    width: 100%;
     position: relative;
     flex-grow: 1;
   }

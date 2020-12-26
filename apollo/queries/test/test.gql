@@ -1,0 +1,10 @@
+query test {
+  patients(where: { name_contains: "Elon" }) {
+    id
+    address
+    name
+    appointments {
+      id
+    }
+  }
+}

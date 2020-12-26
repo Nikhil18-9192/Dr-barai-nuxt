@@ -9,6 +9,7 @@
           >Email</label
         >
         <input
+          v-model="username"
           class="border rounded border-gray-300 p-2"
           type="email"
           placeholder="elonmusk@teslamotors.com"
@@ -17,6 +18,7 @@
           >Password</label
         >
         <input
+          v-model="password"
           class="border rounded border-gray-300 p-2"
           type="password"
           placeholder="Password"
@@ -24,6 +26,7 @@
         <div class="grid grid-cols-2 my-6">
           <button
             class="btn bg-blue-500 rounded text-white text-base shadow-2xl"
+            @click.prevent="login"
           >
             Sign In
           </button>
@@ -37,9 +40,43 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie'
 export default {
   name: 'LoginPage',
   layout: 'login',
+  data() {
+    return {
+      username: '',
+      password: '',
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.getters.getUser
+    },
+  },
+  beforeCreate() {
+    if (this.$store.getters.getUser) {
+      this.$router.push('/')
+    }
+  },
+
+  methods: {
+    async login() {
+      try {
+        const res = await this.$axios.$post(`/auth/local`, {
+          identifier: this.username,
+          password: this.password,
+        })
+        this.$store.commit('SET_USER', res)
+        Cookies.set('jwt', res.jwt)
+        this.$axios.setToken(res.jwt, 'bearer')
+        this.$router.push('/')
+      } catch (error) {
+        console.log(error)
+      }
+    },
+  },
 }
 </script>
 
@@ -65,10 +102,12 @@ export default {
       input {
         width: 370px;
         height: 40px;
+        outline: none;
       }
       .btn {
         height: 32px;
         width: 84px;
+        outline: none;
       }
     }
   }

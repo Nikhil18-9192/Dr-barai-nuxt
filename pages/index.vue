@@ -1,9 +1,17 @@
 <template>
-  <div id="home-page">home</div>
+  <div id="home-page"></div>
 </template>
 
 <script>
-export default {}
+export default {
+  name: 'HomePage',
+  layout: 'default',
+  beforeCreate() {
+    if (!this.$store.state.user) {
+      this.$router.push('/login')
+    }
+  },
+}
 </script>
 
 <style></style>

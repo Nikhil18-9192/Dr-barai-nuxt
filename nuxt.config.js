@@ -24,12 +24,16 @@ export default {
       },
     ],
   },
-
+  loading: {
+    color: '#3b82f6',
+    height: '3px',
+    continuous: true,
+  },
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: [{ src: '~/plugins/nuxt-client-init.js', ssr: false }],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -45,16 +49,28 @@ export default {
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
     // https://go.nuxtjs.dev/axios
+    '@nuxtjs/apollo',
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
   ],
+  apollo: {
+    clientConfigs: {
+      default: {
+        httpEndpoint: 'http://localhost:1337/graphql',
+      },
+    },
+  },
   styleResources: {
     // your settings here
     scss: ['~assets/global.scss'],
   },
-
+  router: {
+    // middleware: ['auth'],
+  },
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {},
+  axios: {
+    baseURL: 'http://localhost:1337',
+  },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},

@@ -1,10 +1,13 @@
 <template>
   <div id="login-layout">
-    <nuxt />
+    <Nuxt />
   </div>
 </template>
 <script>
-export default {}
+export default {
+  name: 'LoginLayout',
+  mounted() {},
+}
 </script>
 
 <style lang="scss" scoped>

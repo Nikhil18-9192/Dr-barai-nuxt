@@ -1,9 +1,11 @@
 <template>
   <div id="patient-page">
+    <AddPatientDialog v-if="modal" @dismiss="modal = false" />
     <div class="title flex justify-between my-8">
       <h1 class="text-2xl font-medium">Patient List</h1>
       <button
-        class="bg-blue-500 rounded-md text-white text-sm font-medium add-btn flex items-center justify-center"
+        class="bg-blue-500 rounded-md text-white text-sm font-medium add-btn flex items-center justify-center outline-none"
+        @click="modal = true"
       >
         <img class="mr-3" src="/plus-circle.svg" alt="" />
         Add New Patient
@@ -11,79 +13,66 @@
     </div>
 
     <table class="patient-list border-separate">
-      <tr class="text-gray-600 text-sm font-normal">
-        <th
-          class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
+      <tbody>
+        <tr class="text-gray-600 text-sm font-normal">
+          <th
+            class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
+          >
+            ID
+          </th>
+          <th
+            class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
+          >
+            Patient’s Name
+          </th>
+          <th
+            class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
+          >
+            Mobile
+          </th>
+          <th
+            class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
+          >
+            Session Count
+          </th>
+        </tr>
+        <tr
+          v-for="(item, i) in patients"
+          :key="i"
+          class="bg-gray-100 my-6 text-sm font-normal"
         >
-          ID
-        </th>
-        <th
-          class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
-        >
-          Patient’s Name
-        </th>
-        <th
-          class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
-        >
-          Mobile
-        </th>
-        <th
-          class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
-        >
-          Session Count
-        </th>
-      </tr>
-      <tr
-        v-for="item in patients"
-        :key="item.id"
-        class="bg-gray-100 my-6 text-sm font-normal"
-      >
-        <td class="p-3">{{ item.id }}</td>
-        <td class="p-3">{{ item.name }}</td>
-        <td class="p-3">{{ item.phone }}</td>
-        <td class="p-3">{{ item.date }}</td>
-      </tr>
+          <td class="p-3">{{ item.id }}</td>
+          <td class="p-3">{{ item.name }}</td>
+          <td class="p-3">{{ item.mobile }}</td>
+          <td class="p-3">{{ item.appointments.length }}</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>
 
 <script>
+// import query from '@/apollo/queries/test/test.gql'
 export default {
+  name: 'PatientsPage',
   data() {
     return {
-      patients: [
-        {
-          id: 'AB1swwaaaw',
-          name: 'Elon Musk',
-          phone: '9876543210',
-          date: '30/12/2019 at 1:00 AM',
-        },
-        {
-          id: 'AB1swwaaaw',
-          name: 'Elon Musk',
-          phone: '9876543210',
-          date: '30/12/2019 at 1:00 AM',
-        },
-        {
-          id: 'AB1swwaaaw',
-          name: 'Elon Musk',
-          phone: '9876543210',
-          date: '30/12/2019 at 1:00 AM',
-        },
-        {
-          id: 'AB1swwaaaw',
-          name: 'Elon Musk',
-          phone: '9876543210',
-          date: '30/12/2019 at 1:00 AM',
-        },
-        {
-          id: 'AB1swwaaaw',
-          name: 'Elon Musk',
-          phone: '9876543210',
-          date: '30/12/2019 at 1:00 AM',
-        },
-      ],
+      modal: false,
+      patients: [],
     }
+  },
+  mounted() {
+    this.getPatients()
+    // this.gqltest()
+  },
+  methods: {
+    async getPatients() {
+      const patient = await this.$axios.$get(`/patients`)
+      this.patients = patient
+    },
+    // async gqltest() {
+    //   const res = await this.$apollo.query({ query })
+    // },
   },
 }
 </script>
