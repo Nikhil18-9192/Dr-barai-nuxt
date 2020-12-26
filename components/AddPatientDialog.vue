@@ -102,6 +102,7 @@
 
 <script>
 export default {
+  props: ['modal'],
   data() {
     return {
       name: '',
@@ -116,7 +117,6 @@ export default {
   },
   methods: {
     async addPatient() {
-      console.log(this.date)
       const {
         name,
         mobile,
@@ -128,7 +128,7 @@ export default {
         city,
       } = this
       try {
-        const response = await this.$axios.$post(`/patients`, {
+        await this.$axios.$post(`/patients`, {
           name,
           mobile,
           email,
@@ -138,7 +138,9 @@ export default {
           pincode,
           city,
         })
-        console.log(response)
+        this.$emit('dismiss')
+        this.$store.dispatch('fetchPatients')
+        this.$router.push('/patients')
       } catch (error) {
         console.log(error.message)
       }

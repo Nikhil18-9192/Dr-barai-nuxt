@@ -3,11 +3,15 @@ export const state = () => ({
   user: false,
   jwt: false,
   addPatientModal: false,
+  patients: [],
 })
 
 export const getters = {
   getUser: (state) => {
     return state.user
+  },
+  getPatients: (state) => {
+    return state.patients
   },
 }
 
@@ -19,8 +23,10 @@ export const mutations = {
     state.jwt = token
   },
   TOGGALE_PATIENT_MODAL: (state) => {
-    console.log('test')
     state.addPatientModal = !state.addPatientModal
+  },
+  SET_PATIENTS: (state, patients) => {
+    state.patients = patients
   },
 }
 
@@ -37,6 +43,15 @@ export const actions = {
       commit('SET_JWT', jwt)
     } catch (error) {
       console.error(error.message)
+    }
+  },
+  async fetchPatients({ commit }) {
+    try {
+      const patient = await this.$axios.$get(`/patients`)
+      console.log(patient)
+      commit('SET_PATIENTS', patient)
+    } catch (error) {
+      console.log(error.message)
     }
   },
 }

@@ -58,18 +58,18 @@ export default {
   data() {
     return {
       modal: false,
-      patients: [],
     }
   },
+  computed: {
+    patients() {
+      return this.$store.getters.getPatients
+    },
+  },
   mounted() {
-    this.getPatients()
+    this.$store.dispatch('fetchPatients')
     // this.gqltest()
   },
   methods: {
-    async getPatients() {
-      const patient = await this.$axios.$get(`/patients`)
-      this.patients = patient
-    },
     // async gqltest() {
     //   const res = await this.$apollo.query({ query })
     // },
