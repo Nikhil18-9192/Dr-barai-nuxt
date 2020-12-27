@@ -73,7 +73,7 @@ export default {
         this.$axios.setToken(res.jwt, 'bearer')
         this.$router.push('/')
       } catch (error) {
-        console.log(error)
+        this.$toast.error(error.message)
       }
     },
   },

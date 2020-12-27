@@ -46,33 +46,112 @@
           <td class="p-3">{{ item.mobile }}</td>
           <td class="p-3">{{ item.appointments.length }}</td>
         </tr>
+        <tr>
+          <td v-if="!patients.length">No patients Yet</td>
+        </tr>
       </tbody>
     </table>
+    <div class="pagination flex justify-between outline-none">
+      <div class="flex mb-6">
+        <button
+          v-for="item in pages"
+          :key="item"
+          :class="currentPage == item ? 'text-gray-900' : ''"
+          class="p-1 mr-2 outline-none text-gray-400 font-normal"
+          @click.prevent="paginatData(item)"
+        >
+          {{ item }}
+        </button>
+      </div>
+      <div v-if="patients.length" class="nextprev flex">
+        <button
+          class="bg-gray-200 p1 h-8 w-14 text-base font-medium rounded-l"
+          @click="prev(currentPage)"
+        >
+          Prev
+        </button>
+        <button
+          class="bg-gray-300 p-1 h-8 w-14 text-base font-medium rounded-r"
+          @click="next(currentPage)"
+        >
+          Next
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-// import query from '@/apollo/queries/test/test.gql'
+// TODO: pageLimit , store cleanup, create button component
+import query from '@/apollo/queries/patient/patients.gql'
 export default {
   name: 'PatientsPage',
   data() {
     return {
+      totalItem: 0,
       modal: false,
+      patients: [],
+      perPage: 7,
+      totalPages: 0,
+      pages: [],
+      start: 0,
+      currentPage: 1,
     }
   },
-  computed: {
-    patients() {
-      return this.$store.getters.getPatients
-    },
-  },
+  computed: {},
   mounted() {
-    this.$store.dispatch('fetchPatients')
-    // this.gqltest()
+    this.fetchPatients()
+    this.fetchTotalPatientCount()
   },
   methods: {
-    // async gqltest() {
-    //   const res = await this.$apollo.query({ query })
-    // },
+    async fetchPatients() {
+      this.$store.commit('SET_LOADING')
+      const { data } = await this.$apollo.query({
+        query,
+        variables: {
+          limit: this.perPage,
+          start: this.start,
+        },
+      })
+      this.patients = data.patients
+      this.$store.commit('SET_PATIENTS', this.patients)
+      this.$store.commit('UNSET_LOADING')
+    },
+    async fetchTotalPatientCount() {
+      this.totalItem = await this.$axios.$get(
+        'http://localhost:1337/patients/count'
+      )
+      this.totalPages = Math.ceil(this.totalItem / this.perPage)
+      for (let i = 1; i <= this.totalPages; i++) {
+        this.pages.push(i)
+      }
+    },
+
+    paginatData(pageNum) {
+      this.currentPage = pageNum
+      this.start = this.currentPage * this.perPage - this.perPage
+      this.fetchPatients()
+    },
+    next(pageNum) {
+      this.$store.commit('SET_LOADING')
+      if (pageNum > this.totalPages - 1) {
+        this.$toast.error('There is no next page')
+        this.$store.commit('UNSET_LOADING')
+        return
+      }
+      const nextPage = pageNum + 1
+      this.paginatData(nextPage)
+    },
+    prev(pageNum) {
+      this.$store.commit('SET_LOADING')
+      if (pageNum < 2) {
+        this.$toast.error('There is no prev page')
+        this.$store.commit('UNSET_LOADING')
+        return
+      }
+      const prevPage = pageNum - 1
+      this.paginatData(prevPage)
+    },
   },
 }
 </script>
@@ -88,13 +167,16 @@ export default {
     }
   }
   .patient-list {
-    // border-collapse: separate;
     border-spacing: 0 1.5em;
     width: 90%;
     th {
       text-align: left;
       font-weight: normal;
     }
+  }
+
+  button {
+    outline: none;
   }
 }
 </style>

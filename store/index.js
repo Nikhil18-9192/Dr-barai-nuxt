@@ -4,6 +4,7 @@ export const state = () => ({
   jwt: false,
   addPatientModal: false,
   patients: [],
+  loading: false,
 })
 
 export const getters = {
@@ -28,6 +29,15 @@ export const mutations = {
   SET_PATIENTS: (state, patients) => {
     state.patients = patients
   },
+  ADD_NEW_PATIENT: (state, patient) => {
+    state.patients.unshift(patient)
+  },
+  SET_LOADING: (state) => {
+    state.loading = true
+  },
+  UNSET_LOADING: (state) => {
+    state.loading = false
+  },
 }
 
 export const actions = {
@@ -42,16 +52,7 @@ export const actions = {
       commit('SET_USER', { email: user.email })
       commit('SET_JWT', jwt)
     } catch (error) {
-      console.error(error.message)
-    }
-  },
-  async fetchPatients({ commit }) {
-    try {
-      const patient = await this.$axios.$get(`/patients`)
-      console.log(patient)
-      commit('SET_PATIENTS', patient)
-    } catch (error) {
-      console.log(error.message)
+      this.$toast.error(error.message)
     }
   },
 }

@@ -1,0 +1,10 @@
+query patients($limit: Int, $start: Int) {
+  patients(start: $start, limit: $limit, sort: "createdAt:desc") {
+    id
+    mobile
+    name
+    appointments {
+      id
+    }
+  }
+}

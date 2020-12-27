@@ -85,7 +85,7 @@
             @click="addPatient"
           >
             <img class="mr-3" src="/bell.svg" alt="" />
-            Send Now
+            Submit
           </button>
           <button
             type="cancel"
@@ -101,8 +101,8 @@
 </template>
 
 <script>
+import { AddPatientValidation } from '@/utils/validation'
 export default {
-  props: ['modal'],
   data() {
     return {
       name: '',
@@ -117,6 +117,7 @@ export default {
   },
   methods: {
     async addPatient() {
+      this.$store.commit('SET_LOADING')
       const {
         name,
         mobile,
@@ -127,8 +128,22 @@ export default {
         pincode,
         city,
       } = this
+      const validation = AddPatientValidation({
+        name,
+        mobile,
+        email,
+        gender,
+        birthDate,
+        address,
+        pincode,
+        city,
+      })
+      if (validation.error) {
+        this.$toast.error(validation.error.message)
+        return
+      }
       try {
-        await this.$axios.$post(`/patients`, {
+        const res = await this.$axios.$post(`/patients`, {
           name,
           mobile,
           email,
@@ -139,10 +154,12 @@ export default {
           city,
         })
         this.$emit('dismiss')
-        this.$store.dispatch('fetchPatients')
+        this.$store.commit('ADD_NEW_PATIENT', res)
         this.$router.push('/patients')
+        this.$toast.success('Add Patient Successfully')
+        this.$store.commit('UNSET_LOADING')
       } catch (error) {
-        console.log(error.message)
+        this.$toast.error(error.message)
       }
     },
   },
@@ -158,6 +175,9 @@ export default {
       width: 20px;
       height: 20px;
     }
+  }
+  button {
+    outline: none;
   }
 }
 </style>
