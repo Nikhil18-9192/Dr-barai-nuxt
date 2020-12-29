@@ -3,7 +3,6 @@ export const state = () => ({
   user: false,
   jwt: false,
   addPatientModal: false,
-  patients: [],
   loading: false,
 })
 
@@ -25,12 +24,6 @@ export const mutations = {
   },
   TOGGALE_PATIENT_MODAL: (state) => {
     state.addPatientModal = !state.addPatientModal
-  },
-  SET_PATIENTS: (state, patients) => {
-    state.patients = patients
-  },
-  ADD_NEW_PATIENT: (state, patient) => {
-    state.patients.unshift(patient)
   },
   SET_LOADING: (state) => {
     state.loading = true

@@ -80,20 +80,12 @@
           placeholder="Elon musk"
         />
         <div class="mt-8 flex">
-          <button
-            class="bg-blue-500 mr-4 rounded-md text-white text-sm font-medium add-btn flex items-center justify-center outline-none"
-            @click="addPatient"
+          <MyButton class="mr-4" :loading="loading" @click.native="addPatient"
+            >Submit</MyButton
           >
-            <img class="mr-3" src="/bell.svg" alt="" />
-            Submit
-          </button>
-          <button
-            type="cancel"
-            class="bg-gray-100 rounded-md text-gray-700 text-sm font-medium add-btn flex items-center justify-center outline-none"
-            @click="$emit('dismiss')"
+          <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
+            >Cancel</MyButton
           >
-            Cancel
-          </button>
         </div>
       </div>
     </div>
@@ -105,10 +97,11 @@ import { AddPatientValidation } from '@/utils/validation'
 export default {
   data() {
     return {
+      loading: false,
       name: '',
       mobile: '',
       email: '',
-      gender: '',
+      gender: 'select gender',
       birthDate: '',
       address: '',
       pincode: '',
@@ -117,7 +110,7 @@ export default {
   },
   methods: {
     async addPatient() {
-      this.$store.commit('SET_LOADING')
+      this.loading = true
       const {
         name,
         mobile,
@@ -143,7 +136,7 @@ export default {
         return
       }
       try {
-        const res = await this.$axios.$post(`/patients`, {
+        await this.$axios.$post(`/patients`, {
           name,
           mobile,
           email,
@@ -154,10 +147,8 @@ export default {
           city,
         })
         this.$emit('dismiss')
-        this.$store.commit('ADD_NEW_PATIENT', res)
         this.$router.push('/patients')
         this.$toast.success('Add Patient Successfully')
-        this.$store.commit('UNSET_LOADING')
       } catch (error) {
         this.$toast.error(error.message)
       }
@@ -178,6 +169,10 @@ export default {
   }
   button {
     outline: none;
+  }
+  .cancel-btn {
+    background: #f3f4f6;
+    color: #000;
   }
 }
 </style>

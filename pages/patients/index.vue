@@ -3,13 +3,7 @@
     <AddPatientDialog v-if="modal" @dismiss="modal = false" />
     <div class="title flex justify-between my-8">
       <h1 class="text-2xl font-medium">Patient List</h1>
-      <button
-        class="bg-blue-500 rounded-md text-white text-sm font-medium add-btn flex items-center justify-center outline-none"
-        @click="modal = true"
-      >
-        <img class="mr-3" src="/plus-circle.svg" alt="" />
-        Add New Patient
-      </button>
+      <MyButton @click.native="modal = true">Add New Patient</MyButton>
     </div>
 
     <table class="patient-list border-separate">
@@ -52,7 +46,15 @@
       </tbody>
     </table>
     <div class="pagination flex justify-between outline-none">
-      <div class="flex mb-6">
+      <div class="flex mb-6 items-center">
+        <button
+          v-if="maxPage <= totalPages && currentPage > 3"
+          class="w-10 h-5 mr-2"
+          @click="firstPage()"
+        >
+          first
+        </button>
+
         <button
           v-for="item in pages"
           :key="item"
@@ -61,6 +63,14 @@
           @click.prevent="paginatData(item)"
         >
           {{ item }}
+        </button>
+
+        <button
+          v-if="maxPage <= totalPages && currentPage <= totalPages - 3"
+          class="w-10 h-5 mr-2"
+          @click="lastPage()"
+        >
+          last
         </button>
       </div>
       <div v-if="patients.length" class="nextprev flex">
@@ -82,7 +92,6 @@
 </template>
 
 <script>
-// TODO: pageLimit , store cleanup, create button component
 import query from '@/apollo/queries/patient/patients.gql'
 export default {
   name: 'PatientsPage',
@@ -91,11 +100,14 @@ export default {
       totalItem: 0,
       modal: false,
       patients: [],
-      perPage: 7,
+      perPage: 2,
       totalPages: 0,
       pages: [],
       start: 0,
       currentPage: 1,
+      maxPage: 5,
+      startPage: 0,
+      endPage: 0,
     }
   },
   computed: {},
@@ -105,7 +117,6 @@ export default {
   },
   methods: {
     async fetchPatients() {
-      this.$store.commit('SET_LOADING')
       const { data } = await this.$apollo.query({
         query,
         variables: {
@@ -114,19 +125,64 @@ export default {
         },
       })
       this.patients = data.patients
-      this.$store.commit('SET_PATIENTS', this.patients)
-      this.$store.commit('UNSET_LOADING')
+      this.pagination()
     },
     async fetchTotalPatientCount() {
       this.totalItem = await this.$axios.$get(
         'http://localhost:1337/patients/count'
       )
+      this.pagination()
+    },
+    pagination() {
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
-      for (let i = 1; i <= this.totalPages; i++) {
-        this.pages.push(i)
+      if (this.totalPages <= this.maxPage) {
+        this.startPage = 1
+        this.endPage = this.totalPages
+        const newPages = []
+        for (let i = this.startPage; i <= this.endPage; i++) {
+          newPages.push(i)
+          this.pages = newPages
+        }
+        return
+      } else if (this.currentPage > 3 && this.totalPages > this.maxPage) {
+        if (this.currentPage <= this.totalPages - 1) {
+          this.startPage = this.currentPage - Math.floor(this.maxPage / 2)
+          this.endPage = this.currentPage + Math.floor(this.maxPage / 2)
+          if (this.currentPage === this.totalPages - 1) {
+            this.endPage = this.currentPage + 1
+          }
+          const newPages = []
+          for (let i = this.startPage; i <= this.endPage; i++) {
+            newPages.push(i)
+            this.pages = newPages
+          }
+        }
+      } else if (this.currentPage <= 3) {
+        this.startPage = 1
+        this.endPage = this.maxPage
+        const newPages = []
+        for (let i = this.startPage; i <= this.endPage; i++) {
+          newPages.push(i)
+          this.pages = newPages
+        }
+      }
+
+      if (this.currentPage === this.totalPages) {
+        this.startPage = this.totalPages - 4
+        this.endPage = this.totalPages
+        const newPages = []
+        for (let i = this.startPage; i <= this.endPage; i++) {
+          newPages.push(i)
+          this.pages = newPages
+        }
       }
     },
-
+    firstPage() {
+      this.paginatData(1)
+    },
+    lastPage() {
+      this.paginatData(this.totalPages)
+    },
     paginatData(pageNum) {
       this.currentPage = pageNum
       this.start = this.currentPage * this.perPage - this.perPage
@@ -174,7 +230,6 @@ export default {
       font-weight: normal;
     }
   }
-
   button {
     outline: none;
   }
