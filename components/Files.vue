@@ -15,9 +15,9 @@
     </div>
     <div class="preview flex flex-wrap">
       <img
-        class="w-52 h-52 mr-8 mt-8"
         v-for="(image, i) in images"
         :key="i"
+        class="w-52 h-52 mr-8 mt-8"
         :src="image"
         alt=""
       />
