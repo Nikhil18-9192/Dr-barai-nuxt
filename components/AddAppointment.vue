@@ -1,7 +1,7 @@
 <template>
   <div id="new-appointment">
-    <h1 class="my-10 text-xl">Create New Appointment</h1>
-    <div class="form">
+    <h1 class="my-10 text-lg font-medium">Create New Appointment</h1>
+    <div class="form flex flex-col">
       <label for="name" class="w-50 text-sm font-normal text-gray-400 mt-3"
         >Name</label
       >
@@ -69,9 +69,6 @@ export default {
 
 <style lang="scss" scoped>
 #new-appointment {
-  .form {
-    display: flex;
-    flex-direction: column;
-  }
+  margin-bottom: 55px;
 }
 </style>

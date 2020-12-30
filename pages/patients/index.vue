@@ -49,7 +49,7 @@
       <div class="flex mb-6 items-center">
         <button
           v-if="maxPage <= totalPages && currentPage > 3"
-          class="w-10 h-5 mr-2"
+          class="w-10 h-9 mr-2"
           @click="firstPage()"
         >
           first
@@ -67,7 +67,7 @@
 
         <button
           v-if="maxPage <= totalPages && currentPage <= totalPages - 3"
-          class="w-10 h-5 mr-2"
+          class="w-10 h-9 mr-2"
           @click="lastPage()"
         >
           last
@@ -105,7 +105,7 @@ export default {
       pages: [],
       start: 0,
       currentPage: 1,
-      maxPage: 5,
+      maxPage: 3,
       startPage: 0,
       endPage: 0,
     }
