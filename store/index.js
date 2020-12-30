@@ -45,7 +45,7 @@ export const actions = {
       commit('SET_USER', { email: user.email })
       commit('SET_JWT', jwt)
     } catch (error) {
-      this.$toast.error(error.message)
+      this.$toast.error('nuxtClient', error.message)
     }
   },
 }

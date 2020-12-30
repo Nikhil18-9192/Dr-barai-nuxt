@@ -48,7 +48,7 @@
     <div class="pagination flex justify-between outline-none">
       <div class="flex mb-6 items-center">
         <button
-          v-if="maxPage <= totalPages && currentPage > 3"
+          v-if="maxPage <= totalPages && currentPage > Math.ceil(maxPage / 2)"
           class="w-10 h-5 mr-2"
           @click="firstPage()"
         >
@@ -66,7 +66,10 @@
         </button>
 
         <button
-          v-if="maxPage <= totalPages && currentPage <= totalPages - 3"
+          v-if="
+            maxPage <= totalPages &&
+            currentPage <= totalPages - Math.ceil(maxPage / 2)
+          "
           class="w-10 h-5 mr-2"
           @click="lastPage()"
         >
@@ -100,7 +103,7 @@ export default {
       totalItem: 0,
       modal: false,
       patients: [],
-      perPage: 2,
+      perPage: 5,
       totalPages: 0,
       pages: [],
       start: 0,
@@ -144,9 +147,15 @@ export default {
           this.pages = newPages
         }
         return
-      } else if (this.currentPage > 3 && this.totalPages > this.maxPage) {
+      } else if (
+        this.currentPage >= Math.ceil(this.maxPage / 2) &&
+        this.totalPages > this.maxPage
+      ) {
         if (this.currentPage <= this.totalPages - 1) {
           this.startPage = this.currentPage - Math.floor(this.maxPage / 2)
+          if (this.startPage === 0) {
+            this.startPage = 1
+          }
           this.endPage = this.currentPage + Math.floor(this.maxPage / 2)
           if (this.currentPage === this.totalPages - 1) {
             this.endPage = this.currentPage + 1
@@ -157,7 +166,7 @@ export default {
             this.pages = newPages
           }
         }
-      } else if (this.currentPage <= 3) {
+      } else if (this.currentPage <= Math.ceil(this.maxPage / 2)) {
         this.startPage = 1
         this.endPage = this.maxPage
         const newPages = []
@@ -168,7 +177,7 @@ export default {
       }
 
       if (this.currentPage === this.totalPages) {
-        this.startPage = this.totalPages - 4
+        this.startPage = this.totalPages - (this.maxPage - 1)
         this.endPage = this.totalPages
         const newPages = []
         for (let i = this.startPage; i <= this.endPage; i++) {
