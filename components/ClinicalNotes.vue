@@ -2,9 +2,9 @@
   <div id="clinical-notes">
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Clinical Notes</h1>
-      <img class="mx-2 mt-1" src="/add_btn.svg" alt="" />
+      <img class="button mx-2 mt-1 hidden" src="/add_btn.svg" alt="" />
     </div>
-    <div class="hidden">
+    <div v-if="!empty" class="container">
       <p class="my-5 text-base font-normal">
         Complaints: {{ clinicalNotes.complaint }}
       </p>
@@ -30,6 +30,7 @@ export default {
         diagnosis: 'Headache',
         notes: 'another day at work',
       },
+      empty: true,
     }
   },
 }
@@ -40,6 +41,11 @@ export default {
   margin-bottom: 55px;
   .line {
     border-bottom: 1px solid #c4c4c4;
+  }
+}
+.new {
+  .button {
+    display: block;
   }
 }
 </style>

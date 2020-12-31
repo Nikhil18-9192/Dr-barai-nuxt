@@ -36,17 +36,18 @@
           </th>
         </tr>
         <tr
-          v-for="(item, i) in appointments"
+          v-for="(appointment, i) in appointments"
           :key="i"
           class="bg-gray-100 my-5 text-sm font-normal"
+          @click="onAppointmentClick(appointment.id)"
         >
-          <td class="py-3 px-2">{{ item.id }}</td>
-          <td class="py-3 px-0">{{ item.name }}</td>
-          <td class="py-3 px-0">{{ item.mobile }}</td>
-          <td class="py-3 px-0">{{ item.appointments.length }}</td>
+          <td class="py-3 px-2">{{ appointment.id }}</td>
+          <td class="py-3 px-0">{{ appointment.patient.name }}</td>
+          <td class="py-3 px-0">{{ appointment.patient.mobile }}</td>
+          <td class="py-3 px-0">{{ appointment.createdAt }}</td>
         </tr>
         <tr>
-          <td v-if="!appointments.length">No appointments Yet</td>
+          <td v-if="!appointments">No appointments Yet</td>
         </tr>
       </tbody>
     </table>
@@ -98,18 +99,19 @@
 
 <script>
 // TODO: pageLimit , store cleanup, create button component
-import query from '@/apollo/queries/patient/patients.gql'
+import query from '@/apollo/queries/appointment/appointments.gql'
 export default {
   name: 'AppointmentsPage',
   data() {
     return {
       totalItem: 0,
-      modal: false,
       appointments: [],
       perPage: 2,
       totalPages: 0,
       pages: [],
       start: 0,
+      startDate: '2020-12-15T06:32:16.336Z',
+      endDate: '2020-12-31T06:32:16.336Z',
       currentPage: 1,
       maxPage: 3,
       startPage: 0,
@@ -122,22 +124,25 @@ export default {
     this.fetchTotalappointmentsCount()
   },
   methods: {
+    onAppointmentClick(id) {
+      this.$router.push(`/appointments/${id}`)
+    },
     async fetchappointments() {
-      this.$store.commit('SET_LOADING')
       const { data } = await this.$apollo.query({
         query,
         variables: {
           limit: this.perPage,
           start: this.start,
+          startDate: this.startDate,
+          endDate: this.endDate,
         },
       })
-      this.appointments = data.patients
-      this.$store.commit('SET_PATIENTS', this.appointments)
-      this.$store.commit('UNSET_LOADING')
+      this.appointments = data.appointments
+      this.pagination()
     },
     async fetchTotalappointmentsCount() {
       this.totalItem = await this.$axios.$get(
-        'http://localhost:1337/patients/count'
+        'http://localhost:1337/appointments/count'
       )
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
       for (let i = 1; i <= this.totalPages; i++) {

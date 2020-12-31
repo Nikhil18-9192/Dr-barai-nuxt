@@ -2,10 +2,10 @@
   <div id="vital-signs">
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Vital Signs</h1>
-      <img class="mx-2 mt-1" src="/add_btn.svg" alt="" />
+      <img class="button mx-2 mt-1 hidden" src="/add_btn.svg" alt="" />
     </div>
 
-    <table class="list w-full hidden">
+    <table class="list w-full">
       <tbody>
         <tr class="bg-gray-100 text-black-400 text-sm">
           <th
@@ -71,14 +71,19 @@ export default {
   margin-bottom: 55px;
   .list {
     border-bottom: 1px solid #c4c4c4;
-    .row {
-      &:hover {
-        background: #c4c4c44b;
-      }
+  }
+}
+.new {
+  .button {
+    display: block;
+  }
+  .row {
+    &:hover {
+      background: #c4c4c44b;
+    }
 
-      &:hover img {
-        display: block;
-      }
+    &:hover img {
+      display: block;
     }
   }
 }

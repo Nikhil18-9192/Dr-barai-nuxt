@@ -59,7 +59,7 @@ export default {
       const date = new Date()
 
       const hour = date.getHours()
-      const min = date.getMinutes()
+      const min = String(date.getMinutes()).padStart(2, 0)
       const now = hour + ':' + min
       return now
     },

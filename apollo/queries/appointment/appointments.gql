@@ -1,0 +1,20 @@
+query appointments(
+  $limit: Int
+  $start: Int
+  $startDate: String
+  $endDate: String
+) {
+  appointments(
+    start: $start
+    where: { createdAt_gte: $startDate, createdAt_lte: $endDate }
+    limit: $limit
+    sort: "createdAt:desc"
+  ) {
+    id
+    createdAt
+    patient {
+      name
+      mobile
+    }
+  }
+}

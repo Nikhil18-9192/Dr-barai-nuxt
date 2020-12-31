@@ -1,10 +1,10 @@
 <template>
   <div id="new-appointment">
-    <AddAppointment />
-    <Prescription />
-    <VitalSigns />
-    <ClinicalNotes />
-    <Files />
+    <AddAppointment class="new" />
+    <Prescription class="new" />
+    <VitalSigns class="new" />
+    <ClinicalNotes class="new" />
+    <Files class="new" />
   </div>
 </template>
 
