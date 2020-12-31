@@ -1,0 +1,6 @@
+query drugs {
+  drugs {
+    id
+    name
+  }
+}

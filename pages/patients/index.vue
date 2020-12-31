@@ -33,7 +33,8 @@
         <tr
           v-for="(item, i) in patients"
           :key="i"
-          class="bg-gray-100 my-6 text-sm font-normal"
+          class="bg-gray-100 my-6 text-sm font-normal cursor-pointer"
+          @click="patientInfo(item.id)"
         >
           <td class="p-3">{{ item.id }}</td>
           <td class="p-3">{{ item.name }}</td>
@@ -119,6 +120,9 @@ export default {
     this.fetchTotalPatientCount()
   },
   methods: {
+    patientInfo(id) {
+      this.$router.push(`/patients/${id}`)
+    },
     async fetchPatients() {
       const { data } = await this.$apollo.query({
         query,

@@ -1,8 +1,14 @@
 <template>
   <div id="prescription">
+    <AddPrescription v-if="addModal" @dismiss="addModal = false" />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Prescription</h1>
-      <img class="mx-2 mt-1" src="/add_btn.svg" alt="" />
+      <img
+        class="mx-2 mt-1"
+        src="/add_btn.svg"
+        alt=""
+        @click="addModal = true"
+      />
     </div>
 
     <table class="drugs-list w-full hidden">
@@ -51,7 +57,9 @@
 <script>
 export default {
   data() {
-    return {}
+    return {
+      addModal: false,
+    }
   },
 }
 </script>

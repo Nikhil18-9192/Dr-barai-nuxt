@@ -5,7 +5,7 @@
       <label for="name" class="w-50 text-sm font-normal text-gray-400 mt-3"
         >Name</label
       >
-      <select
+      <!-- <select
         v-model="patientName"
         class="border rounded border-gray-300 p-2 w-6/12 mt-1 mb-2 outline-none text-gray-400"
       >
@@ -13,7 +13,7 @@
         <option v-for="patient in patients" :key="patient" :value="patient">
           {{ patient }}
         </option>
-      </select>
+      </select> -->
       <label for="date" class="text-sm font-normal text-gray-400 mt-3"
         >Date</label
       >
