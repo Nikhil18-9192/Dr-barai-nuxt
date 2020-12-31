@@ -60,9 +60,8 @@ export default {
     clientConfigs: {
       default: {
         httpEndpoint: 'http://localhost:1337/graphql',
-        tokenName: 'jwt'
+        tokenName: 'jwt',
       },
-
     },
   },
   styleResources: {
