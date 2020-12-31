@@ -1,19 +1,16 @@
 <template>
   <div id="new-appointment">
     <h1 class="my-10 text-lg font-medium">Create New Appointment</h1>
+
     <div class="form flex flex-col">
-      <label for="name" class="w-50 text-sm font-normal text-gray-400 mt-3"
+      <label for="name" class="w-50 text-sm font-normal text-gray-400 my-1"
         >Name</label
       >
-      <select
-        v-model="patientName"
-        class="border rounded border-gray-300 p-2 w-6/12 mt-1 mb-2 outline-none text-gray-400"
-      >
-        <option disabled value="Search Patient">Search Patient</option>
-        <option v-for="patient in patients" :key="patient" :value="patient">
-          {{ patient }}
-        </option>
-      </select>
+      <model-select
+        v-model="patientId"
+        :options="patients"
+        placeholder="Search Patient"
+      />
       <label for="date" class="text-sm font-normal text-gray-400 mt-3"
         >Date</label
       >
@@ -35,16 +32,49 @@
 </template>
 
 <script>
+import { getPatientNames } from '@/apollo/queries/patient/patients.gql'
+import { ModelSelect } from 'vue-search-select'
 export default {
   name: 'NewAppointmentPage',
-
+  components: {
+    ModelSelect,
+  },
   data() {
     return {
-      patientName: 'Search Patient',
+      patientId: false,
+      patients: [
+        {
+          value: false,
+          text: 'Loading...',
+        },
+      ],
     }
+  },
+  created() {
+    this.fetchPaitents()
   },
 
   methods: {
+    async fetchPaitents() {
+      this.patients = []
+      try {
+        const { data } = await this.$apollo.query({
+          query: getPatientNames,
+        })
+
+        for (let i = 0; i < data.patients.length; i++) {
+          const obj = {}
+          obj.value = data.patients[i].id
+          obj.text = data.patients[i].name
+          this.patients.push(obj)
+        }
+      } catch (error) {
+        const obj = {}
+        obj.value = false
+        obj.text = error.message
+        this.patients.push(obj)
+      }
+    },
     getDate() {
       const date = new Date()
       const day = date.getDate()
@@ -70,5 +100,8 @@ export default {
 <style lang="scss" scoped>
 #new-appointment {
   margin-bottom: 55px;
+  .ui.fluid.dropdown {
+    width: 50%;
+  }
 }
 </style>

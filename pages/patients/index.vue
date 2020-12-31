@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import query from '@/apollo/queries/patient/patients.gql'
+import { patients } from '@/apollo/queries/patient/patients.gql'
 export default {
   name: 'PatientsPage',
   data() {
@@ -118,7 +118,7 @@ export default {
   methods: {
     async fetchPatients() {
       const { data } = await this.$apollo.query({
-        query,
+        query: patients,
         variables: {
           limit: this.perPage,
           start: this.start,

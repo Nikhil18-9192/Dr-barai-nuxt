@@ -2,8 +2,8 @@
   <div id="files">
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Files</h1>
-      <label for="add-image" class="add-images mx-2 mt-2 hidden">
-        <img src="/add_btn.svg" alt="" />
+      <label for="add-image" class="add-images mt-1 hidden">
+        <AddButton />
       </label>
       <input
         id="add-image"

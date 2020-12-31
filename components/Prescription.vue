@@ -2,7 +2,7 @@
   <div id="prescription">
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Prescription</h1>
-      <img class="button mx-2 mt-1 hidden" src="/add_btn.svg" alt="" />
+      <AddButton />
     </div>
 
     <table class="drugs-list w-full">
@@ -64,16 +64,20 @@ export default {
   }
 }
 .new {
-  .button {
-    display: block;
-  }
   .row {
     &:hover {
-      background: #c4c4c44b;
+      background: #c4c4c411;
     }
 
     &:hover img {
       display: block;
+    }
+    img {
+      padding: 4px;
+      &:hover {
+        transform: scale(1.05);
+        cursor: pointer;
+      }
     }
   }
 }

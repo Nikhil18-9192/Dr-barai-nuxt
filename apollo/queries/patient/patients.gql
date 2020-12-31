@@ -8,3 +8,10 @@ query patients($limit: Int, $start: Int) {
     }
   }
 }
+
+query getPatientNames{
+  patients(sort: "name:asc"){
+    id
+    name
+  }
+}

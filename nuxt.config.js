@@ -36,6 +36,7 @@ export default {
   plugins: [
     { src: '~/plugins/nuxt-client-init.js', ssr: false },
     { src: '~/plugins/toast.js', ssr: false },
+    { src: '~/plugins/vue-search-select.js', ssr: false },
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -59,7 +60,9 @@ export default {
     clientConfigs: {
       default: {
         httpEndpoint: 'http://localhost:1337/graphql',
+        tokenName: 'jwt'
       },
+
     },
   },
   styleResources: {
