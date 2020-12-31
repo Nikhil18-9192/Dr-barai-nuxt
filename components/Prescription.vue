@@ -1,5 +1,6 @@
 <template>
   <div id="prescription">
+    <AddPrescription v-if="addModal" @dismiss="addModal = false" />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Prescription</h1>
       <AddButton />
@@ -51,7 +52,9 @@
 <script>
 export default {
   data() {
-    return {}
+    return {
+      addModal: false,
+    }
   },
 }
 </script>

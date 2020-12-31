@@ -1,0 +1,20 @@
+query patients($id: String) {
+  patients(where: { id: $id }) {
+    id
+    mobile
+    name
+    address
+    gender
+    bloodGroup
+    birthDate
+    appointments {
+      clinicalNotes {
+        diagnoses
+        complaints
+        observations
+      }
+      date
+      time
+    }
+  }
+}

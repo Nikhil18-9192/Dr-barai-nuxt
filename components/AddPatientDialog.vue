@@ -101,7 +101,7 @@ export default {
       name: '',
       mobile: '',
       email: '',
-      gender: 'select gender',
+      gender: 'Select Gender',
       birthDate: '',
       address: '',
       pincode: '',
@@ -162,10 +162,6 @@ export default {
   .add-btn {
     width: 180px;
     height: 37px;
-    img {
-      width: 20px;
-      height: 20px;
-    }
   }
   button {
     outline: none;
