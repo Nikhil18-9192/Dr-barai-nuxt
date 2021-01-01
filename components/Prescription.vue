@@ -3,7 +3,7 @@
     <AddPrescription v-if="addModal" @dismiss="addModal = false" />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Prescription</h1>
-      <AddButton />
+      <AddButton @clicked="addModal = true" />
     </div>
 
     <table class="drugs-list w-full">
@@ -31,15 +31,19 @@
           </th>
         </tr>
         <tr
-          v-for="item in 4"
-          :key="item"
+          v-for="(item, i) in prescription"
+          :key="i"
           class="row my-6 text-sm font-normal text-center"
         >
-          <td class="p-3">{{ item }}</td>
-          <td class="p-3">{{ item + 1 }}</td>
-          <td class="p-3">{{ item + 2 }}</td>
+          <td class="p-3">{{ item.drug.name }}</td>
+          <td class="p-3">{{ item.frequency.frequency }}</td>
+          <td class="p-3">
+            {{
+              item.frequency.drugDuration + ' ' + item.frequency.drugDurationFor
+            }}
+          </td>
           <td class="p-3 flex justify-center">
-            <p>{{ item + 3 }}</p>
+            <p>{{ item.frequency.instructions }}</p>
             <img class="absolute ml-36 hidden" src="/edit_btn.svg" alt="" />
             <img class="absolute ml-56 hidden" src="/delete_btn.svg" alt="" />
           </td>
@@ -51,6 +55,12 @@
 
 <script>
 export default {
+  props: {
+    prescription: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       addModal: false,

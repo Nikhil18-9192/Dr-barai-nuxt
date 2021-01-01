@@ -55,14 +55,14 @@ export default {
     '@nuxtjs/apollo',
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
+    '@nuxtjs/dayjs',
   ],
   apollo: {
     clientConfigs: {
       default: {
         httpEndpoint: 'http://localhost:1337/graphql',
-        tokenName: 'jwt'
+        tokenName: 'jwt',
       },
-
     },
   },
   styleResources: {

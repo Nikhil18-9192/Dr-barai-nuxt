@@ -4,15 +4,15 @@
       <h1 class="text-xl font-medium">Clinical Notes</h1>
       <AddButton />
     </div>
-    <div v-if="!empty" class="container">
+    <div v-if="Object.entries(clinicalNotes).length != 0" class="container">
       <p class="my-5 text-base font-normal">
-        Complaints: {{ clinicalNotes.complaint }}
+        Complaints: {{ clinicalNotes.complaints }}
       </p>
       <p class="my-5 text-base font-normal">
-        Observations: {{ clinicalNotes.observation }}
+        Observations: {{ clinicalNotes.observations }}
       </p>
       <p class="my-5 text-base font-normal">
-        Diagnosis: {{ clinicalNotes.diagnosis }}
+        Diagnosis: {{ clinicalNotes.diagnoses }}
       </p>
       <p class="my-5 text-base font-normal">Notes: {{ clinicalNotes.notes }}</p>
       <div class="line"></div>
@@ -22,16 +22,14 @@
 
 <script>
 export default {
+  props: {
+    clinicalNotes: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
-    return {
-      clinicalNotes: {
-        complaint: 'Headache',
-        observation: 'Not lying',
-        diagnosis: 'Headache',
-        notes: 'another day at work',
-      },
-      empty: true,
-    }
+    return {}
   },
 }
 </script>

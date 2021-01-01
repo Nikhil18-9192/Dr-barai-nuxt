@@ -44,7 +44,13 @@
           <td class="py-3 px-2">{{ appointment.id }}</td>
           <td class="py-3 px-0">{{ appointment.patient.name }}</td>
           <td class="py-3 px-0">{{ appointment.patient.mobile }}</td>
-          <td class="py-3 px-0">{{ appointment.createdAt }}</td>
+          <td class="py-3 px-0">
+            {{
+              formatter.formatDate(appointment.date) +
+              ' at ' +
+              formatter.formatTime(appointment.date)
+            }}
+          </td>
         </tr>
         <tr>
           <td v-if="!appointments">No appointments Yet</td>
@@ -99,7 +105,8 @@
 
 <script>
 // TODO: pageLimit , store cleanup, create button component
-import query from '@/apollo/queries/appointment/appointments.gql'
+import { appointments } from '@/apollo/queries/appointment/appointments.gql'
+import formatDateTime from '@/utils/formatDateTime'
 export default {
   name: 'AppointmentsPage',
   data() {
@@ -111,14 +118,18 @@ export default {
       pages: [],
       start: 0,
       startDate: '2020-12-15T06:32:16.336Z',
-      endDate: '2020-12-31T06:32:16.336Z',
+      endDate: '2022-12-05T06:32:16.336Z',
       currentPage: 1,
       maxPage: 3,
       startPage: 0,
       endPage: 0,
     }
   },
-  computed: {},
+  computed: {
+    formatter() {
+      return formatDateTime
+    },
+  },
   mounted() {
     this.fetchappointments()
     this.fetchTotalappointmentsCount()
@@ -129,7 +140,7 @@ export default {
     },
     async fetchappointments() {
       const { data } = await this.$apollo.query({
-        query,
+        query: appointments,
         variables: {
           limit: this.perPage,
           start: this.start,

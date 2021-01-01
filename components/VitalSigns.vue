@@ -31,16 +31,21 @@
           <th
             class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200 font-normal"
           >
-            RESP. RATE (Breaths/min))
+            RESP. RATE (Breaths/min)
           </th>
         </tr>
-        <tr class="row my-6 text-sm font-normal text-center">
+        <tr
+          v-if="Object.entries(vitals).length != 0"
+          class="row my-6 text-sm font-normal text-center"
+        >
           <td class="p-3">{{ vitals.weight }}</td>
-          <td class="p-3">{{ vitals.bp }}</td>
-          <td class="p-3">{{ vitals.temp }}</td>
+          <td class="p-3">
+            {{ vitals.bp.bpSystolic + '/' + vitals.bp.bpDiastolic }}
+          </td>
+          <td class="p-3">{{ vitals.temperature.temperature }}</td>
           <td class="p-3">{{ vitals.pulse }}</td>
           <td class="p-3 flex justify-center">
-            <p>{{ vitals.resp }}</p>
+            <p>{{ vitals.respRate }}</p>
             <img class="absolute ml-36 hidden" src="/edit_btn.svg" alt="" />
             <img class="absolute ml-56 hidden" src="/delete_btn.svg" alt="" />
           </td>
@@ -52,16 +57,14 @@
 
 <script>
 export default {
+  props: {
+    vitals: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
-    return {
-      vitals: {
-        weight: 0,
-        bp: 0,
-        temp: 0,
-        pulse: 0,
-        resp: 0,
-      },
-    }
+    return {}
   },
 }
 </script>

@@ -6,15 +6,56 @@ query appointments(
 ) {
   appointments(
     start: $start
-    where: { createdAt_gte: $startDate, createdAt_lte: $endDate }
+    where: { date_gte: $startDate, date_lte: $endDate }
     limit: $limit
     sort: "createdAt:desc"
   ) {
     id
-    createdAt
+    date
     patient {
       name
       mobile
+    }
+  }
+}
+query appointmentFromId($id: String) {
+  appointments(where: { id: $id }) {
+    id
+    date
+    prescription {
+      drug {
+        name
+      }
+      frequency {
+        frequency
+        drugDuration
+        drugDurationFor
+        instructions
+      }
+    }
+    vitalSigns {
+      weight
+      bp {
+        bpSystolic
+        bpDiastolic
+      }
+      temperature {
+        temperature
+      }
+      pulse
+      respRate
+    }
+    clinicalNotes {
+      complaints
+      observations
+      diagnoses
+      notes
+    }
+    patient {
+      name
+    }
+    files {
+      formats
     }
   }
 }
