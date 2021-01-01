@@ -35,12 +35,12 @@
           </th>
         </tr>
         <tr
-          v-for="item in prescription"
-          :key="item"
+          v-for="(item, i) in prescription"
+          :key="i"
           class="row my-6 text-sm font-normal text-center"
         >
-          <td class="p-3">{{ item.drug }}</td>
-          <td class="p-3">{{ item.dosage }}</td>
+          <td class="p-3">{{ item.selectedDrug }}</td>
+          <td class="p-3">{{ item.dosageFrequency }}</td>
           <td class="p-3">{{ item.duration }}{{ item.durationUnit }}</td>
           <td class="p-3 flex justify-center">
             <p>{{ item.intake }}</p>
@@ -69,8 +69,6 @@ export default {
       if (val) {
         this.prescription.push(val)
       }
-
-      console.log(this.prescription)
     },
   },
 }

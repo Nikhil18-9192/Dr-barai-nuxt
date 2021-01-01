@@ -1,8 +1,13 @@
 <template>
   <div id="clinical-notes">
+    <AddClinicalNotes
+      v-if="modal"
+      @dismiss="modal = false"
+      @clinicalNotesData="submitClinicalNotes"
+    />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Clinical Notes</h1>
-      <AddButton />
+      <AddButton @click.native="modal = true" />
     </div>
     <div v-if="!empty" class="container">
       <p class="my-5 text-base font-normal">
@@ -24,6 +29,7 @@
 export default {
   data() {
     return {
+      modal: false,
       clinicalNotes: {
         complaint: 'Headache',
         observation: 'Not lying',
@@ -31,7 +37,15 @@ export default {
         notes: 'another day at work',
       },
       empty: true,
+      notes: [],
     }
+  },
+  methods: {
+    submitClinicalNotes(val) {
+      if (val) {
+        this.notes.push(val)
+      }
+    },
   },
 }
 </script>

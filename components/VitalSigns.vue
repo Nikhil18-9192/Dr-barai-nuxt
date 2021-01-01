@@ -1,8 +1,13 @@
 <template>
   <div id="vital-signs">
+    <VitalSignModal
+      v-if="modal"
+      @dismiss="modal = false"
+      @vitalSignData="submitVitalSignData"
+    />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Vital Signs</h1>
-      <AddButton />
+      <AddButton @click.native="modal = true" />
     </div>
 
     <table class="list w-full">
@@ -31,7 +36,7 @@
           <th
             class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200 font-normal"
           >
-            RESP. RATE (Breaths/min))
+            RESP. RATE (Breaths/min
           </th>
         </tr>
         <tr class="row my-6 text-sm font-normal text-center">
@@ -54,6 +59,7 @@
 export default {
   data() {
     return {
+      modal: false,
       vitals: {
         weight: 0,
         bp: 0,
@@ -61,7 +67,18 @@ export default {
         pulse: 0,
         resp: 0,
       },
+      vitalSigns: [],
     }
+  },
+  mounted() {
+    this.submitVitalSignData()
+  },
+  methods: {
+    submitVitalSignData(val) {
+      if (val) {
+        this.vitalSigns.push(val)
+      }
+    },
   },
 }
 </script>
