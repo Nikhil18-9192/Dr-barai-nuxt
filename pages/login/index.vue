@@ -24,12 +24,13 @@
           placeholder="Password"
         />
         <div class="grid grid-cols-2 my-6">
-          <button
+          <!-- <button
             class="btn bg-blue-500 rounded text-white text-base shadow-2xl"
             @click.prevent="login"
           >
             Sign In
-          </button>
+          </button> -->
+          <MyButton @click.native="login">Sign In</MyButton>
           <p class="text-right text-blue-500 font-bold text-sm">
             Forgot Password?
           </p>

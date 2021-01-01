@@ -43,8 +43,8 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
         >
           <option disabled value="Select Gender">Select Gender</option>
-          <option>Male</option>
-          <option>Female</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
         </select>
         <label for="bday" class="text-sm font-normal text-gray-400"
           >Birth Date</label
@@ -70,14 +70,14 @@
           v-model="pincode"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
           type="number"
-          placeholder="Elon musk"
+          placeholder="416010"
         />
         <label for="city" class="text-sm font-normal text-gray-400">City</label>
         <input
           v-model="city"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
           type="text"
-          placeholder="Elon musk"
+          placeholder="Kolhapur"
         />
         <div class="mt-8 flex">
           <MyButton class="mr-4" :loading="loading" @click.native="addPatient"
@@ -95,6 +95,7 @@
 <script>
 import { AddPatientValidation } from '@/utils/validation'
 export default {
+  props: ['patient'],
   data() {
     return {
       loading: false,
@@ -106,6 +107,18 @@ export default {
       address: '',
       pincode: '',
       city: '',
+    }
+  },
+  mounted() {
+    if (this.patient) {
+      this.name = this.patient.name
+      this.mobile = this.patient.mobile
+      this.email = this.patient.email
+      this.gender = this.patient.gender
+      this.birthDate = this.patient.birthDate
+      this.address = this.patient.address
+      this.pincode = this.patient.pincode
+      this.city = this.patient.city
     }
   },
   methods: {
@@ -136,19 +149,35 @@ export default {
         return
       }
       try {
-        await this.$axios.$post(`/patients`, {
-          name,
-          mobile,
-          email,
-          gender,
-          birthDate,
-          address,
-          pincode,
-          city,
-        })
-        this.$emit('dismiss')
-        this.$router.push('/patients')
-        this.$toast.success('Add Patient Successfully')
+        if (this.patient == null) {
+          await this.$axios.$post(`/patients`, {
+            name,
+            mobile,
+            email,
+            gender,
+            birthDate,
+            address,
+            pincode,
+            city,
+          })
+          this.$emit('dismiss')
+          this.$router.push('/patients')
+          this.$toast.success('Add Patient Successfully')
+        } else {
+          const res = await this.$axios.$put(`/patients/${this.patient.id}`, {
+            name,
+            mobile,
+            email,
+            gender,
+            birthDate,
+            address,
+            pincode,
+            city,
+          })
+          this.$emit('dismiss', res)
+          this.$router.push(`/patients/${this.patient.id}`)
+          this.$toast.success('Add Updated Successfully')
+        }
       } catch (error) {
         this.$toast.error(error.message)
       }
