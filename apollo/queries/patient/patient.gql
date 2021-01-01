@@ -1,5 +1,5 @@
-query patients($id: String) {
-  patients(where: { id: $id }) {
+query patients($id: ID!) {
+  patient(id: $id) {
     id
     mobile
     name
@@ -7,7 +7,11 @@ query patients($id: String) {
     gender
     bloodGroup
     birthDate
-    appointments {
+    email
+    pincode
+    city
+    appointments(sort: "createdAt:desc") {
+      id
       clinicalNotes {
         diagnoses
         complaints

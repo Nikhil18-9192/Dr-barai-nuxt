@@ -22,10 +22,12 @@ const tempMeasurementPositions = [
   'temporal',
   'rectal',
 ]
+const StockUnits = ['bottles', 'strips']
 
 export {
   dosageFrequency,
   durationUnits,
   bpMeasurementPositions,
   tempMeasurementPositions,
+  StockUnits,
 }

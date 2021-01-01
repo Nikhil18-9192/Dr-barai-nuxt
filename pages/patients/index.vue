@@ -3,7 +3,9 @@
     <AddPatientDialog v-if="modal" @dismiss="modal = false" />
     <div class="title flex justify-between my-8">
       <h1 class="text-2xl font-medium">Patient List</h1>
-      <MyButton @click.native="modal = true">Add New Patient</MyButton>
+      <MyButton :icon="addBtnIcon" @click.native="modal = true"
+        >Add New Patient</MyButton
+      >
     </div>
 
     <table class="patient-list border-separate">
@@ -101,6 +103,7 @@ export default {
   name: 'PatientsPage',
   data() {
     return {
+      addBtnIcon: '/plus-circle.svg',
       totalItem: 0,
       modal: false,
       patients: [],

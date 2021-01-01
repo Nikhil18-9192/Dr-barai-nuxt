@@ -7,7 +7,10 @@
       <div v-if="loading">
         <span class="spinner"></span>
       </div>
-      <span v-else>
+      <span v-else :class="icon ? 'flex' : 'flex-none'" class="btn-text w-full">
+        <div v-if="icon" class="icon flex w-2/6 items-center justify-center">
+          <img :src="icon" alt="" />
+        </div>
         <slot></slot>
       </span>
     </transition>
@@ -20,6 +23,10 @@ export default {
     loading: {
       type: Boolean,
       default: false,
+    },
+    icon: {
+      type: String,
+      default: '',
     },
   },
   methods: {},
@@ -37,6 +44,9 @@ export default {
   font-size: 16px;
   border-top-color: white;
   animation: spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+}
+img {
+  width: 22px;
 }
 
 .btn {

@@ -2,16 +2,12 @@ import Cookies from 'js-cookie'
 export const state = () => ({
   user: false,
   jwt: false,
-  addPatientModal: false,
   loading: false,
 })
 
 export const getters = {
   getUser: (state) => {
     return state.user
-  },
-  getPatients: (state) => {
-    return state.patients
   },
 }
 
@@ -21,9 +17,6 @@ export const mutations = {
   },
   SET_JWT: (state, token) => {
     state.jwt = token
-  },
-  TOGGALE_PATIENT_MODAL: (state) => {
-    state.addPatientModal = !state.addPatientModal
   },
   SET_LOADING: (state) => {
     state.loading = true
