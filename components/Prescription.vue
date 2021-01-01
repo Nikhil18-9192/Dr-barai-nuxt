@@ -7,7 +7,7 @@
     />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Prescription</h1>
-      <AddButton @clicked="addModal = true" />
+      <AddButton @click.native="addModal = true" />
     </div>
 
     <table class="drugs-list w-full">
@@ -68,7 +68,6 @@ export default {
   data() {
     return {
       addModal: false,
-      prescription: [],
     }
   },
   mounted() {

@@ -1,11 +1,5 @@
 <template>
-  <img
-    id="add-button"
-    class="add-button mx-2 mt-1"
-    src="/add_btn.svg"
-    alt=""
-    @click="$emit('clicked')"
-  />
+  <img id="add-button" class="add-button mx-2 mt-1" src="/add_btn.svg" alt="" />
 </template>
 
 <script>
