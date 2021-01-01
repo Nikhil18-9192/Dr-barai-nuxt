@@ -1,6 +1,10 @@
 <template>
   <div id="prescription">
-    <AddPrescription v-if="addModal" @dismiss="addModal = false" />
+    <AddPrescription
+      v-if="addModal"
+      @prescriptionData="submitPrescriptionData"
+      @dismiss="addModal = false"
+    />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Prescription</h1>
       <AddButton @clicked="addModal = true" />
@@ -64,7 +68,18 @@ export default {
   data() {
     return {
       addModal: false,
+      prescription: [],
     }
+  },
+  mounted() {
+    this.submitPrescriptionData()
+  },
+  methods: {
+    submitPrescriptionData(val) {
+      if (val) {
+        this.prescription.push(val)
+      }
+    },
   },
 }
 </script>

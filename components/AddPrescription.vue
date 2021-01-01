@@ -2,6 +2,7 @@
   <div
     id="add-prescription"
     class="fixed w-full z-50 top-0 left-0 h-screen bg-black bg-opacity-50"
+    @click="$emit('dismiss')"
   >
     <div
       class="add-modal bg-white relative rounded-md mx-auto mt-12 py-6 px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
@@ -14,7 +15,7 @@
         >
         <select
           v-model="selectedDrug"
-          class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none text-gray-400 text-sm"
+          class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
         >
           <option disabled value="Select Drugs">Select Drugs</option>
           <option v-for="item in drugs" :key="item.id" :value="item.name">
@@ -26,7 +27,7 @@
         >
         <select
           v-model="dosageFrequency"
-          class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none text-gray-400 text-sm"
+          class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
         >
           <option disabled value="Select Dosage">Select Dosage</option>
           <option v-for="dosage in getDosage" :key="dosage" :value="dosage">
@@ -39,7 +40,7 @@
         <textarea
           v-model="intake"
           placeholder="eg. before food"
-          class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none text-gray-400 text-sm"
+          class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
         ></textarea>
         <label for="name" class="text-sm font-light text-gray-400"
           >Duration</label
@@ -52,7 +53,7 @@
           placeholder="10"
         />
         <span
-          class="cursor-pointer text-blue-500 ml-2"
+          class="cursor-pointer text-blue-500 ml-2 capitalize"
           @click="
             selectedDurationUnitIndex < durationUnits.length - 1
               ? selectedDurationUnitIndex++
@@ -62,7 +63,9 @@
           {{ durationUnits[selectedDurationUnitIndex] }}
         </span>
         <div class="mt-8 flex">
-          <MyButton class="mr-4" @click.native="submit">Submit</MyButton>
+          <MyButton class="mr-4" @click.native="submitPrescriptionData"
+            >Submit</MyButton
+          >
           <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
             >Cancel</MyButton
           >
@@ -74,6 +77,7 @@
 
 <script>
 import { dosageFrequency, durationUnits } from '@/utils'
+import { AddPrescriptionValidation } from '@/utils/validation'
 import query from '@/apollo/queries/drug/drug.gql'
 export default {
   data() {
@@ -81,8 +85,8 @@ export default {
       selectedDurationUnitIndex: 0,
       selectedDrug: 'Select Drugs',
       dosageFrequency: 'Select Dosage',
-      intake: 'eg. before food',
-      duration: false,
+      intake: '',
+      duration: '',
       drugs: [],
     }
   },
@@ -98,15 +102,27 @@ export default {
     this.drug()
   },
   methods: {
-    submit() {
+    submitPrescriptionData() {
+      const { selectedDrug, dosageFrequency, intake, duration } = this
+      const validation = AddPrescriptionValidation({
+        selectedDrug,
+        dosageFrequency,
+        intake,
+        duration,
+      })
+      if (validation.error) {
+        this.$toast.error(validation.error.message)
+        return
+      }
       const prescriptionData = {
-        drug: this.selectedDrug,
-        dosage: this.dosageFrequency,
-        intake: this.intake,
-        duration: this.duration,
+        selectedDrug,
+        dosageFrequency,
+        intake,
+        duration,
         durationUnit: this.durationUnits[this.selectedDurationUnitIndex],
       }
-      console.log(prescriptionData)
+      this.$emit('prescriptionData', prescriptionData)
+      this.$emit('dismiss')
     },
     async drug() {
       const { data } = await this.$apollo.query({

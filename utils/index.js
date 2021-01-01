@@ -14,5 +14,18 @@ const dosageFrequency = [
   'twice_a_week',
 ]
 const durationUnits = ['day', 'week', 'month', 'year', 'sos']
+const bpMeasurementPositions = ['standing', 'seating']
+const tempMeasurementPositions = [
+  'axillary',
+  'oral',
+  'tympanic',
+  'temporal',
+  'rectal',
+]
 
-export { dosageFrequency, durationUnits }
+export {
+  dosageFrequency,
+  durationUnits,
+  bpMeasurementPositions,
+  tempMeasurementPositions,
+}

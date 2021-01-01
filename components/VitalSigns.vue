@@ -1,8 +1,13 @@
 <template>
   <div id="vital-signs">
+    <VitalSignModal
+      v-if="modal"
+      @dismiss="modal = false"
+      @vitalSignData="submitVitalSignData"
+    />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Vital Signs</h1>
-      <AddButton />
+      <AddButton @click.native="modal = true" />
     </div>
 
     <table class="list w-full">
@@ -65,6 +70,16 @@ export default {
   },
   data() {
     return {}
+  },
+  mounted() {
+    this.submitVitalSignData()
+  },
+  methods: {
+    submitVitalSignData(val) {
+      if (val) {
+        this.vitalSigns.push(val)
+      }
+    },
   },
 }
 </script>
