@@ -62,7 +62,9 @@
           {{ durationUnits[selectedDurationUnitIndex] }}
         </span>
         <div class="mt-8 flex">
-          <MyButton class="mr-4" @click.native="submit">Submit</MyButton>
+          <MyButton class="mr-4" @click.native="submitPrescriptionData"
+            >Submit</MyButton
+          >
           <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
             >Cancel</MyButton
           >
@@ -81,8 +83,8 @@ export default {
       selectedDurationUnitIndex: 0,
       selectedDrug: 'Select Drugs',
       dosageFrequency: 'Select Dosage',
-      intake: 'eg. before food',
-      duration: false,
+      intake: '',
+      duration: '',
       drugs: [],
     }
   },
@@ -98,7 +100,7 @@ export default {
     this.drug()
   },
   methods: {
-    submit() {
+    submitPrescriptionData() {
       const prescriptionData = {
         drug: this.selectedDrug,
         dosage: this.dosageFrequency,
@@ -106,7 +108,8 @@ export default {
         duration: this.duration,
         durationUnit: this.durationUnits[this.selectedDurationUnitIndex],
       }
-      console.log(prescriptionData)
+      this.$emit('prescriptionData', prescriptionData)
+      this.$emit('dismiss')
     },
     async drug() {
       const { data } = await this.$apollo.query({

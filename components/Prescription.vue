@@ -1,9 +1,13 @@
 <template>
   <div id="prescription">
-    <AddPrescription v-if="addModal" @dismiss="addModal = false" />
+    <AddPrescription
+      v-if="addModal"
+      @prescriptionData="submitPrescriptionData"
+      @dismiss="addModal = false"
+    />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Prescription</h1>
-      <AddButton />
+      <AddButton @click.native="addModal = true" />
     </div>
 
     <table class="drugs-list w-full">
@@ -31,15 +35,15 @@
           </th>
         </tr>
         <tr
-          v-for="item in 4"
+          v-for="item in prescription"
           :key="item"
           class="row my-6 text-sm font-normal text-center"
         >
-          <td class="p-3">{{ item }}</td>
-          <td class="p-3">{{ item + 1 }}</td>
-          <td class="p-3">{{ item + 2 }}</td>
+          <td class="p-3">{{ item.drug }}</td>
+          <td class="p-3">{{ item.dosage }}</td>
+          <td class="p-3">{{ item.duration }}{{ item.durationUnit }}</td>
           <td class="p-3 flex justify-center">
-            <p>{{ item + 3 }}</p>
+            <p>{{ item.intake }}</p>
             <img class="absolute ml-36 hidden" src="/edit_btn.svg" alt="" />
             <img class="absolute ml-56 hidden" src="/delete_btn.svg" alt="" />
           </td>
@@ -54,7 +58,20 @@ export default {
   data() {
     return {
       addModal: false,
+      prescription: [],
     }
+  },
+  mounted() {
+    this.submitPrescriptionData()
+  },
+  methods: {
+    submitPrescriptionData(val) {
+      if (val) {
+        this.prescription.push(val)
+      }
+
+      console.log(this.prescription)
+    },
   },
 }
 </script>
