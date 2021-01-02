@@ -10,21 +10,29 @@
         Start New Appointment
       </button>
     </div>
-    <div class="date-picker flex">
-      <p class="p-2">From-</p>
-      <datepicker
-        class="date mt-2 text-blue-500"
-        v-model="startDate"
-        placeholder="Select Date"
-      />
-      <p class="p-2">To-</p>
-      <datepicker
-        class="date mt-2 text-blue-500"
-        v-model="endDate"
-        :disabled-dates="getDisabledDates"
-        placeholder="Select Date"
-      />
-    </div>
+    <client-only>
+      <div class="date-picker flex">
+        <p class="p-2">From-</p>
+        <datepicker
+          v-model="startDate"
+          class="mt-2 text-blue-500"
+          placeholder="Select Date"
+        ></datepicker>
+        <p class="p-2">To-</p>
+        <datepicker
+          v-model="endDate"
+          class="mt-2 text-blue-500"
+          :disabled-dates="getDisabledDates"
+          placeholder="Select Date"
+        ></datepicker>
+        <button
+          class="p-2 bg-blue-500 text-white rounded cursor-pointer"
+          @click="fetchappointments"
+        >
+          Refresh
+        </button>
+      </div>
+    </client-only>
     <table class="appointments-list border-separate">
       <tbody>
         <tr class="text-gray-600 text-sm font-normal">
@@ -126,13 +134,13 @@ export default {
   data() {
     return {
       totalItem: 0,
-      appointments: [],
+      appointments: false,
       perPage: 2,
       totalPages: 0,
       pages: [],
       start: 0,
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: this.$dayjs().startOf('day').$d,
+      endDate: this.$dayjs().startOf('day').$d,
       currentPage: 1,
       maxPage: 3,
       startPage: 0,
@@ -152,7 +160,6 @@ export default {
   },
   mounted() {
     this.fetchappointments()
-    this.fetchTotalappointmentsCount()
   },
   methods: {
     onAppointmentClick(id) {
@@ -165,28 +172,37 @@ export default {
           limit: this.perPage,
           start: this.start,
           startDate: this.startDate,
-          endDate: this.endDate,
+          endDate: this.modifyEndDate(this.endDate),
         },
       })
-      this.appointments = data.appointments
-      this.pagination()
-    },
-    async fetchTotalappointmentsCount() {
-      this.totalItem = await this.$axios.$get(
-        'http://localhost:1337/appointments/count'
-      )
+      if (data.appointments.length !== 0) {
+        this.appointments = data.appointments
+
+        this.pagination()
+      } else {
+        this.appointments = false
+      }
+      this.totalItem = data.appointments.length
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
       for (let i = 1; i <= this.totalPages; i++) {
         this.pages.push(i)
       }
     },
+    // async fetchTotalappointmentsCount() {
+    //   this.totalItem = await this.$axios.$get(
+    //     'http://localhost:1337/appointments/count'
+    //   )
+    //   this.totalPages = Math.ceil(this.totalItem / this.perPage)
+    //   for (let i = 1; i <= this.totalPages; i++) {
+    //     this.pages.push(i)
+    //   }
+    // },
 
     newAppointment() {
       this.$router.push('/appointments/newAppointment')
     },
 
     pagination() {
-      this.totalPages = Math.ceil(this.totalItem / this.perPage)
       if (this.totalPages <= this.maxPage) {
         this.startPage = 1
         this.endPage = this.totalPages
@@ -196,9 +212,15 @@ export default {
           this.pages = newPages
         }
         return
-      } else if (this.currentPage > 3 && this.totalPages > this.maxPage) {
+      } else if (
+        this.currentPage >= Math.ceil(this.maxPage / 2) &&
+        this.totalPages > this.maxPage
+      ) {
         if (this.currentPage <= this.totalPages - 1) {
           this.startPage = this.currentPage - Math.floor(this.maxPage / 2)
+          if (this.startPage === 0) {
+            this.startPage = 1
+          }
           this.endPage = this.currentPage + Math.floor(this.maxPage / 2)
           if (this.currentPage === this.totalPages - 1) {
             this.endPage = this.currentPage + 1
@@ -209,7 +231,7 @@ export default {
             this.pages = newPages
           }
         }
-      } else if (this.currentPage <= 3) {
+      } else if (this.currentPage <= Math.ceil(this.maxPage / 2)) {
         this.startPage = 1
         this.endPage = this.maxPage
         const newPages = []
@@ -220,7 +242,7 @@ export default {
       }
 
       if (this.currentPage === this.totalPages) {
-        this.startPage = this.totalPages - 4
+        this.startPage = this.totalPages - (this.maxPage - 1)
         this.endPage = this.totalPages
         const newPages = []
         for (let i = this.startPage; i <= this.endPage; i++) {
@@ -260,6 +282,9 @@ export default {
       const prevPage = pageNum - 1
       this.paginatData(prevPage)
     },
+    modifyEndDate(date) {
+      return this.$dayjs(date).startOf('day').add(1, 'day')
+    },
   },
 }
 </script>
@@ -292,6 +317,9 @@ export default {
 
   button {
     outline: none;
+    &:hover {
+      transform: scale(1.05);
+    }
   }
 }
 </style>
