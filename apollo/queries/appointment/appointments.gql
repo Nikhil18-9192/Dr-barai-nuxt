@@ -8,7 +8,7 @@ query appointments(
     start: $start
     where: { date_gte: $startDate, date_lte: $endDate }
     limit: $limit
-    sort: "createdAt:desc"
+    sort: "date:desc"
   ) {
     id
     date
