@@ -11,7 +11,7 @@
       <AddButton @click.native="addModal = true" />
     </div>
 
-    <table class="drugs-list w-full">
+    <table v-if="prescriptions" class="drugs-list w-full">
       <tbody>
         <tr class="bg-gray-100 text-black-400 text-sm">
           <th
@@ -40,11 +40,15 @@
           :key="i"
           class="row my-6 text-sm font-normal text-center"
         >
-          <td class="p-3">{{ item.selectedDrug }}</td>
-          <td class="p-3">{{ item.dosageFrequency }}</td>
-          <td class="p-3">{{ item.duration }}{{ item.durationUnit }}</td>
+          <td class="p-3">{{ item.drug.name }}</td>
+          <td class="p-3">{{ item.frequency.frequency }}</td>
+          <td class="p-3">
+            {{
+              item.frequency.drugDuration + ' ' + item.frequency.drugDurationFor
+            }}
+          </td>
           <td class="p-3 flex justify-center">
-            <p>{{ item.intake }}</p>
+            <p>{{ item.frequency.instructions }}</p>
             <img class="absolute ml-36 hidden" src="/edit_btn.svg" alt="" />
             <img class="absolute ml-56 hidden" src="/delete_btn.svg" alt="" />
           </td>
@@ -56,11 +60,26 @@
 
 <script>
 export default {
+  props: {
+    prescription: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       addModal: false,
-      prescription: [],
+      addPrescription: false,
     }
+  },
+  computed: {
+    prescriptions() {
+      if (this.$route.name === 'appointments-newAppointment') {
+        return this.addprescription
+      } else if (Object.entries(this.prescription).length !== 0) {
+        return this.prescription
+      } else return false
+    },
   },
   mounted() {
     this.submitPrescriptionData()

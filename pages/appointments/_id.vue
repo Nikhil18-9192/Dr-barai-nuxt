@@ -1,14 +1,61 @@
 <template>
   <div id="appointment">
-    <Prescription />
-    <VitalSigns />
-    <ClinicalNotes />
-    <Files />
+    <AppointmentTitle :appointment-info="appointmentInfo" />
+    <Prescription :prescription="prescription" />
+    <VitalSigns :vitals="vitalSigns" />
+    <ClinicalNotes :clinical-notes="clinicalNotes" />
+    <Files :images="files" />
   </div>
 </template>
 
 <script>
-export default {}
+import { appointmentFromId } from '@/apollo/queries/appointment/appointments.gql'
+import formatDateTime from '@/utils/formatDateTime'
+export default {
+  data() {
+    return {
+      appointmentInfo: {
+        date: '',
+        time: '',
+        name: '',
+      },
+      prescription: [],
+      vitalSigns: {},
+      clinicalNotes: {},
+      files: [],
+      url: 'http://localhost:1337/appointments/',
+    }
+  },
+  mounted() {
+    this.fetchAppointment()
+  },
+  methods: {
+    async fetchAppointment() {
+      const id = this.$route.params.id
+
+      try {
+        const { data } = await this.$apollo.query({
+          query: appointmentFromId,
+          variables: {
+            id,
+          },
+        })
+
+        const result = data.appointments[0]
+
+        this.prescription = result.prescription
+        this.vitalSigns = result.vitalSigns
+        this.clinicalNotes = result.clinicalNotes
+        this.files = result.files
+        this.appointmentInfo.date = formatDateTime.formatDate(result.date)
+        this.appointmentInfo.time = formatDateTime.formatTime(result.date)
+        this.appointmentInfo.name = result.patient.name
+      } catch (e) {
+        console.log(e)
+      }
+    },
+  },
+}
 </script>
 
 <style></style>

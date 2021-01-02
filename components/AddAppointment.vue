@@ -76,22 +76,10 @@ export default {
       }
     },
     getDate() {
-      const date = new Date()
-      const day = date.getDate()
-      const month = date.getMonth() + 1
-      const year = date.getFullYear()
-
-      const today = year + '-' + month + '-' + day
-
-      return today
+      return this.$dayjs().format('YYYY-MM-DD')
     },
     getTime() {
-      const date = new Date()
-
-      const hour = date.getHours()
-      const min = String(date.getMinutes()).padStart(2, 0)
-      const now = hour + ':' + min
-      return now
+      return this.$dayjs().format('hh:mm')
     },
   },
 }

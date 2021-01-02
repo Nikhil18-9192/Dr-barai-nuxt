@@ -13,12 +13,12 @@
         @change="onImageAdded"
       />
     </div>
-    <div class="preview flex flex-wrap">
+    <div v-if="images.length != 0" class="preview flex flex-wrap">
       <img
         v-for="(image, i) in images"
         :key="i"
         class="w-52 h-52 mr-8 mt-8"
-        :src="image"
+        :src="image.formats.thumbnail.url"
         alt=""
       />
     </div>
@@ -27,10 +27,14 @@
 
 <script>
 export default {
+  props: {
+    images: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
-    return {
-      images: [],
-    }
+    return {}
   },
   methods: {
     onImageAdded(event) {

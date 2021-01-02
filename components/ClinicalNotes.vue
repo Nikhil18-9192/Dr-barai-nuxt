@@ -9,17 +9,15 @@
       <h1 class="text-xl font-medium">Clinical Notes</h1>
       <AddButton @click.native="modal = true" />
     </div>
-    <div v-if="!empty" class="container">
+    <div v-if="notes" class="container">
       <p class="my-5 text-base font-normal">
-        Complaints: {{ clinicalNotes.complaint }}
+        Complaints: {{ notes.complaints }}
       </p>
       <p class="my-5 text-base font-normal">
-        Observations: {{ clinicalNotes.observation }}
+        Observations: {{ notes.observations }}
       </p>
-      <p class="my-5 text-base font-normal">
-        Diagnosis: {{ clinicalNotes.diagnosis }}
-      </p>
-      <p class="my-5 text-base font-normal">Notes: {{ clinicalNotes.notes }}</p>
+      <p class="my-5 text-base font-normal">Diagnosis: {{ notes.diagnoses }}</p>
+      <p class="my-5 text-base font-normal">Notes: {{ notes.notes }}</p>
       <div class="line"></div>
     </div>
   </div>
@@ -27,23 +25,31 @@
 
 <script>
 export default {
+  props: {
+    clinicalNotes: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       modal: false,
-      clinicalNotes: {
-        complaint: 'Headache',
-        observation: 'Not lying',
-        diagnosis: 'Headache',
-        notes: 'another day at work',
-      },
-      empty: true,
-      notes: [],
+      addNotes: false,
     }
+  },
+  computed: {
+    notes() {
+      if (this.$route.name === 'appointments-newAppointment') {
+        return this.addNotes
+      } else if (Object.entries(this.clinicalNotes).length !== 0) {
+        return this.clinicalNotes
+      } else return false
+    },
   },
   methods: {
     submitClinicalNotes(val) {
       if (val) {
-        this.notes.push(val)
+        this.addNotes = val
       }
     },
   },
