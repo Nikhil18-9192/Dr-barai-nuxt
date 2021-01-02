@@ -11,19 +11,24 @@
       </button>
     </div>
     <div class="date-picker flex">
-      <p class="p-2">From-</p>
-      <datepicker
-        class="date mt-2 text-blue-500"
-        v-model="startDate"
-        placeholder="Select Date"
-      />
-      <p class="p-2">To-</p>
-      <datepicker
-        class="date mt-2 text-blue-500"
-        v-model="endDate"
-        :disabled-dates="getDisabledDates"
-        placeholder="Select Date"
-      />
+      <div>
+        <p class="p-2">From-</p>
+        <datepicker
+          v-model="startDate"
+          class="date mt-2 text-blue-500"
+          placeholder="Select Date"
+        />
+      </div>
+      <div>
+        <p class="p-2">To-</p>
+
+        <datepicker
+          v-model="endDate"
+          class="date mt-2 text-blue-500"
+          :disabled-dates="getDisabledDates"
+          placeholder="Select Date"
+        />
+      </div>
     </div>
     <table class="appointments-list border-separate">
       <tbody>
@@ -118,7 +123,6 @@
 </template>
 
 <script>
-// TODO: pageLimit , store cleanup, create button component
 import { appointments } from '@/apollo/queries/appointment/appointments.gql'
 import formatDateTime from '@/utils/formatDateTime'
 export default {
@@ -159,6 +163,7 @@ export default {
       this.$router.push(`/appointments/${id}`)
     },
     async fetchappointments() {
+      this.$store.commit('SET_LOADING')
       const { data } = await this.$apollo.query({
         query: appointments,
         variables: {
@@ -169,11 +174,12 @@ export default {
         },
       })
       this.appointments = data.appointments
+      this.$store.commit('UNSET_LOADING')
       this.pagination()
     },
     async fetchTotalappointmentsCount() {
       this.totalItem = await this.$axios.$get(
-        'http://localhost:1337/appointments/count'
+        `/appointments/count?date_gte=${this.startDate.toISOString()}&date_lte=${this.endDate.toISOString()}`
       )
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
       for (let i = 1; i <= this.totalPages; i++) {

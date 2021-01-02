@@ -86,12 +86,7 @@ export default {
   methods: {
     submitVitalSignData(val) {
       if (val) {
-<<<<<<< HEAD
-        console.log(val)
-        this.vitalSigns.push(val)
-=======
         this.addVitals = val
->>>>>>> 2a9972168ce2f011022dd5bf1fddc01edbd9f014
       }
     },
   },

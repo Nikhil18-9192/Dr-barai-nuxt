@@ -42,7 +42,6 @@ export default {
         })
 
         const result = data.appointments[0]
-
         this.prescription = result.prescription
         this.vitalSigns = result.vitalSigns
         this.clinicalNotes = result.clinicalNotes
@@ -51,7 +50,7 @@ export default {
         this.appointmentInfo.time = formatDateTime.formatTime(result.date)
         this.appointmentInfo.name = result.patient.name
       } catch (e) {
-        console.log(e)
+        this.$toast.error(e.message)
       }
     },
   },

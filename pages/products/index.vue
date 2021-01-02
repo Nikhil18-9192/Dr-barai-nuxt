@@ -1,9 +1,14 @@
 <template>
   <div id="product-page">
-    <AddProductModal v-if="modal" @dismiss="newProduct" />
+    <AddProductModal
+      v-if="modal"
+      :product="productToEdit"
+      @dismiss="newProduct"
+      @updatedProduct="updatedProduct"
+    />
     <div class="title flex justify-between my-8">
       <h1 class="text-2xl font-medium">Product List</h1>
-      <MyButton :icon="addBtnIcon" @click.native="modal = true"
+      <MyButton :icon="addBtnIcon" @click.native="addNew"
         >Add New Product</MyButton
       >
     </div>
@@ -36,6 +41,7 @@
           v-for="item in products"
           :key="item.id"
           class="bg-gray-100 my-6 text-sm font-normal cursor-pointer"
+          @click="editProduct(item)"
         >
           <td class="p-3">{{ item.id }}</td>
           <td class="p-3">{{ item.name }}</td>
@@ -114,6 +120,7 @@ export default {
       maxPage: 5,
       startPage: 0,
       endPage: 0,
+      productToEdit: {},
     }
   },
   computed: {},
@@ -122,13 +129,28 @@ export default {
     this.fetchTotalProductsCount()
   },
   methods: {
+    addNew() {
+      this.productToEdit = null
+      this.modal = true
+    },
+    editProduct(product) {
+      this.productToEdit = product
+      this.modal = true
+    },
     newProduct(val) {
       if (val) {
         this.products.unshift(val)
       }
       this.modal = false
     },
+    updatedProduct(val) {
+      if (val) {
+        const index = this.products.findIndex((p) => p.id === val.id)
+        this.products[index] = val
+      }
+    },
     async fetchProducts() {
+      this.$store.commit('SET_LOADING')
       const { data } = await this.$apollo.query({
         query: products,
         variables: {
@@ -137,6 +159,7 @@ export default {
         },
       })
       this.products = data.products
+      this.$store.commit('UNSET_LOADING')
       this.pagination()
     },
     async fetchTotalProductsCount() {

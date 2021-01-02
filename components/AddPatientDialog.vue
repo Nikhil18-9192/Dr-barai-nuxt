@@ -8,7 +8,9 @@
       class="add-modal bg-white relative rounded-md mx-auto mt-12 py-6 px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
-      <h1 class="text-lg font-medium text-center mb-8">Add New Patient</h1>
+      <h1 class="text-lg font-medium text-center mb-8">
+        {{ patient ? 'Edit' : 'Add New' }} Patient
+      </h1>
       <div class="form">
         <label for="name" class="text-sm font-normal text-gray-400">Name</label>
         <input
@@ -95,7 +97,12 @@
 <script>
 import { AddPatientValidation } from '@/utils/validation'
 export default {
-  props: ['patient'],
+  props: {
+    patient: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       loading: false,

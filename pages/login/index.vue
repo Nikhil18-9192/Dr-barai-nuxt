@@ -24,13 +24,7 @@
           placeholder="Password"
         />
         <div class="grid grid-cols-2 my-6">
-          <!-- <button
-            class="btn bg-blue-500 rounded text-white text-base shadow-2xl"
-            @click.prevent="login"
-          >
-            Sign In
-          </button> -->
-          <MyButton @click.native="login">Sign In</MyButton>
+          <MyButton :loading="loading" @click.native="login">Sign In</MyButton>
           <p class="text-right text-blue-500 font-bold text-sm">
             Forgot Password?
           </p>
@@ -49,6 +43,7 @@ export default {
     return {
       username: '',
       password: '',
+      loading: false,
     }
   },
   computed: {
@@ -64,6 +59,7 @@ export default {
 
   methods: {
     async login() {
+      this.loading = true
       try {
         const res = await this.$axios.$post(`/auth/local`, {
           identifier: this.username,

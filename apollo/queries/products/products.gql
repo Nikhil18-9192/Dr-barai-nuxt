@@ -1,9 +1,16 @@
 query products($limit: Int, $start: Int) {
   products(start: $start, limit: $limit, sort: "createdAt:desc") {
     id
-    name
+    itemcode
     stock
     retailPrice
     stockingUnit
+    serviceTax
+    sbcTax
+    kkcTax
+    itemType
+    reorderLevel
+    manufacturer
+    name
   }
 }

@@ -8,7 +8,9 @@
       class="add-modal bg-white relative rounded-md mx-auto mt-12 py-6 px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
-      <h1 class="text-lg font-medium text-center mb-8">Add New Product</h1>
+      <h1 class="text-lg font-medium text-center mb-8">
+        {{ product ? 'Edit' : 'Add New' }} Product
+      </h1>
       <div class="form">
         <label for="name" class="text-sm font-normal text-gray-400"
           >item name</label
@@ -95,11 +97,17 @@
           type="checkbox"
           value="serviceTax"
         />
-        <label for="serviceTax">Service Tax</label>
+        <label for="serviceTax" class="text-sm font-normal text-gray-400"
+          >Service Tax</label
+        >
         <input id="sbcTax" v-model="sbcTax" type="checkbox" value="sbcTax" />
-        <label for="sbcTax">Swachh Bharat Cess</label>
+        <label for="sbcTax" class="text-sm font-normal text-gray-400"
+          >Swachh Bharat Cess</label
+        >
         <input id="kkcTax" v-model="kkcTax" type="checkbox" value="kkcTax" />
-        <label for="kkcTax">Krishi kalyan Cess</label>
+        <label for="kkcTax" class="text-sm font-normal text-gray-400"
+          >Krishi kalyan Cess</label
+        >
 
         <div class="mt-8 flex">
           <MyButton class="mr-4" @click.native="submitProduct">Submit</MyButton>
@@ -116,6 +124,12 @@
 import { StockUnits } from '@/utils'
 
 export default {
+  props: {
+    product: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       name: '',
@@ -136,7 +150,21 @@ export default {
       return StockUnits
     },
   },
-  mounted() {},
+  mounted() {
+    if (this.product) {
+      this.name = this.product.name
+      this.itemcode = this.product.itemcode
+      this.itemType = this.product.itemType
+      this.manufacturer = this.product.manufacturer
+      this.stock = this.product.stock
+      this.reorderLevel = this.product.reorderLevel
+      this.retailPrice = this.product.retailPrice
+      this.serviceTax = this.product.serviceTax
+      this.sbcTax = this.product.sbcTax
+      this.kkcTax = this.product.kkcTax
+      this.stockUnitsIndex = this.stockUnits.indexOf(this.product.stockingUnit)
+    }
+  },
   methods: {
     async submitProduct() {
       const {
@@ -152,21 +180,40 @@ export default {
         kkcTax,
       } = this
       try {
-        const result = await this.$axios.$post('/products', {
-          name,
-          itemcode,
-          itemType,
-          manufacturer,
-          stock,
-          reorderLevel,
-          serviceTax,
-          stockingUnit: this.stockUnits[this.stockUnitsIndex],
-          sbcTax,
-          kkcTax,
-          retailPrice,
-        })
-        this.$emit('dismiss', result)
-        this.$router.push('/products')
+        if (!this.product) {
+          const result = await this.$axios.$post('/products', {
+            name,
+            itemcode,
+            itemType,
+            manufacturer,
+            stock,
+            reorderLevel,
+            serviceTax,
+            stockingUnit: this.stockUnits[this.stockUnitsIndex],
+            sbcTax,
+            kkcTax,
+            retailPrice,
+          })
+          this.$emit('dismiss', result)
+          this.$router.push('/products')
+        } else {
+          const res = await this.$axios.$put(`/products/${this.product.id}`, {
+            name,
+            itemcode,
+            itemType,
+            manufacturer,
+            stock,
+            reorderLevel,
+            serviceTax,
+            stockingUnit: this.stockUnits[this.stockUnitsIndex],
+            sbcTax,
+            kkcTax,
+            retailPrice,
+          })
+          this.$emit('dismiss')
+          this.$emit('updatedProduct', res)
+          this.$router.push('/products')
+        }
       } catch (error) {
         this.$toast.error(error.message)
       }

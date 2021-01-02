@@ -1,9 +1,9 @@
 <template>
   <div id="patient-page">
-    <AddPatientDialog v-if="modal" @dismiss="newPatient" />
+    <AddPatientDialog v-if="modal" :patient="patient" @dismiss="newPatient" />
     <div class="title flex justify-between my-8">
       <h1 class="text-2xl font-medium">Patient List</h1>
-      <MyButton :icon="addBtnIcon" @click.native="modal = true"
+      <MyButton :icon="addBtnIcon" @click.native="addPatient"
         >Add New Patient</MyButton
       >
     </div>
@@ -115,6 +115,7 @@ export default {
       maxPage: 5,
       startPage: 0,
       endPage: 0,
+      patient: null,
     }
   },
   computed: {},
@@ -123,6 +124,9 @@ export default {
     this.fetchTotalPatientCount()
   },
   methods: {
+    addPatient() {
+      this.modal = true
+    },
     newPatient(val) {
       if (val) {
         this.patients.unshift(val)
@@ -133,6 +137,7 @@ export default {
       this.$router.push(`/patients/${id}`)
     },
     async fetchPatients() {
+      this.$store.commit('SET_LOADING')
       const { data } = await this.$apollo.query({
         query: patients,
         variables: {
@@ -141,6 +146,7 @@ export default {
         },
       })
       this.patients = data.patients
+      this.$store.commit('UNSET_LOADING')
       this.pagination()
     },
     async fetchTotalPatientCount() {

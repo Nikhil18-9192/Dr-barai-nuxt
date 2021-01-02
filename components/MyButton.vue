@@ -7,8 +7,12 @@
       <div v-if="loading">
         <span class="spinner"></span>
       </div>
-      <span v-else :class="icon ? 'flex' : 'flex-none'" class="btn-text w-full">
-        <div v-if="icon" class="icon flex w-2/6 items-center justify-center">
+      <span
+        v-else
+        :class="icon ? 'flex ' : 'flex-none'"
+        class="btn-text w-full justify-center"
+      >
+        <div v-if="icon" class="icon flex w-1/4 items-center justify-center">
           <img :src="icon" alt="" />
         </div>
         <slot></slot>
