@@ -18,12 +18,12 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
         >
           <option disabled value="Select Drugs">Select Drugs</option>
-          <option v-for="item in drugs" :key="item.id" :value="item.name">
+          <option v-for="item in drugs" :key="item.id" :value="item.id">
             {{ item.name }}
           </option>
         </select>
         <label for="gender" class="text-sm font-light text-gray-400"
-          >Dosage & Frequency</label
+          >Frequency</label
         >
         <select
           v-model="dosageFrequency"
@@ -35,10 +35,19 @@
           </option>
         </select>
         <label for="address" class="text-sm font-light text-gray-400"
-          >Intake Instruction</label
+          >Intake</label
+        >
+        <input
+          v-model="intake"
+          type="text"
+          placeholder="eg. before food"
+          class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
+        />
+        <label for="address" class="text-sm font-light text-gray-400"
+          >Instruction</label
         >
         <textarea
-          v-model="intake"
+          v-model="instructions"
           placeholder="eg. before food"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
         ></textarea>
@@ -80,6 +89,12 @@ import { dosageFrequency, durationUnits } from '@/utils'
 import { AddPrescriptionValidation } from '@/utils/validation'
 import query from '@/apollo/queries/drug/drug.gql'
 export default {
+  props: {
+    currentPrescription: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       selectedDurationUnitIndex: 0,
@@ -88,6 +103,7 @@ export default {
       intake: '',
       duration: '',
       drugs: [],
+      instructions: '',
     }
   },
   computed: {
@@ -102,25 +118,42 @@ export default {
     this.drug()
   },
   methods: {
-    submitPrescriptionData() {
-      const { selectedDrug, dosageFrequency, intake, duration } = this
+    async submitPrescriptionData() {
+      const {
+        selectedDrug,
+        dosageFrequency,
+        intake,
+        duration,
+        instructions,
+      } = this
       const validation = AddPrescriptionValidation({
         selectedDrug,
         dosageFrequency,
         intake,
         duration,
+        instructions,
       })
       if (validation.error) {
         this.$toast.error(validation.error.message)
         return
       }
       const prescriptionData = {
-        selectedDrug,
-        dosageFrequency,
-        intake,
-        duration,
-        durationUnit: this.durationUnits[this.selectedDurationUnitIndex],
+        drug: this.selectedDrug,
+        frequency: {
+          frequency: this.dosageFrequency,
+          intake,
+          drugDuration: this.duration,
+          drugDurationFor: this.durationUnits[this.selectedDurationUnitIndex],
+          instructions,
+        },
       }
+
+      await this.$axios.$put(
+        `http://localhost:1337/appointments/5ff01fbfb5c97c1e28afdfb3`,
+        {
+          prescription: [...this.currentPrescription, prescriptionData],
+        }
+      )
       this.$emit('prescriptionData', prescriptionData)
       this.$emit('dismiss')
     },

@@ -22,8 +22,9 @@ const AddPrescriptionValidation = (data) => {
       .max(50)
       .label('Dosage & Frequency')
       .required(),
-    intake: Joi.string().min(3).max(250).label('Intake Instruction').required(),
+    intake: Joi.string().min(3).max(50).label('Intake').required(),
     duration: Joi.number().label('Duration').required(),
+    instructions: Joi.string().min(3).max(250).label('Instruction').required(),
   }).required()
 
   return formSchema.validate(data)
@@ -35,6 +36,7 @@ const AddVitalSignValidation = (data) => {
     diastolic: Joi.number().label('diastolic').required(),
     temperature: Joi.number().label('temperature').required(),
     respiration: Joi.number().label('respiration').required(),
+    pulse: Joi.number().label('respiration').required(),
   }).required()
 
   return formSchema.validate(data)

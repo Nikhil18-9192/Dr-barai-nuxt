@@ -1,6 +1,6 @@
 <template>
   <div id="product-page">
-    <AddProductModal v-if="modal" @dismiss="modal = false" />
+    <AddProductModal v-if="modal" @dismiss="newProduct" />
     <div class="title flex justify-between my-8">
       <h1 class="text-2xl font-medium">Product List</h1>
       <MyButton :icon="addBtnIcon" @click.native="modal = true"
@@ -38,7 +38,7 @@
           class="bg-gray-100 my-6 text-sm font-normal cursor-pointer"
         >
           <td class="p-3">{{ item.id }}</td>
-          <td class="p-3">{{ item.itemcode }}</td>
+          <td class="p-3">{{ item.name }}</td>
           <td class="p-3">{{ item.stock }}{{ item.stockingUnit }}</td>
           <td class="p-3">{{ item.retailPrice }}</td>
         </tr>
@@ -122,6 +122,12 @@ export default {
     this.fetchTotalProductsCount()
   },
   methods: {
+    newProduct(val) {
+      if (val) {
+        this.products.unshift(val)
+      }
+      this.modal = false
+    },
     async fetchProducts() {
       const { data } = await this.$apollo.query({
         query: products,

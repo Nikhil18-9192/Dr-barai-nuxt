@@ -76,6 +76,7 @@ export default {
   methods: {
     submitVitalSignData(val) {
       if (val) {
+        console.log(val)
         this.vitalSigns.push(val)
       }
     },

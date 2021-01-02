@@ -1,6 +1,6 @@
 <template>
   <div id="patient-page">
-    <AddPatientDialog v-if="modal" @dismiss="modal = false" />
+    <AddPatientDialog v-if="modal" @dismiss="newPatient" />
     <div class="title flex justify-between my-8">
       <h1 class="text-2xl font-medium">Patient List</h1>
       <MyButton :icon="addBtnIcon" @click.native="modal = true"
@@ -123,6 +123,12 @@ export default {
     this.fetchTotalPatientCount()
   },
   methods: {
+    newPatient(val) {
+      if (val) {
+        this.patients.unshift(val)
+      }
+      this.modal = false
+    },
     patientInfo(id) {
       this.$router.push(`/patients/${id}`)
     },

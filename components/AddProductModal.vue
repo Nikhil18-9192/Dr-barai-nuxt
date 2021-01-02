@@ -23,7 +23,7 @@
           >item code</label
         >
         <input
-          v-model="code"
+          v-model="itemcode"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
           type="number"
           placeholder=""
@@ -41,9 +41,10 @@
           <option value="supplies">supplies</option>
         </select>
         <label for="manufacturer" class="text-sm font-normal text-gray-400"
-          >manufacturer</label
+          >Manufacturer</label
         >
         <input
+          v-model="manufacturer"
           type="text"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
           placeholder="Eon musk"
@@ -52,6 +53,7 @@
           >Stock</label
         ><br />
         <input
+          v-model="stock"
           class="border rounded border-gray-300 p-2 w-1/3 mt-1 mb-2 outline-none"
           type="number"
           placeholder="10"
@@ -71,6 +73,7 @@
           >MRP (incl. taxes)</label
         ><br />
         <input
+          v-model="retailPrice"
           class="border rounded border-gray-300 p-2 w-1/2 mt-1 mb-2 outline-none"
           type="number"
           placeholder="type product price"
@@ -80,13 +83,26 @@
           >Re-order Level (notify if less than)</label
         ><br />
         <input
+          v-model="reorderLevel"
           class="border rounded border-gray-300 p-2 w-1/2 mt-1 mb-2 outline-none"
           type="number"
           placeholder="10"
         />
+        <br />
+        <input
+          id="serviceTax"
+          v-model="serviceTax"
+          type="checkbox"
+          value="serviceTax"
+        />
+        <label for="serviceTax">Service Tax</label>
+        <input id="sbcTax" v-model="sbcTax" type="checkbox" value="sbcTax" />
+        <label for="sbcTax">Swachh Bharat Cess</label>
+        <input id="kkcTax" v-model="kkcTax" type="checkbox" value="kkcTax" />
+        <label for="kkcTax">Krishi kalyan Cess</label>
 
         <div class="mt-8 flex">
-          <MyButton class="mr-4">Submit</MyButton>
+          <MyButton class="mr-4" @click.native="submitProduct">Submit</MyButton>
           <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
             >Cancel</MyButton
           >
@@ -98,13 +114,21 @@
 
 <script>
 import { StockUnits } from '@/utils'
+
 export default {
   data() {
     return {
       name: '',
-      code: null,
+      itemcode: null,
       itemType: 'Select Item type',
       stockUnitsIndex: 0,
+      manufacturer: '',
+      stock: null,
+      reorderLevel: null,
+      retailPrice: null,
+      serviceTax: false,
+      sbcTax: false,
+      kkcTax: false,
     }
   },
   computed: {
@@ -113,7 +137,41 @@ export default {
     },
   },
   mounted() {},
-  methods: {},
+  methods: {
+    async submitProduct() {
+      const {
+        name,
+        itemcode,
+        itemType,
+        manufacturer,
+        stock,
+        reorderLevel,
+        serviceTax,
+        retailPrice,
+        sbcTax,
+        kkcTax,
+      } = this
+      try {
+        const result = await this.$axios.$post('/products', {
+          name,
+          itemcode,
+          itemType,
+          manufacturer,
+          stock,
+          reorderLevel,
+          serviceTax,
+          stockingUnit: this.stockUnits[this.stockUnitsIndex],
+          sbcTax,
+          kkcTax,
+          retailPrice,
+        })
+        this.$emit('dismiss', result)
+        this.$router.push('/products')
+      } catch (error) {
+        this.$toast.error(error.message)
+      }
+    },
+  },
 }
 </script>
 

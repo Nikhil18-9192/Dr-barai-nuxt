@@ -126,13 +126,21 @@ export default {
   mounted() {},
   methods: {
     submitVitalSignData() {
-      const { weight, systolic, diastolic, temperature, respiration } = this
+      const {
+        weight,
+        systolic,
+        diastolic,
+        temperature,
+        respiration,
+        pulse,
+      } = this
       const validation = AddVitalSignValidation({
         weight,
         systolic,
         diastolic,
         temperature,
         respiration,
+        pulse,
       })
       if (validation.error) {
         this.$toast.error(validation.error.message)
@@ -140,14 +148,21 @@ export default {
       }
       const vitalSignData = {
         weight,
-        systolic,
-        diastolic,
-        temperature,
-        respiration,
-        bpUnit: this.bpMeasurementPositions[this.bpMeasurementPositionIndex],
-        tempUnit: this.tempMeasurementPositions[
-          this.tempMeasurementPositionIndex
-        ],
+        respRate: this.respiration,
+        pulse,
+        bp: {
+          bpSystolic: this.systolic,
+          bpDiastolic: this.diastolic,
+          bpMeasurementPosition: this.bpMeasurementPositions[
+            this.bpMeasurementPositionIndex
+          ],
+        },
+        temperature: {
+          temperature,
+          tempMeasurementPosition: this.tempMeasurementPositions[
+            this.tempMeasurementPositionIndex
+          ],
+        },
       }
       this.$emit('vitalSignData', vitalSignData)
       this.$emit('dismiss')

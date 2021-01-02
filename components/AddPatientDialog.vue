@@ -150,7 +150,7 @@ export default {
       }
       try {
         if (this.patient == null) {
-          await this.$axios.$post(`/patients`, {
+          const result = await this.$axios.$post(`/patients`, {
             name,
             mobile,
             email,
@@ -160,7 +160,7 @@ export default {
             pincode,
             city,
           })
-          this.$emit('dismiss')
+          this.$emit('dismiss', result)
           this.$router.push('/patients')
           this.$toast.success('Add Patient Successfully')
         } else {

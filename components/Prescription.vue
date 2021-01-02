@@ -2,6 +2,7 @@
   <div id="prescription">
     <AddPrescription
       v-if="addModal"
+      :current-prescription="prescription"
       @prescriptionData="submitPrescriptionData"
       @dismiss="addModal = false"
     />
