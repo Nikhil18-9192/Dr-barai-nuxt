@@ -9,17 +9,15 @@
       <h1 class="text-xl font-medium">Clinical Notes</h1>
       <AddButton @click.native="modal = true" />
     </div>
-    <div v-if="Object.entries(clinicalNotes).length != 0" class="container">
+    <div v-if="notes" class="container">
       <p class="my-5 text-base font-normal">
-        Complaints: {{ clinicalNotes.complaints }}
+        Complaints: {{ notes.complaints }}
       </p>
       <p class="my-5 text-base font-normal">
-        Observations: {{ clinicalNotes.observations }}
+        Observations: {{ notes.observations }}
       </p>
-      <p class="my-5 text-base font-normal">
-        Diagnosis: {{ clinicalNotes.diagnoses }}
-      </p>
-      <p class="my-5 text-base font-normal">Notes: {{ clinicalNotes.notes }}</p>
+      <p class="my-5 text-base font-normal">Diagnosis: {{ notes.diagnoses }}</p>
+      <p class="my-5 text-base font-normal">Notes: {{ notes.notes }}</p>
       <div class="line"></div>
     </div>
   </div>
@@ -34,12 +32,24 @@ export default {
     },
   },
   data() {
-    return {}
+    return {
+      modal: false,
+      addNotes: false,
+    }
+  },
+  computed: {
+    notes() {
+      if (this.$route.name === 'appointments-newAppointment') {
+        return this.addNotes
+      } else if (Object.entries(this.clinicalNotes).length !== 0) {
+        return this.clinicalNotes
+      } else return false
+    },
   },
   methods: {
     submitClinicalNotes(val) {
       if (val) {
-        this.notes.push(val)
+        this.addNotes = val
       }
     },
   },

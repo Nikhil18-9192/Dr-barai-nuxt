@@ -37,6 +37,7 @@ export default {
     { src: '~/plugins/nuxt-client-init.js', ssr: false },
     { src: '~/plugins/toast.js', ssr: false },
     { src: '~/plugins/vue-search-select.js', ssr: false },
+    { src: '~plugins/datepicker.js', ssr: false },
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)

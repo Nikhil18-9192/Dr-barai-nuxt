@@ -10,7 +10,21 @@
         Start New Appointment
       </button>
     </div>
-
+    <div class="date-picker flex">
+      <p class="p-2">From-</p>
+      <datepicker
+        class="date mt-2 text-blue-500"
+        v-model="startDate"
+        placeholder="Select Date"
+      />
+      <p class="p-2">To-</p>
+      <datepicker
+        class="date mt-2 text-blue-500"
+        v-model="endDate"
+        :disabled-dates="getDisabledDates"
+        placeholder="Select Date"
+      />
+    </div>
     <table class="appointments-list border-separate">
       <tbody>
         <tr class="text-gray-600 text-sm font-normal">
@@ -41,7 +55,7 @@
           class="bg-gray-100 my-5 text-sm font-normal"
           @click="onAppointmentClick(appointment.id)"
         >
-          <td class="py-3 px-2">{{ appointment.id }}</td>
+          <td class="py-3 pl-2">{{ appointment.id }}</td>
           <td class="py-3 px-0">{{ appointment.patient.name }}</td>
           <td class="py-3 px-0">{{ appointment.patient.mobile }}</td>
           <td class="py-3 px-0">
@@ -117,8 +131,8 @@ export default {
       totalPages: 0,
       pages: [],
       start: 0,
-      startDate: '2020-12-15T06:32:16.336Z',
-      endDate: '2022-12-05T06:32:16.336Z',
+      startDate: new Date(),
+      endDate: new Date(),
       currentPage: 1,
       maxPage: 3,
       startPage: 0,
@@ -128,6 +142,12 @@ export default {
   computed: {
     formatter() {
       return formatDateTime
+    },
+    getDisabledDates() {
+      const disabledDates = {
+        to: this.startDate,
+      }
+      return disabledDates
     },
   },
   mounted() {
@@ -264,6 +284,9 @@ export default {
     }
     td {
       text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 

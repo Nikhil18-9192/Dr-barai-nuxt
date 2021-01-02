@@ -10,7 +10,7 @@
       <AddButton @click.native="addModal = true" />
     </div>
 
-    <table class="drugs-list w-full">
+    <table v-if="prescriptions" class="drugs-list w-full">
       <tbody>
         <tr class="bg-gray-100 text-black-400 text-sm">
           <th
@@ -68,7 +68,17 @@ export default {
   data() {
     return {
       addModal: false,
+      addPrescription: false,
     }
+  },
+  computed: {
+    prescriptions() {
+      if (this.$route.name === 'appointments-newAppointment') {
+        return this.addprescription
+      } else if (Object.entries(this.prescription).length !== 0) {
+        return this.prescription
+      } else return false
+    },
   },
   mounted() {
     this.submitPrescriptionData()

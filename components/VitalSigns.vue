@@ -10,7 +10,7 @@
       <AddButton @click.native="modal = true" />
     </div>
 
-    <table class="list w-full">
+    <table v-if="vitalSigns" class="list w-full">
       <tbody>
         <tr class="bg-gray-100 text-black-400 text-sm">
           <th
@@ -39,16 +39,13 @@
             RESP. RATE (Breaths/min)
           </th>
         </tr>
-        <tr
-          v-if="Object.entries(vitals).length != 0"
-          class="row my-6 text-sm font-normal text-center"
-        >
-          <td class="p-3">{{ vitals.weight }}</td>
+        <tr class="row my-6 text-sm font-normal text-center">
+          <td class="p-3">{{ vitalSigns.weight }}</td>
           <td class="p-3">
-            {{ vitals.bp.bpSystolic + '/' + vitals.bp.bpDiastolic }}
+            {{ vitalSigns.bp.bpSystolic + '/' + vitalSigns.bp.bpDiastolic }}
           </td>
-          <td class="p-3">{{ vitals.temperature.temperature }}</td>
-          <td class="p-3">{{ vitals.pulse }}</td>
+          <td class="p-3">{{ vitalSigns.temperature.temperature }}</td>
+          <td class="p-3">{{ vitalSigns.pulse }}</td>
           <td class="p-3 flex justify-center">
             <p>{{ vitals.respRate }}</p>
             <img class="absolute ml-36 hidden" src="/edit_btn.svg" alt="" />
@@ -69,7 +66,19 @@ export default {
     },
   },
   data() {
-    return {}
+    return {
+      modal: false,
+      addVitals: false,
+    }
+  },
+  computed: {
+    vitalSigns() {
+      if (this.$route.name === 'appointments-newAppointment') {
+        return this.addVitals
+      } else if (Object.entries(this.vitals).length !== 0) {
+        return this.vitals
+      } else return false
+    },
   },
   mounted() {
     this.submitVitalSignData()
@@ -77,7 +86,7 @@ export default {
   methods: {
     submitVitalSignData(val) {
       if (val) {
-        this.vitalSigns.push(val)
+        this.addVitals = val
       }
     },
   },
