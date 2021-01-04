@@ -40,7 +40,9 @@ export default {
 
 <style lang="scss" scoped>
 #drawer {
-  position: relative;
+  position: sticky;
+  top: 0;
+  left: 0;
   min-width: 0px;
   height: 100vh;
   transition: 0.3s ease all;

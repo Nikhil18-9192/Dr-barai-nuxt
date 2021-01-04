@@ -3,7 +3,7 @@
     <Drawer />
     <div class="nuxt-view">
       <MenuBar />
-      <Nuxt class="mx-10 my-app" />
+      <Nuxt class="px-10 my-app" />
     </div>
   </div>
 </template>
