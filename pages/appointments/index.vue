@@ -193,15 +193,6 @@ export default {
         this.pages = newPages
       }
     },
-    // async fetchTotalappointmentsCount() {
-    //   this.totalItem = await this.$axios.$get(
-    //     'http://localhost:1337/appointments/count'
-    //   )
-    //   this.totalPages = Math.ceil(this.totalItem / this.perPage)
-    //   for (let i = 1; i <= this.totalPages; i++) {
-    //     this.pages.push(i)
-    //   }
-    // },
 
     newAppointment() {
       this.$router.push('/appointments/newAppointment')
@@ -216,27 +207,7 @@ export default {
           newPages.push(i)
           this.pages = newPages
         }
-        return
-      } else if (
-        this.totalPages > this.maxPage &&
-        this.currentPage >= Math.ceil(this.maxPage / 2)
-      ) {
-        if (this.currentPage <= this.totalPages - 1) {
-          this.startPage = this.currentPage - Math.floor(this.maxPage / 2)
-          if (this.startPage === 0) {
-            this.startPage = 1
-          }
-          this.endPage = this.currentPage + Math.floor(this.maxPage / 2)
-          if (this.currentPage === this.totalPages - 1) {
-            this.endPage = this.currentPage + 1
-          }
-          const newPages = []
-          for (let i = this.startPage; i <= this.endPage; i++) {
-            newPages.push(i)
-            this.pages = newPages
-          }
-        }
-      } else if (this.currentPage <= Math.ceil(this.maxPage / 2)) {
+      } else if (this.totalPages > this.maxPage) {
         this.startPage = 1
         this.endPage = this.maxPage
         const newPages = []
@@ -245,16 +216,44 @@ export default {
           this.pages = newPages
         }
       }
+      // if (
+      //   this.totalPages > this.maxPage &&
+      //   this.currentPage >= Math.ceil(this.maxPage / 2)
+      // ) {
+      //   if (this.currentPage <= this.totalPages - 1) {
+      //     this.startPage = this.currentPage - Math.floor(this.maxPage / 2)
+      //     if (this.startPage === 0) {
+      //       this.startPage = 1
+      //     }
+      //     this.endPage = this.currentPage + Math.floor(this.maxPage / 2)
+      //     if (this.currentPage === this.totalPages - 1) {
+      //       this.endPage = this.currentPage + 1
+      //     }
+      //     const newPages = []
+      //     for (let i = this.startPage; i <= this.endPage; i++) {
+      //       newPages.push(i)
+      //       this.pages = newPages
+      //     }
+      //   }
+      // } else if (this.currentPage <= Math.ceil(this.maxPage / 2)) {
+      //   this.startPage = 1
+      //   this.endPage = this.maxPage
+      //   const newPages = []
+      //   for (let i = this.startPage; i <= this.endPage; i++) {
+      //     newPages.push(i)
+      //     this.pages = newPages
+      //   }
+      // }
 
-      if (this.currentPage === this.totalPages) {
-        this.startPage = this.totalPages - (this.maxPage - 1)
-        this.endPage = this.totalPages
-        const newPages = []
-        for (let i = this.startPage; i <= this.endPage; i++) {
-          newPages.push(i)
-          this.pages = newPages
-        }
-      }
+      // if (this.currentPage === this.totalPages) {
+      //   this.startPage = this.totalPages - (this.maxPage - 1)
+      //   this.endPage = this.totalPages
+      //   const newPages = []
+      //   for (let i = this.startPage; i <= this.endPage; i++) {
+      //     newPages.push(i)
+      //     this.pages = newPages
+      //   }
+      // }
     },
     firstPage() {
       this.paginatData(1)
