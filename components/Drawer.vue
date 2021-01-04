@@ -24,7 +24,7 @@
 export default {
   data() {
     return {
-      displayMenu: false,
+      displayMenu: true,
       menuItem: [
         { icon: '/dashboard.svg', name: 'Dashboard', route: '/' },
         { icon: '/calender.svg', name: 'Appointment', route: '/appointments' },
@@ -62,6 +62,11 @@ export default {
     transform: translateY(-50%);
     opacity: 0;
     transition: 0.5s ease all;
+  }
+
+  img {
+    transition: 0.5s ease all;
+    max-width: 2rem;
   }
 }
 
