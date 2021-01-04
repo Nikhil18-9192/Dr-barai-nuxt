@@ -193,6 +193,15 @@ export default {
         this.pages = newPages
       }
     },
+    // async fetchTotalappointmentsCount() {
+    //   this.totalItem = await this.$axios.$get(
+    //     'http://localhost:1337/appointments/count'
+    //   )
+    //   this.totalPages = Math.ceil(this.totalItem / this.perPage)
+    //   for (let i = 1; i <= this.totalPages; i++) {
+    //     this.pages.push(i)
+    //   }
+    // },
 
     newAppointment() {
       this.$router.push('/appointments/newAppointment')
