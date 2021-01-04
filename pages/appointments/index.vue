@@ -82,7 +82,7 @@
     <div class="pagination flex justify-between outline-none">
       <div class="flex mb-6 items-center">
         <button
-          v-if="maxPage <= totalPages && currentPage > 3"
+          v-if="maxPage < totalPages && currentPage > 3"
           class="w-10 h-9 mr-2"
           @click="firstPage()"
         >
@@ -90,8 +90,8 @@
         </button>
 
         <button
-          v-for="item in pages"
-          :key="item"
+          v-for="(item, i) in pages"
+          :key="i"
           :class="currentPage == item ? 'text-gray-900' : ''"
           class="p-1 mr-2 outline-none text-gray-400 font-normal"
           @click.prevent="paginatData(item)"
@@ -100,7 +100,7 @@
         </button>
 
         <button
-          v-if="maxPage <= totalPages && currentPage <= totalPages - 3"
+          v-if="maxPage < totalPages && currentPage <= totalPages - 3"
           class="w-10 h-9 mr-2"
           @click="lastPage()"
         >
@@ -134,7 +134,7 @@ export default {
     return {
       totalItem: 0,
       appointments: false,
-      perPage: 2,
+      perPage: 1,
       totalPages: 0,
       pages: [],
       start: 0,
@@ -165,7 +165,7 @@ export default {
       this.$router.push(`/appointments/${id}`)
     },
     async fetchappointments() {
-      this.$store.commit('SET_LOADING')
+      this.fetchTotalappointmentsCount()
       const { data } = await this.$apollo.query({
         query: appointments,
         variables: {
@@ -177,7 +177,6 @@ export default {
       })
       if (data.appointments.length !== 0) {
         this.appointments = data.appointments
-
         this.pagination()
       } else {
         this.appointments = false
@@ -185,11 +184,13 @@ export default {
     },
     async fetchTotalappointmentsCount() {
       this.totalItem = await this.$axios.$get(
-        'http://localhost:1337/appointments/count'
+        `http://localhost:1337/appointments/count?date_gte=${this.startDate.toISOString()}&date_lte=${this.endDate.toISOString()}`
       )
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
+      const newPages = []
       for (let i = 1; i <= this.totalPages; i++) {
-        this.pages.push(i)
+        newPages.push(i)
+        this.pages = newPages
       }
     },
 
@@ -208,8 +209,8 @@ export default {
         }
         return
       } else if (
-        this.currentPage >= Math.ceil(this.maxPage / 2) &&
-        this.totalPages > this.maxPage
+        this.totalPages > this.maxPage &&
+        this.currentPage >= Math.ceil(this.maxPage / 2)
       ) {
         if (this.currentPage <= this.totalPages - 1) {
           this.startPage = this.currentPage - Math.floor(this.maxPage / 2)
