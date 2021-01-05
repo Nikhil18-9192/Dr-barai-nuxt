@@ -18,6 +18,7 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
           type="text"
           placeholder="Elon musk"
+          autocomplete="on"
         />
         <label for="mobile" class="text-sm font-normal text-gray-400"
           >Mobile</label
@@ -27,6 +28,7 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
           type="number"
           placeholder="0123456789"
+          autocomplete="on"
         />
         <label for="email" class="text-sm font-normal text-gray-400"
           >Email</label
@@ -36,6 +38,7 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
           type="email"
           placeholder="elonmusk@teslamotors.com"
+          autocomplete="on"
         />
         <label for="gender" class="text-sm font-normal text-gray-400"
           >Gender</label
@@ -56,6 +59,7 @@
           type="date"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
           placeholder="dd-yy-mm"
+          autocomplete="on"
         />
         <label for="address" class="text-sm font-normal text-gray-400"
           >Address</label
@@ -64,6 +68,7 @@
           v-model="address"
           placeholder="street address"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
+          autocomplete="on"
         ></textarea>
         <label for="pincode" class="text-sm font-normal text-gray-400"
           >Pincode</label
@@ -73,6 +78,7 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
           type="number"
           placeholder="416010"
+          autocomplete="on"
         />
         <label for="city" class="text-sm font-normal text-gray-400">City</label>
         <input
@@ -80,6 +86,7 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
           type="text"
           placeholder="Kolhapur"
+          autocomplete="on"
         />
         <div class="mt-8 flex">
           <MyButton class="mr-4" :loading="loading" @click.native="addPatient"

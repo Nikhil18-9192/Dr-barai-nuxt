@@ -17,6 +17,7 @@
           v-model="complaints"
           placeholder="Add compaints"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
+          autocomplete="on"
         ></textarea>
         <label for="gender" class="text-sm font-light text-gray-400"
           >Observations</label
@@ -25,6 +26,7 @@
           v-model="observations"
           placeholder="Add observations"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
+          autocomplete="on"
         ></textarea>
         <label for="gender" class="text-sm font-light text-gray-400"
           >Diagnoses</label
@@ -33,6 +35,7 @@
           v-model="diagnoses"
           placeholder="Add diagnoses"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
+          autocomplete="on"
         ></textarea>
         <label for="gender" class="text-sm font-light text-gray-400"
           >Notes</label
@@ -41,6 +44,7 @@
           v-model="notes"
           placeholder="Add notes"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
+          autocomplete="on"
         ></textarea>
         <div class="mt-8 flex">
           <MyButton class="mr-4" @click.native="submitClinicalNotes"

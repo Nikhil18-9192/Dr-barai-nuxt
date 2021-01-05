@@ -47,7 +47,7 @@
           <td class="p-3">{{ vitalSigns.temperature.temperature }}</td>
           <td class="p-3">{{ vitalSigns.pulse }}</td>
           <td class="p-3 flex justify-center">
-            <p>{{ vitals.respRate }}</p>
+            <p>{{ vitalSigns.respRate }}</p>
             <img class="absolute ml-36 hidden" src="/edit_btn.svg" alt="" />
             <img class="absolute ml-56 hidden" src="/delete_btn.svg" alt="" />
           </td>

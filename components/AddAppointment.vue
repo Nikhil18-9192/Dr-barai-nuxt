@@ -10,6 +10,7 @@
         v-model="patientId"
         :options="patients"
         placeholder="Search Patient"
+        autocomplete="on"
       />
       <label for="date" class="text-sm font-normal text-gray-400 mt-3"
         >Date</label
