@@ -70,27 +70,39 @@
             <td
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
             >
-              {{ appointment.date }}
+              {{ formatter.formatDate(appointment.date) }}
             </td>
             <td
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
             >
-              {{ appointment.time }}
+              {{ formatter.formatTime(appointment.date) }}
             </td>
             <td
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
             >
-              {{ appointment.clinicalNotes.complaints }}
+              {{
+                appointment.clinicalNotes !== null
+                  ? appointment.clinicalNotes.complaints
+                  : ''
+              }}
             </td>
             <td
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
             >
-              {{ appointment.clinicalNotes.observations }}
+              {{
+                appointment.clinicalNotes !== null
+                  ? appointment.clinicalNotes.observation
+                  : ''
+              }}
             </td>
             <td
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
             >
-              {{ appointment.clinicalNotes.diagnoses }}
+              {{
+                appointment.clinicalNotes !== null
+                  ? appointment.clinicalNotes.diagnoses
+                  : ''
+              }}
             </td>
           </tr>
         </tbody>
@@ -101,6 +113,7 @@
 
 <script>
 import query from '@/apollo/queries/patient/patient.gql'
+import formatDateTime from '@/utils/formatDateTime'
 export default {
   data() {
     return {
@@ -120,10 +133,15 @@ export default {
       patient: false,
     }
   },
-
+  computed: {
+    formatter() {
+      return formatDateTime
+    },
+  },
   mounted() {
     this.fetchPatient()
   },
+
   methods: {
     patientUpdated(val) {
       if (val) {

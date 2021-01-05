@@ -170,7 +170,6 @@ export default {
         },
       })
       this.notifications = data.notifications
-      console.log(this.notifications)
       this.$store.commit('UNSET_LOADING')
       this.pagination()
     },
