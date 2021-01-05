@@ -1,5 +1,5 @@
 <template>
-  <div id="menu-bar" class="border-b-2 py-3 text-center">
+  <div id="menu-bar" class="border-b-2 py-3 z-40 text-center">
     <p class="text-gray-800 font-medium text-lg uppercase">
       Dr. Barai’s Clinic
     </p>
@@ -22,7 +22,6 @@ export default {}
   position: sticky;
   top: 0;
   left: 0;
-  z-index: 1000;
   background: #fff;
   .loader {
     width: 35px;

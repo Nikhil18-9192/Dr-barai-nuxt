@@ -10,7 +10,7 @@
     >
       <h1 class="text-lg font-medium text-center mb-8">Add Clinical Notes</h1>
       <div class="form">
-        <label for="gender" class="text-sm font-light text-gray-400"
+        <label for="complaints" class="text-sm font-light text-gray-400"
           >Complaints</label
         >
         <textarea
@@ -19,7 +19,7 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
           autocomplete="on"
         ></textarea>
-        <label for="gender" class="text-sm font-light text-gray-400"
+        <label for="observations" class="text-sm font-light text-gray-400"
           >Observations</label
         >
         <textarea
@@ -28,7 +28,7 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
           autocomplete="on"
         ></textarea>
-        <label for="gender" class="text-sm font-light text-gray-400"
+        <label for="diagnoses" class="text-sm font-light text-gray-400"
           >Diagnoses</label
         >
         <textarea
@@ -37,7 +37,7 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
           autocomplete="on"
         ></textarea>
-        <label for="gender" class="text-sm font-light text-gray-400"
+        <label for="notes" class="text-sm font-light text-gray-400"
           >Notes</label
         >
         <textarea

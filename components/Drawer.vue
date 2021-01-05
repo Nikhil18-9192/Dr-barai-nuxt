@@ -68,7 +68,7 @@ export default {
 
   img {
     transition: 0.5s ease all;
-    max-width: 2rem;
+    max-width: 26px;
   }
 }
 

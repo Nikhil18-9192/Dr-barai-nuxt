@@ -1,0 +1,12 @@
+query notifications($limit: Int, $start: Int) {
+  notifications(start: $start, limit: $limit, sort: "createdAt:desc") {
+    id
+    createdAt
+    message
+    patients {
+      id
+      mobile
+      name
+    }
+  }
+}

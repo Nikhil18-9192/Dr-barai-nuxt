@@ -3,14 +3,15 @@ query patients($limit: Int, $start: Int) {
     id
     mobile
     name
+    createdAt
     appointments {
       id
     }
   }
 }
 
-query getPatientNames{
-  patients(sort: "name:asc"){
+query getPatientNames {
+  patients(sort: "name:asc") {
     id
     name
   }

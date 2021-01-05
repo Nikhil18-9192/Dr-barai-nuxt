@@ -1,8 +1,15 @@
 <template>
   <div id="notification-page">
+    <SendSmsModal
+      v-if="modal"
+      @dismiss="modal = false"
+      @addNotify="addNotify"
+    />
     <div class="title flex justify-between my-8">
       <h1 class="text-2xl font-medium">SMS Logs</h1>
-      <MyButton :icon="addBtnIcon">Create New SMS</MyButton>
+      <MyButton :icon="addBtnIcon" @click.native="modal = true"
+        >Create New SMS</MyButton
+      >
     </div>
 
     <table class="notification-list border-separate">
@@ -16,32 +23,39 @@
           <th
             class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
           >
-            Sent TO
+            Sent To
           </th>
           <th
             class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
           >
-            Mobile
+            Message
           </th>
           <th
             class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
           >
-            Created At
+            Sent At
           </th>
         </tr>
+
         <tr
-          v-for="(item, i) in patients"
-          :key="i"
+          v-for="item in notifications"
+          :key="item.id"
           class="bg-gray-100 my-6 text-sm font-normal cursor-pointer"
-          @click="patientInfo(item.id)"
         >
           <td class="p-3">{{ item.id }}</td>
-          <td class="p-3">{{ item.name }}</td>
-          <td class="p-3">{{ item.mobile }}</td>
-          <td class="p-3">{{ item.appointments.length }}</td>
+          <td class="p-3">{{ item.patients[0].name }}, ...</td>
+          <td class="p-3">{{ text_truncate(item.message) }}</td>
+          <td class="p-3">
+            {{
+              formatter.formatDate(item.createdAt) +
+              ' at ' +
+              formatter.formatTime(item.createdAt)
+            }}
+          </td>
         </tr>
+
         <tr>
-          <td v-if="!patients.length">No patients Yet</td>
+          <td v-if="!notifications.length">No notifications Yet</td>
         </tr>
       </tbody>
     </table>
@@ -76,7 +90,7 @@
           last
         </button>
       </div>
-      <div v-if="patients.length" class="nextprev flex">
+      <div v-if="notifications.length" class="nextprev flex">
         <button
           class="bg-gray-200 p1 h-8 w-14 text-base font-medium rounded-l"
           @click="prev(currentPage)"
@@ -95,14 +109,16 @@
 </template>
 
 <script>
-import { patients } from '@/apollo/queries/patient/patients.gql'
+import { notifications } from '@/apollo/queries/notifications/notifications.gql'
+import formatDateTime from '@/utils/formatDateTime'
 export default {
-  name: 'PatientsPage',
+  name: 'NotificationsPage',
   data() {
     return {
+      modal: false,
       addBtnIcon: '/plus-circle.svg',
       totalItem: 0,
-      patients: [],
+      notifications: [],
       perPage: 5,
       totalPages: 0,
       pages: [],
@@ -112,42 +128,55 @@ export default {
       startPage: 0,
       endPage: 0,
       patient: null,
+      total: 0,
     }
   },
-  computed: {},
+  computed: {
+    formatter() {
+      return formatDateTime
+    },
+  },
   mounted() {
-    this.fetchPatients()
-    this.fetchTotalPatientCount()
+    this.fetchNotifications()
+    this.fetchTotalNotificationCount()
   },
   methods: {
-    addPatient() {
-      this.modal = true
-    },
-    newPatient(val) {
-      if (val) {
-        this.patients.unshift(val)
+    text_truncate(str, length, ending) {
+      if (length == null) {
+        length = 30
       }
-      this.modal = false
+      if (ending == null) {
+        ending = '...'
+      }
+      if (str.length > length) {
+        return str.substring(0, length - ending.length) + ending
+      } else {
+        return str
+      }
     },
-    patientInfo(id) {
-      this.$router.push(`/patients/${id}`)
+    addNotify(val) {
+      if (val) {
+        this.notifications.unshift(val)
+      }
     },
-    async fetchPatients() {
+
+    async fetchNotifications() {
       this.$store.commit('SET_LOADING')
       const { data } = await this.$apollo.query({
-        query: patients,
+        query: notifications,
         variables: {
           limit: this.perPage,
           start: this.start,
         },
       })
-      this.patients = data.patients
+      this.notifications = data.notifications
+      console.log(this.notifications)
       this.$store.commit('UNSET_LOADING')
       this.pagination()
     },
-    async fetchTotalPatientCount() {
+    async fetchTotalNotificationCount() {
       this.totalItem = await this.$axios.$get(
-        'http://localhost:1337/patients/count'
+        'http://localhost:1337/notifications/count'
       )
       this.pagination()
     },
@@ -213,7 +242,7 @@ export default {
     paginatData(pageNum) {
       this.currentPage = pageNum
       this.start = this.currentPage * this.perPage - this.perPage
-      this.fetchPatients()
+      this.fetchNotifications()
     },
     next(pageNum) {
       this.$store.commit('SET_LOADING')
