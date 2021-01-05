@@ -19,7 +19,11 @@ export default {}
 
 <style lang="scss" scoped>
 #menu-bar {
-  position: relative;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background: #fff;
   .loader {
     width: 35px;
     position: absolute;
