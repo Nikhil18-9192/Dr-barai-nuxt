@@ -40,15 +40,37 @@
           :key="i"
           class="row my-6 text-sm font-normal text-center"
         >
-          <td class="p-3">{{ item.drug.name }}</td>
-          <td class="p-3">{{ item.frequency.frequency }}</td>
           <td class="p-3">
             {{
-              item.frequency.drugDuration + ' ' + item.frequency.drugDurationFor
+              item.drug == null || item.drug.name == null
+                ? '---'
+                : item.drug.name
+            }}
+          </td>
+          <td class="p-3">
+            {{
+              item.frequency == null || item.frequency.frequency == null
+                ? '---'
+                : item.frequency.frequency
+            }}
+          </td>
+          <td class="p-3">
+            {{
+              item.frequency == null || item.frequency.drugDuration == null
+                ? '---'
+                : item.frequency.drugDuration +
+                  ' ' +
+                  item.frequency.drugDurationFor
             }}
           </td>
           <td class="p-3 flex justify-center">
-            <p>{{ item.frequency.instructions }}</p>
+            <p>
+              {{
+                item.frequency == null || item.frequency.instructions == null
+                  ? '---'
+                  : item.frequency.instructions
+              }}
+            </p>
             <img class="absolute ml-36 hidden" src="/edit_btn.svg" alt="" />
             <img class="absolute ml-56 hidden" src="/delete_btn.svg" alt="" />
           </td>
