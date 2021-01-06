@@ -197,6 +197,9 @@ export default {
 
       if (this.currentPage === this.totalPages) {
         this.startPage = this.totalPages - (this.maxPage - 1)
+        if (this.startPage <= 0) {
+          this.startPage = 1
+        }
         this.endPage = this.totalPages
         const newPages = []
         for (let i = this.startPage; i <= this.endPage; i++) {

@@ -20,6 +20,7 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
           type="text"
           placeholder="eg. Paracetomol"
+          autocomplete="on"
         />
         <label for="item code" class="text-sm font-normal text-gray-400"
           >item code</label
@@ -29,6 +30,7 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
           type="number"
           placeholder=""
+          autocomplete="on"
         />
         <label for="item type" class="text-sm font-normal text-gray-400"
           >item type</label
@@ -50,6 +52,7 @@
           type="text"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
           placeholder="Eon musk"
+          autocomplete="on"
         />
         <label for="stock" class="text-sm font-normal text-gray-400"
           >Stock</label
@@ -59,6 +62,7 @@
           class="border rounded border-gray-300 p-2 w-1/3 mt-1 mb-2 outline-none"
           type="number"
           placeholder="10"
+          autocomplete="on"
         />
         <span
           class="cursor-pointer text-blue-500 ml-2 capitalize"
@@ -79,6 +83,7 @@
           class="border rounded border-gray-300 p-2 w-1/2 mt-1 mb-2 outline-none"
           type="number"
           placeholder="type product price"
+          autocomplete="on"
         />
         <br />
         <label for="level" class="text-sm font-normal text-gray-400"
@@ -89,6 +94,7 @@
           class="border rounded border-gray-300 p-2 w-1/2 mt-1 mb-2 outline-none"
           type="number"
           placeholder="10"
+          autocomplete="on"
         />
         <br />
         <input

@@ -24,7 +24,7 @@
 export default {
   data() {
     return {
-      displayMenu: false,
+      displayMenu: true,
       menuItem: [
         { icon: '/dashboard.svg', name: 'Dashboard', route: '/' },
         { icon: '/calender.svg', name: 'Appointment', route: '/appointments' },
@@ -40,7 +40,9 @@ export default {
 
 <style lang="scss" scoped>
 #drawer {
-  position: relative;
+  position: sticky;
+  top: 0;
+  left: 0;
   min-width: 0px;
   height: 100vh;
   transition: 0.3s ease all;
@@ -62,6 +64,11 @@ export default {
     transform: translateY(-50%);
     opacity: 0;
     transition: 0.5s ease all;
+  }
+
+  img {
+    transition: 0.5s ease all;
+    max-width: 26px;
   }
 }
 

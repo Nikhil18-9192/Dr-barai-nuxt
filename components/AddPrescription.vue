@@ -42,6 +42,7 @@
           type="text"
           placeholder="eg. before food"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
+          autocomplete="on"
         />
         <label for="address" class="text-sm font-light text-gray-400"
           >Instruction</label
@@ -50,6 +51,7 @@
           v-model="instructions"
           placeholder="eg. before food"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
+          autocomplete="on"
         ></textarea>
         <label for="name" class="text-sm font-light text-gray-400"
           >Duration</label
@@ -60,6 +62,7 @@
           class="border rounded border-gray-300 p-2 mt-1 mb-2 outline-none w-1/3 text-sm"
           type="Number"
           placeholder="10"
+          autocomplete="on"
         />
         <span
           class="cursor-pointer text-blue-500 ml-2 capitalize"

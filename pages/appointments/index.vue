@@ -27,7 +27,7 @@
         ></datepicker>
         <button
           class="p-2 bg-blue-500 text-white rounded cursor-pointer"
-          @click="fetchappointments"
+          @click="refresh"
         >
           Refresh
         </button>
@@ -82,7 +82,7 @@
     <div class="pagination flex justify-between outline-none">
       <div class="flex mb-6 items-center">
         <button
-          v-if="maxPage < totalPages && currentPage > 3"
+          v-if="maxPage < totalPages && currentPage > Math.ceil(maxPage / 2)"
           class="w-10 h-9 mr-2"
           @click="firstPage()"
         >
@@ -100,7 +100,10 @@
         </button>
 
         <button
-          v-if="maxPage < totalPages && currentPage <= totalPages - 3"
+          v-if="
+            maxPage < totalPages &&
+            currentPage <= totalPages - Math.ceil(maxPage / 2)
+          "
           class="w-10 h-9 mr-2"
           @click="lastPage()"
         >
@@ -134,14 +137,14 @@ export default {
     return {
       totalItem: 0,
       appointments: false,
-      perPage: 1,
+      perPage: 5,
       totalPages: 0,
       pages: [],
       start: 0,
       startDate: this.$dayjs().startOf('day').$d,
       endDate: this.$dayjs().startOf('day').$d,
       currentPage: 1,
-      maxPage: 3,
+      maxPage: 5,
       startPage: 0,
       endPage: 0,
     }
@@ -159,13 +162,18 @@ export default {
   },
   mounted() {
     this.fetchappointments()
+    this.fetchTotalappointmentsCount()
   },
   methods: {
+    refresh() {
+      this.fetchappointments()
+      this.fetchTotalappointmentsCount()
+    },
     onAppointmentClick(id) {
       this.$router.push(`/appointments/${id}`)
     },
     async fetchappointments() {
-      this.fetchTotalappointmentsCount()
+      this.$store.commit('SET_LOADING')
       const { data } = await this.$apollo.query({
         query: appointments,
         variables: {
@@ -181,13 +189,15 @@ export default {
       } else {
         this.appointments = false
       }
+      this.$store.commit('UNSET_LOADING')
     },
     async fetchTotalappointmentsCount() {
+      const newPages = []
       this.totalItem = await this.$axios.$get(
         `http://localhost:1337/appointments/count?date_gte=${this.startDate.toISOString()}&date_lte=${this.endDate.toISOString()}`
       )
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
-      const newPages = []
+
       for (let i = 1; i <= this.totalPages; i++) {
         newPages.push(i)
         this.pages = newPages
@@ -199,7 +209,7 @@ export default {
     },
 
     pagination() {
-      if (this.totalPages <= this.maxPage) {
+      if (this.maxPage >= this.totalPages) {
         this.startPage = 1
         this.endPage = this.totalPages
         const newPages = []
@@ -207,7 +217,28 @@ export default {
           newPages.push(i)
           this.pages = newPages
         }
-      } else if (this.totalPages > this.maxPage) {
+      } else if (
+        this.totalPages > this.maxPage &&
+        this.currentPage >= Math.ceil(this.maxPage / 2)
+      ) {
+        if (this.currentPage <= this.totalPages - 1) {
+          this.startPage = this.currentPage - Math.floor(this.maxPage / 2)
+
+          if (this.startPage === 0 && this.startPage < 1) {
+            this.startPage = 1
+          }
+          this.endPage = this.currentPage + Math.floor(this.maxPage / 2)
+
+          if (this.currentPage === this.totalPages - 1) {
+            this.endPage = this.currentPage + 1
+          }
+          const newPages = []
+          for (let i = this.startPage; i <= this.endPage; i++) {
+            newPages.push(i)
+            this.pages = newPages
+          }
+        }
+      } else if (this.currentPage <= Math.ceil(this.maxPage / 2)) {
         this.startPage = 1
         this.endPage = this.maxPage
         const newPages = []
@@ -216,44 +247,19 @@ export default {
           this.pages = newPages
         }
       }
-      // if (
-      //   this.totalPages > this.maxPage &&
-      //   this.currentPage >= Math.ceil(this.maxPage / 2)
-      // ) {
-      //   if (this.currentPage <= this.totalPages - 1) {
-      //     this.startPage = this.currentPage - Math.floor(this.maxPage / 2)
-      //     if (this.startPage === 0) {
-      //       this.startPage = 1
-      //     }
-      //     this.endPage = this.currentPage + Math.floor(this.maxPage / 2)
-      //     if (this.currentPage === this.totalPages - 1) {
-      //       this.endPage = this.currentPage + 1
-      //     }
-      //     const newPages = []
-      //     for (let i = this.startPage; i <= this.endPage; i++) {
-      //       newPages.push(i)
-      //       this.pages = newPages
-      //     }
-      //   }
-      // } else if (this.currentPage <= Math.ceil(this.maxPage / 2)) {
-      //   this.startPage = 1
-      //   this.endPage = this.maxPage
-      //   const newPages = []
-      //   for (let i = this.startPage; i <= this.endPage; i++) {
-      //     newPages.push(i)
-      //     this.pages = newPages
-      //   }
-      // }
 
-      // if (this.currentPage === this.totalPages) {
-      //   this.startPage = this.totalPages - (this.maxPage - 1)
-      //   this.endPage = this.totalPages
-      //   const newPages = []
-      //   for (let i = this.startPage; i <= this.endPage; i++) {
-      //     newPages.push(i)
-      //     this.pages = newPages
-      //   }
-      // }
+      if (this.currentPage === this.totalPages) {
+        this.startPage = this.totalPages - (this.maxPage - 1)
+        if (this.startPage <= 0) {
+          this.startPage = 1
+        }
+        this.endPage = this.totalPages
+        const newPages = []
+        for (let i = this.startPage; i <= this.endPage; i++) {
+          newPages.push(i)
+          this.pages = newPages
+        }
+      }
     },
     firstPage() {
       this.paginatData(1)
@@ -267,20 +273,18 @@ export default {
       this.fetchappointments()
     },
     next(pageNum) {
-      this.$store.commit('SET_LOADING')
       if (pageNum > this.totalPages - 1) {
         this.$toast.error('There is no next page')
-        this.$store.commit('UNSET_LOADING')
+
         return
       }
       const nextPage = pageNum + 1
       this.paginatData(nextPage)
     },
     prev(pageNum) {
-      this.$store.commit('SET_LOADING')
       if (pageNum < 2) {
         this.$toast.error('There is no prev page')
-        this.$store.commit('UNSET_LOADING')
+
         return
       }
       const prevPage = pageNum - 1

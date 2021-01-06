@@ -10,37 +10,41 @@
     >
       <h1 class="text-lg font-medium text-center mb-8">Add Clinical Notes</h1>
       <div class="form">
-        <label for="gender" class="text-sm font-light text-gray-400"
+        <label for="complaints" class="text-sm font-light text-gray-400"
           >Complaints</label
         >
         <textarea
           v-model="complaints"
           placeholder="Add compaints"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
+          autocomplete="on"
         ></textarea>
-        <label for="gender" class="text-sm font-light text-gray-400"
+        <label for="observations" class="text-sm font-light text-gray-400"
           >Observations</label
         >
         <textarea
           v-model="observations"
           placeholder="Add observations"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
+          autocomplete="on"
         ></textarea>
-        <label for="gender" class="text-sm font-light text-gray-400"
+        <label for="diagnoses" class="text-sm font-light text-gray-400"
           >Diagnoses</label
         >
         <textarea
           v-model="diagnoses"
           placeholder="Add diagnoses"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
+          autocomplete="on"
         ></textarea>
-        <label for="gender" class="text-sm font-light text-gray-400"
+        <label for="notes" class="text-sm font-light text-gray-400"
           >Notes</label
         >
         <textarea
           v-model="notes"
           placeholder="Add notes"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
+          autocomplete="on"
         ></textarea>
         <div class="mt-8 flex">
           <MyButton class="mr-4" @click.native="submitClinicalNotes"
