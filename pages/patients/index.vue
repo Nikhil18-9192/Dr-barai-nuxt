@@ -49,22 +49,25 @@
       </tbody>
     </table>
     <div class="pagination flex justify-between">
-      <paginate
-        v-model="currentPage"
-        :page-count="totalPages"
-        :page-range="3"
-        :margin-pages="2"
-        :click-handler="clickCallback"
-        :prev-text="'<<'"
-        :next-text="'>>'"
-        prev-class="flex items-center mr-2 outline-none"
-        next-class="flex items-center ml-2 outline-none"
-        :container-class="'flex'"
-        :page-class="'text-gray-400 p-1 mr-2'"
-        :active-class="'text-gray-900'"
-        :page-link-class="'outline-none'"
-      >
-      </paginate>
+      <div>
+        <paginate
+          v-model="currentPage"
+          :page-count="totalPages"
+          :page-range="3"
+          :margin-pages="2"
+          :click-handler="clickCallback"
+          :prev-text="'<<'"
+          :next-text="'>>'"
+          prev-class="flex items-center mr-2 outline-none"
+          next-class="flex items-center ml-2 outline-none"
+          :container-class="'flex'"
+          :page-class="'text-gray-400 p-1 mr-2'"
+          :active-class="'text-gray-900'"
+          :page-link-class="'outline-none'"
+        >
+        </paginate>
+      </div>
+
       <div class="pagination flex justify-between outline-none">
         <div v-if="patients.length" class="nextprev flex">
           <button
