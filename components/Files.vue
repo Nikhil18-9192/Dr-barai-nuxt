@@ -53,7 +53,6 @@ export default {
       for (let i = 0; i < files.length; i++) {
         this.addImages.push(URL.createObjectURL(files[i]))
       }
-      console.log(this.addImages)
     },
   },
 }
