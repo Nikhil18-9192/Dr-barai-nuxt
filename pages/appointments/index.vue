@@ -137,7 +137,7 @@ export default {
     return {
       totalItem: 0,
       appointments: false,
-      perPage: 5,
+      perPage: 1,
       totalPages: 0,
       pages: [],
       start: 0,
@@ -196,6 +196,7 @@ export default {
       this.totalItem = await this.$axios.$get(
         `http://localhost:1337/appointments/count?date_gte=${this.startDate.toISOString()}&date_lte=${this.endDate.toISOString()}`
       )
+
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
 
       for (let i = 1; i <= this.totalPages; i++) {

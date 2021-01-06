@@ -1,14 +1,14 @@
 <template>
   <div
     id="add-patient"
-    class="fixed w-full z-50 top-0 left-0 h-screen bg-black bg-opacity-50"
+    class="fixed w-full z-50 top-0 left-0 h-screen bg-black bg-opacity-50 overflow-y-scroll"
     @click.stop="$emit('dismiss')"
   >
     <div
       class="add-modal bg-white relative rounded-md mx-auto mt-12 py-6 px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
-      <h1 class="text-lg font-medium text-center mb-8">
+      <h1 class="text-lg font-medium text-center mb-4">
         {{ patient ? 'Edit' : 'Add New' }} Patient
       </h1>
       <div class="form">
