@@ -1,33 +1,50 @@
 <template>
   <div id="new-appointment">
     <h1 class="my-10 text-lg font-medium">Create New Appointment</h1>
+    <h2 class="timer absolute text-6xl">{{ time }}</h2>
+    <div class="container relative flex">
+      <div class="form flex flex-col w-6/12">
+        <label for="name" class="w-50 text-sm font-normal text-gray-400 my-1"
+          >Name</label
+        >
+        <model-select
+          v-model="selectedPatientId"
+          :options="patients"
+          placeholder="Search Patient"
+          autocomplete="on"
+        />
+        <label for="date" class="text-sm font-normal text-gray-400 mt-3"
+          >Date</label
+        >
+        <input
+          type="date"
+          v-model="sessionDate"
+          class="border rounded border-gray-300 p-2 mt-1 mb-2 outline-none"
+        />
+        <label for="time" class="text-sm font-normal text-gray-400 mt-3"
+          >Time</label
+        >
+        <input
+          type="time"
+          v-model="sessionTime"
+          class="border rounded border-gray-300 p-2 mt-1 mb-2 outline-none"
+        />
+      </div>
 
-    <div class="form flex flex-col">
-      <label for="name" class="w-50 text-sm font-normal text-gray-400 my-1"
-        >Name</label
+      <button
+        v-if="!sessionStarted"
+        class="session-btn absolute bg-black rounded-md text-white text-sm font-medium ml-8 mb-2 p-3"
+        @click="startSession()"
       >
-      <model-select
-        v-model="patientId"
-        :options="patients"
-        placeholder="Search Patient"
-        autocomplete="on"
-      />
-      <label for="date" class="text-sm font-normal text-gray-400 mt-3"
-        >Date</label
+        Start Session
+      </button>
+      <button
+        v-if="sessionStarted"
+        class="session-btn absolute bg-red-500 rounded-md text-white text-sm font-medium ml-8 mb-2 p-3"
+        @click="finishSession()"
       >
-      <input
-        type="date"
-        :value="getDate()"
-        class="border rounded border-gray-300 p-2 w-6/12 mt-1 mb-2 outline-none"
-      />
-      <label for="time" class="text-sm font-normal text-gray-400 mt-3"
-        >Time</label
-      >
-      <input
-        type="time"
-        :value="getTime()"
-        class="border rounded border-gray-300 p-2 w-6/12 mt-1 mb-2 outline-none"
-      />
+        Finish Session
+      </button>
     </div>
   </div>
 </template>
@@ -42,7 +59,13 @@ export default {
   },
   data() {
     return {
-      patientId: false,
+      sessionStarted: false,
+      time: '00:00:00',
+      interval: false,
+      startTime: false,
+      sessionDate: this.getDate(),
+      sessionTime: this.getTime(),
+      selectedPatientId: false,
       patients: [
         {
           value: false,
@@ -80,7 +103,46 @@ export default {
       return this.$dayjs().format('YYYY-MM-DD')
     },
     getTime() {
-      return this.$dayjs().format('hh:mm')
+      return this.$dayjs().format('hh:mm:ss')
+    },
+    startSession() {
+      if (!this.selectedPatientId) {
+        this.$toast.error('Please select a patient')
+        return
+      }
+      this.startTime = Date.now()
+      this.startTimer()
+      this.sessionStarted = true
+    },
+    finishSession() {
+      clearInterval(this.interval)
+      this.time = '00:00:00'
+      this.sessionStarted = false
+    },
+    startTimer() {
+      const parent = this
+      this.interval = setInterval(function () {
+        const elaspsedTime = Date.now() - parent.startTime
+        parent.formatTime(elaspsedTime)
+      }, 1000)
+    },
+
+    formatTime(time) {
+      const hour = time / 3600000
+      const hh = Math.floor(hour)
+
+      const min = (hour - hh) * 60
+      const mm = Math.floor(min)
+
+      const sec = (min - mm) * 60
+      const ss = Math.floor(sec)
+
+      const HH = hh.toString().padStart(2, '0')
+      const MM = mm.toString().padStart(2, '0')
+      const SS = ss.toString().padStart(2, '0')
+
+      console.log(`${HH}:${MM}:${SS}`)
+      this.time = `${HH}:${MM}:${SS}`
     },
   },
 }
@@ -88,9 +150,15 @@ export default {
 
 <style lang="scss" scoped>
 #new-appointment {
+  position: relative;
   margin-bottom: 55px;
-  .ui.fluid.dropdown {
-    width: 50%;
+  .timer {
+    right: 0;
+    top: 0;
+  }
+  .session-btn {
+    left: 50%;
+    bottom: 0;
   }
 }
 </style>

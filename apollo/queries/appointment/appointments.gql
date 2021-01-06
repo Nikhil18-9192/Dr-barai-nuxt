@@ -19,7 +19,7 @@ query appointments(
   }
 }
 query appointmentFromId($id: String) {
-  appointment(where: { id: $id }) {
+  appointments(where: { id: $id }) {
     id
     date
     prescription {

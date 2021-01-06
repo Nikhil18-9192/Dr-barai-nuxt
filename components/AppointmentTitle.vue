@@ -5,10 +5,10 @@
   >
     <div class="date-time absolute ml-5 py-4 pr-5">
       <h2 class="text-gray-600 text-lg font-medium mt-1">
-        {{ appointmentInfo.date }}
+        {{ appointmentInfo.date == null ? '---' : appointmentInfo.date }}
       </h2>
       <p class="text-sm font-medium text-gray-400">
-        {{ appointmentInfo.time }}
+        {{ appointmentInfo.time == null ? '---' : appointmentInfo.time }}
       </p>
     </div>
     <div class="patient-info ml-48 mt-4">

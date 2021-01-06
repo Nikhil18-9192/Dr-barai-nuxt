@@ -40,14 +40,31 @@
           </th>
         </tr>
         <tr class="row my-6 text-sm font-normal text-center">
-          <td class="p-3">{{ vitalSigns.weight }}</td>
           <td class="p-3">
-            {{ vitalSigns.bp.bpSystolic + '/' + vitalSigns.bp.bpDiastolic }}
+            {{ vitalSigns.weight == null ? '---' : vitalSigns.weight }}
           </td>
-          <td class="p-3">{{ vitalSigns.temperature.temperature }}</td>
-          <td class="p-3">{{ vitalSigns.pulse }}</td>
+          <td class="p-3">
+            {{
+              vitalSigns.bp == null ||
+              vitalSigns.bp.bpSystolic == null ||
+              vitalSigns.bp.bpDiastolic == null
+                ? '---'
+                : vitalSigns.bp.bpSystolic + '/' + vitalSigns.bp.bpDiastolic
+            }}
+          </td>
+          <td class="p-3">
+            {{
+              vitalSigns.temperature == null ||
+              vitalSigns.temperature.temperature == null
+                ? '---'
+                : vitalSigns.temperature.temperature
+            }}
+          </td>
+          <td class="p-3">
+            {{ vitalSigns.pulse == null ? '---' : vitalSigns.pulse }}
+          </td>
           <td class="p-3 flex justify-center">
-            <p>{{ vitalSigns.respRate }}</p>
+            <p>{{ vitals.respRate == null ? '---' : vitalSigns.respRate }}</p>
             <img class="absolute ml-36 hidden" src="/edit_btn.svg" alt="" />
             <img class="absolute ml-56 hidden" src="/delete_btn.svg" alt="" />
           </td>
