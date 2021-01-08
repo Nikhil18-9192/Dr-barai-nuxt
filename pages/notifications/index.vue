@@ -1,18 +1,20 @@
 <template>
   <div id="notification-page">
-    <SendSmsModal
-      v-if="modal"
-      @dismiss="modal = false"
-      @addNotify="addNotify"
-    />
-    <div class="title flex justify-between my-8">
-      <h1 class="text-2xl font-medium">SMS Logs</h1>
-      <MyButton :icon="addBtnIcon" @click.native="modal = true"
-        >Create New SMS</MyButton
-      >
+    <div class="sms-info flex-col flex">
+      <SendSmsModal
+        v-if="modal"
+        @dismiss="modal = false"
+        @addNotify="addNotify"
+      />
+      <div class="title flex justify-between my-8">
+        <h1 class="text-2xl font-medium">SMS Logs</h1>
+        <MyButton :icon="addBtnIcon" @click.native="modal = true"
+          >Create New SMS</MyButton
+        >
+      </div>
     </div>
 
-    <table class="notification-list border-separate">
+    <table class="notification-list border-separate flex-grow">
       <tbody>
         <tr class="text-gray-600 text-sm font-normal">
           <th
@@ -41,9 +43,12 @@
           v-for="item in notifications"
           :key="item.id"
           class="bg-gray-100 my-6 text-sm font-normal cursor-pointer"
+          @click="viewNotification(item.id)"
         >
           <td class="p-3">{{ item.id }}</td>
-          <td class="p-3">{{ item.patients[0].name }}, ...</td>
+          <td class="p-3">
+            {{ getName(item.patients) }}
+          </td>
           <td class="p-3">{{ text_truncate(item.message) }}</td>
           <td class="p-3">
             {{
@@ -59,50 +64,41 @@
         </tr>
       </tbody>
     </table>
-    <div class="pagination flex justify-between outline-none">
-      <div class="flex mb-6 items-center">
-        <button
-          v-if="maxPage <= totalPages && currentPage > Math.ceil(maxPage / 2)"
-          class="w-10 h-5 mr-2"
-          @click="firstPage()"
+    <div class="pagination-section flex justify-between">
+      <div>
+        <paginate
+          v-model="currentPage"
+          :page-count="totalPages"
+          :page-range="3"
+          :margin-pages="2"
+          :click-handler="clickCallback"
+          :prev-text="'<<'"
+          :next-text="'>>'"
+          prev-class="flex items-center mr-2"
+          next-class="flex items-center ml-2"
+          :container-class="'flex'"
+          :page-class="'text-gray-400 p-1 mr-2'"
+          :active-class="'text-gray-900'"
+          :page-link-class="'outline-none'"
         >
-          first
-        </button>
-
-        <button
-          v-for="item in pages"
-          :key="item"
-          :class="currentPage == item ? 'text-gray-900' : ''"
-          class="p-1 mr-2 outline-none text-gray-400 font-normal"
-          @click.prevent="paginatData(item)"
-        >
-          {{ item }}
-        </button>
-
-        <button
-          v-if="
-            maxPage <= totalPages &&
-            currentPage <= totalPages - Math.ceil(maxPage / 2)
-          "
-          class="w-10 h-5 mr-2"
-          @click="lastPage()"
-        >
-          last
-        </button>
+        </paginate>
       </div>
-      <div v-if="notifications.length" class="nextprev flex">
-        <button
-          class="bg-gray-200 p1 h-8 w-14 text-base font-medium rounded-l"
-          @click="prev(currentPage)"
-        >
-          Prev
-        </button>
-        <button
-          class="bg-gray-300 p-1 h-8 w-14 text-base font-medium rounded-r"
-          @click="next(currentPage)"
-        >
-          Next
-        </button>
+
+      <div class="paginate-section">
+        <div v-if="notifications.length" class="nextprev flex">
+          <button
+            class="bg-gray-200 p1 h-8 w-14 text-base font-medium rounded-l"
+            @click="prev(currentPage)"
+          >
+            Prev
+          </button>
+          <button
+            class="bg-gray-300 p-1 h-8 w-14 text-base font-medium rounded-r"
+            @click="next(currentPage)"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -113,6 +109,7 @@ import { notifications } from '@/apollo/queries/notifications/notifications.gql'
 import formatDateTime from '@/utils/formatDateTime'
 export default {
   name: 'NotificationsPage',
+
   data() {
     return {
       modal: false,
@@ -121,14 +118,7 @@ export default {
       notifications: [],
       perPage: 5,
       totalPages: 0,
-      pages: [],
-      start: 0,
       currentPage: 1,
-      maxPage: 5,
-      startPage: 0,
-      endPage: 0,
-      patient: null,
-      total: 0,
     }
   },
   computed: {
@@ -141,6 +131,63 @@ export default {
     this.fetchTotalNotificationCount()
   },
   methods: {
+    async clickCallback(selectedPage) {
+      this.currentPage = selectedPage
+      const { data } = await this.$apollo.query({
+        query: notifications,
+        variables: {
+          limit: this.perPage,
+          start: selectedPage * this.perPage - this.perPage,
+        },
+      })
+      this.notifications = data.notifications
+    },
+    next() {
+      this.currentPage++
+      if (this.currentPage > this.totalPages) {
+        this.$toast.error('no pages')
+        this.currentPage = this.totalPages
+      }
+      this.fetchNotifications()
+    },
+    prev() {
+      this.currentPage--
+      if (this.currentPage === 0) {
+        this.$toast.error('no pages')
+        this.currentPage = 1
+      }
+      this.fetchNotifications()
+    },
+    async fetchNotifications() {
+      this.$store.commit('SET_LOADING')
+      const { data } = await this.$apollo.query({
+        query: notifications,
+        variables: {
+          limit: this.perPage,
+          start: this.currentPage * this.perPage - this.perPage,
+        },
+      })
+      this.notifications = data.notifications
+      this.$store.commit('UNSET_LOADING')
+    },
+    async fetchTotalNotificationCount() {
+      this.totalItem = await this.$axios.$get(
+        'http://localhost:1337/notifications/count'
+      )
+      this.totalPages = Math.ceil(this.totalItem / this.perPage)
+    },
+    getName(patients) {
+      if (patients.length === 1) {
+        return patients[0].name
+      } else {
+        return `${patients[0].name.substring(0, 10)} & ${
+          patients.length - 1
+        } Other`
+      }
+    },
+    viewNotification(id) {
+      this.$router.push(`/notifications/${id}`)
+    },
     text_truncate(str, length, ending) {
       if (length == null) {
         length = 30
@@ -159,134 +206,31 @@ export default {
         this.notifications.unshift(val)
       }
     },
-
-    async fetchNotifications() {
-      this.$store.commit('SET_LOADING')
-      const { data } = await this.$apollo.query({
-        query: notifications,
-        variables: {
-          limit: this.perPage,
-          start: this.start,
-        },
-      })
-      this.notifications = data.notifications
-      this.$store.commit('UNSET_LOADING')
-      this.pagination()
-    },
-    async fetchTotalNotificationCount() {
-      this.totalItem = await this.$axios.$get(
-        'http://localhost:1337/notifications/count'
-      )
-      this.pagination()
-    },
-    pagination() {
-      this.totalPages = Math.ceil(this.totalItem / this.perPage)
-      if (this.totalPages <= this.maxPage) {
-        this.startPage = 1
-        this.endPage = this.totalPages
-        const newPages = []
-        for (let i = this.startPage; i <= this.endPage; i++) {
-          newPages.push(i)
-          this.pages = newPages
-        }
-        return
-      } else if (
-        this.currentPage >= Math.ceil(this.maxPage / 2) &&
-        this.totalPages > this.maxPage
-      ) {
-        if (this.currentPage <= this.totalPages - 1) {
-          this.startPage = this.currentPage - Math.floor(this.maxPage / 2)
-          if (this.startPage === 0) {
-            this.startPage = 1
-          }
-          this.endPage = this.currentPage + Math.floor(this.maxPage / 2)
-          if (this.currentPage === this.totalPages - 1) {
-            this.endPage = this.currentPage + 1
-          }
-          const newPages = []
-          for (let i = this.startPage; i <= this.endPage; i++) {
-            newPages.push(i)
-            this.pages = newPages
-          }
-        }
-      } else if (this.currentPage <= Math.ceil(this.maxPage / 2)) {
-        this.startPage = 1
-        this.endPage = this.maxPage
-        const newPages = []
-        for (let i = this.startPage; i <= this.endPage; i++) {
-          newPages.push(i)
-          this.pages = newPages
-        }
-      }
-
-      if (this.currentPage === this.totalPages) {
-        this.startPage = this.totalPages - (this.maxPage - 1)
-        if (this.startPage <= 0) {
-          this.startPage = 1
-        }
-        this.endPage = this.totalPages
-        const newPages = []
-        for (let i = this.startPage; i <= this.endPage; i++) {
-          newPages.push(i)
-          this.pages = newPages
-        }
-      }
-    },
-    firstPage() {
-      this.paginatData(1)
-    },
-    lastPage() {
-      this.paginatData(this.totalPages)
-    },
-    paginatData(pageNum) {
-      this.currentPage = pageNum
-      this.start = this.currentPage * this.perPage - this.perPage
-      this.fetchNotifications()
-    },
-    next(pageNum) {
-      this.$store.commit('SET_LOADING')
-      if (pageNum > this.totalPages - 1) {
-        this.$toast.error('There is no next page')
-        this.$store.commit('UNSET_LOADING')
-        return
-      }
-      const nextPage = pageNum + 1
-      this.paginatData(nextPage)
-    },
-    prev(pageNum) {
-      this.$store.commit('SET_LOADING')
-      if (pageNum < 2) {
-        this.$toast.error('There is no prev page')
-        this.$store.commit('UNSET_LOADING')
-        return
-      }
-      const prevPage = pageNum - 1
-      this.paginatData(prevPage)
-    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-#notification-page {
-  .add-btn {
-    width: 180px;
-    height: 37px;
-    img {
-      width: 20px;
-      height: 20px;
-    }
+.add-btn {
+  width: 180px;
+  height: 37px;
+  img {
+    width: 20px;
+    height: 20px;
   }
-  .notification-list {
-    border-spacing: 0 1.5em;
-    width: 90%;
-    th {
-      text-align: left;
-      font-weight: normal;
-    }
+}
+.notification-list {
+  border-spacing: 0 1.5em;
+  width: 90%;
+  th {
+    text-align: left;
+    font-weight: normal;
   }
-  button {
-    outline: none;
-  }
+}
+button {
+  outline: none;
+}
+.sms-info {
+  min-height: 150px;
 }
 </style>

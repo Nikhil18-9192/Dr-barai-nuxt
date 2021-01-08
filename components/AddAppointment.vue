@@ -141,7 +141,6 @@ export default {
       const MM = mm.toString().padStart(2, '0')
       const SS = ss.toString().padStart(2, '0')
 
-      console.log(`${HH}:${MM}:${SS}`)
       this.time = `${HH}:${MM}:${SS}`
     },
   },

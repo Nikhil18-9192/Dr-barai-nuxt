@@ -36,3 +36,16 @@
 body {
   font-family: 'Inter', sans-serif;
 }
+
+.c-sliding-pagination__list {
+  display: flex;
+}
+
+.c-sliding-pagination__list-element {
+  @apply text-gray-400;
+  @apply p-1;
+  @apply mr-2;
+}
+.c-sliding-pagination__list-element--active {
+  @apply text-black;
+}

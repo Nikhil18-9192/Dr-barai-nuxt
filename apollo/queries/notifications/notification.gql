@@ -1,0 +1,13 @@
+query notification($id: ID!) {
+  notification(id: $id) {
+    id
+    message
+    createdAt
+    patients {
+      name
+      id
+      mobile
+      address
+    }
+  }
+}

@@ -11,6 +11,7 @@
       <h1 class="text-lg font-medium text-center mb-8">Send Message</h1>
       <form autocomplete="on">
         <multi-select
+          :is-disabled="propsToPass()"
           :options="patients"
           :selected-options="items"
           placeholder="select Patients"
@@ -34,6 +35,7 @@
           v-model="sendToAll"
           type="checkbox"
           value="sendToAll"
+          @click="sendAll(sendToAll)"
         />
         <label for="sendAll" class="text-sm font-normal text-gray-400"
           >Send To All</label
@@ -80,6 +82,20 @@ export default {
     this.fetchPatients()
   },
   methods: {
+    propsToPass() {
+      let isDisable = false
+      if (this.sendToAll) {
+        // eslint-disable-next-line
+        return (isDisable = true)
+      }
+    },
+    sendAll(status) {
+      if (!status) {
+        this.count = this.patients.length
+      } else {
+        this.count = 0
+      }
+    },
     onSelect(items, lastSelectItem) {
       this.items = items
       this.count = this.items.length
@@ -114,9 +130,16 @@ export default {
     },
     async submitNotification() {
       const patients = []
-      for (const i in this.items) {
-        patients.push(this.items[i].value)
+      if (this.sendToAll) {
+        for (const i in this.patients) {
+          patients.push(this.patients[i].value)
+        }
+      } else {
+        for (const i in this.items) {
+          patients.push(this.items[i].value)
+        }
       }
+
       const res = await this.$axios.$post(`/notifications`, {
         patients,
         message: this.message,
