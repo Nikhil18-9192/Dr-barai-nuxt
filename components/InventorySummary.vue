@@ -2,15 +2,26 @@
   <div id="inventory-summary">
     <div class="list relative border border-gray-300 rounded-xl mt-14">
       <div class="container py-3">
-        <p class="title text-gray-400 text-center">Total Patients</p>
+        <div class="title py-4">
+          <p class="text-black text-center font-semibold">Quantity Low</p>
+          <p class="qty-low text-center text-gray-400">
+            {{ itemsToBeStocked.length }} products need to be restocked!
+          </p>
+        </div>
+        <div class="container-1">
+          <div class="header flex py-3 justify-between">
+            <p class="pl-6">Product</p>
+            <p class="pr-3">Quantity</p>
+          </div>
+        </div>
         <div
-          v-for="(appointment, i) in appointments"
+          v-for="(item, i) in itemsToBeStocked"
           :key="i"
-          class="container py-3 px-6"
+          class="items py-5 mx-6 flex justify-between"
         >
-          <p class="text-gray-500 text-sm mb-1">{{ appointment.time }}</p>
-          <h2 class="name text-xl capitalize font-normal">
-            {{ appointment.patient.name }}
+          <p class="text-lg mb-1">{{ item.product }}</p>
+          <h2 class="qty text-lg capitalize font-normal pr-3">
+            {{ item.qty }}
           </h2>
         </div>
       </div>
@@ -22,36 +33,26 @@
 export default {
   data() {
     return {
-      appointments: [
+      itemsToBeStocked: [
         {
-          time: '11.15',
-          patient: {
-            name: 'musk',
-          },
+          product: 'Pain Killer',
+          qty: 5,
         },
         {
-          time: '11.16',
-          patient: {
-            name: 'musk',
-          },
+          product: 'Pain Killer',
+          qty: 4,
         },
         {
-          time: '11.18',
-          patient: {
-            name: 'musk',
-          },
+          product: 'Pain Killer',
+          qty: 3,
         },
         {
-          time: '12.15',
-          patient: {
-            name: 'musk',
-          },
+          product: 'Pain Killer',
+          qty: 2,
         },
         {
-          time: '11.85',
-          patient: {
-            name: 'musk',
-          },
+          product: 'Pain Killers',
+          qty: 2,
         },
       ],
     }
@@ -71,6 +72,10 @@ export default {
     }
   }
   .title {
+    padding-bottom: 24px;
+    border-bottom: 1px solid #c4c4c4;
+  }
+  .items {
     padding-bottom: 10px;
     border-bottom: 1px solid #c4c4c4;
   }
