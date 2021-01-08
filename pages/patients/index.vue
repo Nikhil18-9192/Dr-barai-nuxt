@@ -48,8 +48,8 @@
         </tr>
       </tbody>
     </table>
-    <div class="pagination flex justify-between">
-      <div>
+    <div v-if="patients.length" class="pagination flex justify-between">
+      <client-only>
         <paginate
           v-model="currentPage"
           :page-count="totalPages"
@@ -66,10 +66,10 @@
           :page-link-class="'outline-none'"
         >
         </paginate>
-      </div>
+      </client-only>
 
       <div class="pagination flex justify-between outline-none">
-        <div v-if="patients.length" class="nextprev flex">
+        <div class="nextprev flex">
           <button
             class="bg-gray-200 p1 h-8 w-14 text-base font-medium rounded-l"
             @click="prev(currentPage)"

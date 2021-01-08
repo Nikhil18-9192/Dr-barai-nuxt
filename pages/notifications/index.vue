@@ -64,8 +64,11 @@
         </tr>
       </tbody>
     </table>
-    <div class="pagination-section flex justify-between">
-      <div>
+    <div
+      v-if="notifications.length"
+      class="pagination-section flex justify-between"
+    >
+      <client-only>
         <paginate
           v-model="currentPage"
           :page-count="totalPages"
@@ -82,10 +85,10 @@
           :page-link-class="'outline-none'"
         >
         </paginate>
-      </div>
+      </client-only>
 
       <div class="paginate-section">
-        <div v-if="notifications.length" class="nextprev flex">
+        <div class="nextprev flex">
           <button
             class="bg-gray-200 p1 h-8 w-14 text-base font-medium rounded-l"
             @click="prev(currentPage)"
