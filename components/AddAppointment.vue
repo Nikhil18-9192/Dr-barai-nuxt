@@ -17,16 +17,16 @@
           >Date</label
         >
         <input
-          type="date"
           v-model="sessionDate"
+          type="date"
           class="border rounded border-gray-300 p-2 mt-1 mb-2 outline-none"
         />
         <label for="time" class="text-sm font-normal text-gray-400 mt-3"
           >Time</label
         >
         <input
-          type="time"
           v-model="sessionTime"
+          type="time"
           class="border rounded border-gray-300 p-2 mt-1 mb-2 outline-none"
         />
       </div>

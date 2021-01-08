@@ -1,5 +1,9 @@
 <template>
-  <div id="home-page"></div>
+  <div id="home-page" class="flex justify-between py-16 px-2">
+    <TodayAppointment />
+    <TotalPatientsAndAppointments />
+    <InventorySummary />
+  </div>
 </template>
 
 <script>
