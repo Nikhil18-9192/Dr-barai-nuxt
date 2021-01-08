@@ -71,23 +71,26 @@
         </tbody>
       </table>
     </div>
-    <div class="pagination flex justify-between">
-      <paginate
-        v-model="currentPage"
-        :page-count="totalPages"
-        :page-range="3"
-        :margin-pages="2"
-        :click-handler="clickCallback"
-        :prev-text="'<<'"
-        :next-text="'>>'"
-        prev-class="flex items-center mr-2"
-        next-class="flex items-center ml-2"
-        :container-class="'flex'"
-        :page-class="'text-gray-400 p-1 mr-2'"
-        :active-class="'text-gray-900'"
-        :page-link-class="'outline-none'"
-      >
-      </paginate>
+    <div v-if="paginateItem.length" class="pagination flex justify-between">
+      <client-only>
+        <paginate
+          v-model="currentPage"
+          :page-count="totalPages"
+          :page-range="3"
+          :margin-pages="2"
+          :click-handler="clickCallback"
+          :prev-text="'<<'"
+          :next-text="'>>'"
+          prev-class="flex items-center mr-2"
+          next-class="flex items-center ml-2"
+          :container-class="'flex'"
+          :page-class="'text-gray-400 p-1 mr-2'"
+          :active-class="'text-gray-900'"
+          :page-link-class="'outline-none'"
+        >
+        </paginate>
+      </client-only>
+
       <div class="pagination flex justify-between">
         <div class="nextprev flex">
           <button

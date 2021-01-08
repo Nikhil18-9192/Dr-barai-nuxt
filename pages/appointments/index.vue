@@ -79,50 +79,41 @@
         </tr>
       </tbody>
     </table>
-    <div class="pagination flex justify-between outline-none">
-      <div class="flex mb-6 items-center">
-        <button
-          v-if="maxPage < totalPages && currentPage > Math.ceil(maxPage / 2)"
-          class="w-10 h-9 mr-2"
-          @click="firstPage()"
+    <div v-if="appointments.length" class="pagination flex justify-between">
+      <client-only>
+        <paginate
+          v-model="currentPage"
+          :page-count="totalPages"
+          :page-range="3"
+          :margin-pages="2"
+          :click-handler="clickCallback"
+          :prev-text="'<<'"
+          :next-text="'>>'"
+          prev-class="flex items-center mr-2 outline-none"
+          next-class="flex items-center ml-2 outline-none"
+          :container-class="'flex'"
+          :page-class="'text-gray-400 p-1 mr-2'"
+          :active-class="'text-gray-900'"
+          :page-link-class="'outline-none'"
         >
-          first
-        </button>
+        </paginate>
+      </client-only>
 
-        <button
-          v-for="(item, i) in pages"
-          :key="i"
-          :class="currentPage == item ? 'text-gray-900' : ''"
-          class="p-1 mr-2 outline-none text-gray-400 font-normal"
-          @click.prevent="paginatData(item)"
-        >
-          {{ item }}
-        </button>
-
-        <button
-          v-if="
-            maxPage < totalPages &&
-            currentPage <= totalPages - Math.ceil(maxPage / 2)
-          "
-          class="w-10 h-9 mr-2"
-          @click="lastPage()"
-        >
-          last
-        </button>
-      </div>
-      <div v-if="appointments.length" class="nextprev flex">
-        <button
-          class="bg-gray-200 p1 h-8 w-14 text-base font-medium rounded-l"
-          @click="prev(currentPage)"
-        >
-          Prev
-        </button>
-        <button
-          class="bg-gray-300 p-1 h-8 w-14 text-base font-medium rounded-r"
-          @click="next(currentPage)"
-        >
-          Next
-        </button>
+      <div class="pagination flex justify-between outline-none">
+        <div class="nextprev flex">
+          <button
+            class="bg-gray-200 p1 h-8 w-14 text-base font-medium rounded-l"
+            @click="prev(currentPage)"
+          >
+            Prev
+          </button>
+          <button
+            class="bg-gray-300 p-1 h-8 w-14 text-base font-medium rounded-r"
+            @click="next(currentPage)"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -139,14 +130,10 @@ export default {
       appointments: false,
       perPage: 1,
       totalPages: 0,
-      pages: [],
-      start: 0,
       startDate: this.$dayjs().startOf('day').$d,
       endDate: this.$dayjs().startOf('day').$d,
       currentPage: 1,
       maxPage: 5,
-      startPage: 0,
-      endPage: 0,
     }
   },
   computed: {
@@ -165,12 +152,39 @@ export default {
     this.fetchTotalappointmentsCount()
   },
   methods: {
-    refresh() {
-      this.fetchappointments()
-      this.fetchTotalappointmentsCount()
+    async clickCallback(selectedPage) {
+      this.$store.commit('SET_LOADING')
+      const { data } = await this.$apollo.query({
+        query: appointments,
+        variables: {
+          limit: this.perPage,
+          start: selectedPage * this.perPage - this.perPage,
+          startDate: this.startDate,
+          endDate: this.modifyEndDate(this.endDate),
+        },
+      })
+      if (data.appointments.length !== 0) {
+        this.appointments = data.appointments
+      } else {
+        this.appointments = false
+      }
+      this.$store.commit('UNSET_LOADING')
     },
-    onAppointmentClick(id) {
-      this.$router.push(`/appointments/${id}`)
+    next() {
+      this.currentPage++
+      if (this.currentPage > this.totalPages) {
+        this.$toast.error('no pages')
+        this.currentPage = this.totalPages
+      }
+      this.fetchappointments()
+    },
+    prev() {
+      this.currentPage--
+      if (this.currentPage === 0) {
+        this.$toast.error('no pages')
+        this.currentPage = 1
+      }
+      this.fetchappointments()
     },
     async fetchappointments() {
       this.$store.commit('SET_LOADING')
@@ -178,119 +192,36 @@ export default {
         query: appointments,
         variables: {
           limit: this.perPage,
-          start: this.start,
+          start: this.currentPage * this.perPage - this.perPage,
           startDate: this.startDate,
           endDate: this.modifyEndDate(this.endDate),
         },
       })
       if (data.appointments.length !== 0) {
         this.appointments = data.appointments
-        this.pagination()
       } else {
         this.appointments = false
       }
       this.$store.commit('UNSET_LOADING')
     },
     async fetchTotalappointmentsCount() {
-      const newPages = []
       this.totalItem = await this.$axios.$get(
         `http://localhost:1337/appointments/count?date_gte=${this.startDate.toISOString()}&date_lte=${this.endDate.toISOString()}`
       )
-
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
-
-      for (let i = 1; i <= this.totalPages; i++) {
-        newPages.push(i)
-        this.pages = newPages
-      }
+    },
+    refresh() {
+      this.fetchappointments()
+      this.fetchTotalappointmentsCount()
+    },
+    onAppointmentClick(id) {
+      this.$router.push(`/appointments/${id}`)
     },
 
     newAppointment() {
       this.$router.push('/appointments/newAppointment')
     },
 
-    pagination() {
-      if (this.maxPage >= this.totalPages) {
-        this.startPage = 1
-        this.endPage = this.totalPages
-        const newPages = []
-        for (let i = this.startPage; i <= this.endPage; i++) {
-          newPages.push(i)
-          this.pages = newPages
-        }
-      } else if (
-        this.totalPages > this.maxPage &&
-        this.currentPage >= Math.ceil(this.maxPage / 2)
-      ) {
-        if (this.currentPage <= this.totalPages - 1) {
-          this.startPage = this.currentPage - Math.floor(this.maxPage / 2)
-
-          if (this.startPage === 0 && this.startPage < 1) {
-            this.startPage = 1
-          }
-          this.endPage = this.currentPage + Math.floor(this.maxPage / 2)
-
-          if (this.currentPage === this.totalPages - 1) {
-            this.endPage = this.currentPage + 1
-          }
-          const newPages = []
-          for (let i = this.startPage; i <= this.endPage; i++) {
-            newPages.push(i)
-            this.pages = newPages
-          }
-        }
-      } else if (this.currentPage <= Math.ceil(this.maxPage / 2)) {
-        this.startPage = 1
-        this.endPage = this.maxPage
-        const newPages = []
-        for (let i = this.startPage; i <= this.endPage; i++) {
-          newPages.push(i)
-          this.pages = newPages
-        }
-      }
-
-      if (this.currentPage === this.totalPages) {
-        this.startPage = this.totalPages - (this.maxPage - 1)
-        if (this.startPage <= 0) {
-          this.startPage = 1
-        }
-        this.endPage = this.totalPages
-        const newPages = []
-        for (let i = this.startPage; i <= this.endPage; i++) {
-          newPages.push(i)
-          this.pages = newPages
-        }
-      }
-    },
-    firstPage() {
-      this.paginatData(1)
-    },
-    lastPage() {
-      this.paginatData(this.totalPages)
-    },
-    paginatData(pageNum) {
-      this.currentPage = pageNum
-      this.start = this.currentPage * this.perPage - this.perPage
-      this.fetchappointments()
-    },
-    next(pageNum) {
-      if (pageNum > this.totalPages - 1) {
-        this.$toast.error('There is no next page')
-
-        return
-      }
-      const nextPage = pageNum + 1
-      this.paginatData(nextPage)
-    },
-    prev(pageNum) {
-      if (pageNum < 2) {
-        this.$toast.error('There is no prev page')
-
-        return
-      }
-      const prevPage = pageNum - 1
-      this.paginatData(prevPage)
-    },
     modifyEndDate(date) {
       return this.$dayjs(date).startOf('day').add(1, 'day')
     },
