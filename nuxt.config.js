@@ -62,7 +62,10 @@ export default {
   apollo: {
     clientConfigs: {
       default: {
-        httpEndpoint: 'http://localhost:1337/graphql',
+        httpEndpoint:
+          process.env.NODE_ENV === 'production'
+            ? 'https://dr-barai-practo.appspot.com/graphql'
+            : 'http://localhost:1337/graphql',
         tokenName: 'jwt',
       },
     },
@@ -76,7 +79,10 @@ export default {
   },
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: 'http://localhost:1337',
+    baseURL:
+      process.env.NODE_ENV === 'production'
+        ? 'https://dr-barai-practo.appspot.com/'
+        : 'http://localhost:1337',
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)

@@ -206,7 +206,7 @@ export default {
     },
     async fetchTotalappointmentsCount() {
       this.totalItem = await this.$axios.$get(
-        `http://localhost:1337/appointments/count?date_gte=${this.startDate.toISOString()}&date_lte=${this.endDate.toISOString()}`
+        `/appointments/count?date_gte=${this.startDate.toISOString()}&date_lte=${this.endDate.toISOString()}`
       )
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
     },

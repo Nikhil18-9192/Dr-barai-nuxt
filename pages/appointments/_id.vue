@@ -23,7 +23,6 @@ export default {
       vitalSigns: {},
       clinicalNotes: {},
       files: [],
-      url: 'http://localhost:1337/appointments/',
     }
   },
   mounted() {

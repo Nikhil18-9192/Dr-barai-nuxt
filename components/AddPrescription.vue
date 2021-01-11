@@ -151,12 +151,9 @@ export default {
         },
       }
 
-      await this.$axios.$put(
-        `http://localhost:1337/appointments/5ff01fbfb5c97c1e28afdfb3`,
-        {
-          prescription: [...this.currentPrescription, prescriptionData],
-        }
-      )
+      await this.$axios.$put(`/appointments/5ff01fbfb5c97c1e28afdfb3`, {
+        prescription: [...this.currentPrescription, prescriptionData],
+      })
       this.$emit('prescriptionData', prescriptionData)
       this.$emit('dismiss')
     },
