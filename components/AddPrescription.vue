@@ -5,10 +5,12 @@
     @click="$emit('dismiss')"
   >
     <div
-      class="add-modal bg-white relative rounded-md mx-auto mt-12 py-6 px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
+      class="add-modal bg-white relative rounded-md mx-auto mt-12 py-4 sm:py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
-      <h1 class="text-lg font-medium text-center mb-8">Add Prescription</h1>
+      <h1 class="text-lg font-medium text-center mb-4 sm:mb-8">
+        Add Prescription
+      </h1>
       <div class="form">
         <label for="gender" class="text-sm font-light text-gray-400"
           >Drug</label
@@ -191,6 +193,11 @@ export default {
   input {
     &::placeholder {
       color: #a1a1a1;
+    }
+  }
+  .add-modal {
+    @include for-phone-only {
+      width: 85%;
     }
   }
 }

@@ -2,13 +2,16 @@
   <div id="patient-page">
     <AddPatientDialog v-if="modal" :patient="patient" @dismiss="newPatient" />
     <div class="title flex justify-between my-8">
-      <h1 class="text-2xl font-medium">Patient List</h1>
+      <h1 class="text-xl sm:text-2xl font-medium">Patient List</h1>
       <MyButton :icon="addBtnIcon" @click.native="addPatient"
         >Add New Patient</MyButton
       >
     </div>
 
-    <table class="patient-list border-separate">
+    <table
+      v-if="$device.isDesktopOrTablet"
+      class="patient-list border-separate"
+    >
       <tbody>
         <tr class="text-gray-600 text-sm font-normal">
           <th
@@ -48,6 +51,7 @@
         </tr>
       </tbody>
     </table>
+    <PatientsCardForPhone v-if="$device.isMobile" :card-info="patients" />
     <div v-if="patients.length" class="pagination flex justify-between">
       <client-only>
         <paginate
@@ -68,7 +72,10 @@
         </paginate>
       </client-only>
 
-      <div class="pagination flex justify-between outline-none">
+      <div
+        v-if="$device.isDesktopOrTablet"
+        class="pagination flex justify-between outline-none"
+      >
         <div class="nextprev flex">
           <button
             class="bg-gray-200 p1 h-8 w-14 text-base font-medium rounded-l"

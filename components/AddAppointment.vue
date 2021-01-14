@@ -1,7 +1,7 @@
 <template>
   <div id="new-appointment">
-    <h1 class="my-10 text-lg font-medium">Create New Appointment</h1>
-    <h2 class="timer absolute text-6xl">{{ time }}</h2>
+    <h1 class="my-4 sm:my-10 text-lg font-medium">Create New Appointment</h1>
+    <h2 class="timer sm:absolute text-6xl">{{ time }}</h2>
     <div class="container relative flex">
       <div class="form flex flex-col w-6/12">
         <label for="name" class="w-50 text-sm font-normal text-gray-400 my-1"

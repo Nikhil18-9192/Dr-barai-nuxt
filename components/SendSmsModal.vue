@@ -61,6 +61,12 @@ export default {
   components: {
     MultiSelect,
   },
+  props: {
+    patient: {
+      type: Object,
+      default: () => null,
+    },
+  },
   data() {
     return {
       count: 0,
@@ -70,6 +76,7 @@ export default {
       icon: '/bell.svg',
       message: '',
       sendToAll: false,
+      disabled: false,
       patients: [
         {
           value: false,
@@ -79,12 +86,24 @@ export default {
     }
   },
   mounted() {
+    if (this.patient) {
+      const selectedPatient = [
+        {
+          text: this.patient.name,
+          value: this.patient.id,
+        },
+      ]
+      this.items = selectedPatient
+      this.count = 1
+    } else {
+      this.items = []
+    }
     this.fetchPatients()
   },
   methods: {
     propsToPass() {
       let isDisable = false
-      if (this.sendToAll) {
+      if (this.sendToAll || this.patient) {
         // eslint-disable-next-line
         return (isDisable = true)
       }
@@ -146,6 +165,7 @@ export default {
         sendToAll: this.sendToAll,
       })
       this.$emit('dismiss')
+
       this.$emit('addNotify', res)
     },
   },

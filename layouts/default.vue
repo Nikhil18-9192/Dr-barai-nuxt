@@ -1,9 +1,12 @@
 <template>
   <div id="dash-view">
-    <Drawer />
-
+    <Drawer v-if="$device.isDesktopOrTablet" />
     <div class="nuxt-view">
       <MenuBar />
+      <MenuBotton v-if="$device.isMobile" />
+      <transition name="phone-menu">
+        <MobileMenu v-if="menuState" class="mobile-menu" />
+      </transition>
       <Nuxt class="px-10 my-app" />
     </div>
   </div>
@@ -12,6 +15,21 @@
 <script>
 import Cookies from 'js-cookie'
 export default {
+  data() {
+    return {
+      menuState: false,
+    }
+  },
+  computed: {
+    storeMenuState() {
+      return this.$store.getters.getMenuState
+    },
+  },
+  watch: {
+    storeMenuState(newState) {
+      this.menuState = newState
+    },
+  },
   mounted() {
     const jwt = Cookies.get('jwt')
     if (!jwt) {
@@ -38,6 +56,14 @@ export default {
         display: none;
       }
     }
+  }
+  .mobile-menu {
+    z-index: 999;
+  }
+  .phone-menu-enter-active,
+  .phone-menu-leave-active {
+    transition: 0.4s ease all;
+    transform: translateX(-100%);
   }
 }
 </style>
