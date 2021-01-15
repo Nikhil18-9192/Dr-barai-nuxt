@@ -58,6 +58,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
     '@nuxtjs/dayjs',
+    '@nuxtjs/device',
   ],
   apollo: {
     clientConfigs: {
