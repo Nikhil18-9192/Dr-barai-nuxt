@@ -2,8 +2,8 @@
   <div id="new-appointment">
     <h1 class="my-4 sm:my-10 text-lg font-medium">Create New Appointment</h1>
     <h2 class="timer sm:absolute text-6xl">{{ time }}</h2>
-    <div class="container relative flex">
-      <div class="form flex flex-col w-6/12">
+    <div class="container relative sm:flex">
+      <div class="form flex flex-col w-full sm:w-6/12">
         <label for="name" class="w-50 text-sm font-normal text-gray-400 my-1"
           >Name</label
         >
@@ -33,14 +33,14 @@
 
       <button
         v-if="!sessionStarted"
-        class="session-btn absolute bg-black rounded-md text-white text-sm font-medium ml-8 mb-2 p-3"
+        class="session-btn relative sm:absolute bg-black rounded-md text-white text-sm font-medium ml-8 mb-2 p-3"
         @click="startSession()"
       >
         Start Session
       </button>
       <button
         v-if="sessionStarted"
-        class="session-btn absolute bg-red-500 rounded-md text-white text-sm font-medium ml-8 mb-2 p-3"
+        class="session-btn relative sm:absolute bg-red-500 rounded-md text-white text-sm font-medium ml-8 mb-2 p-3"
         @click="finishSession()"
       >
         Finish Session
@@ -74,6 +74,13 @@ export default {
       ],
     }
   },
+  beforeMount() {
+    window.addEventListener('beforeunload', (event) => {
+      event.preventDefault()
+      // Chrome requires returnValue to be set.
+      event.returnValue = ''
+    })
+  },
   created() {
     this.fetchPaitents()
   },
@@ -103,7 +110,7 @@ export default {
       return this.$dayjs().format('YYYY-MM-DD')
     },
     getTime() {
-      return this.$dayjs().format('hh:mm:ss')
+      return this.$dayjs().format('HH:mm')
     },
     startSession() {
       if (!this.selectedPatientId) {

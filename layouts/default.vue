@@ -1,14 +1,18 @@
 <template>
   <div id="dash-view">
-    <Drawer v-if="$device.isDesktopOrTablet" />
-    <div class="nuxt-view">
-      <MenuBar />
-      <MenuBotton v-if="$device.isMobile" />
-      <transition name="phone-menu">
-        <MobileMenu v-if="menuState" class="mobile-menu" />
-      </transition>
-      <Nuxt class="px-10 my-app" />
-    </div>
+    <client-only>
+      <Drawer v-if="$device.isDesktopOrTablet" />
+      <div class="nuxt-view">
+        <MenuBar />
+        <MenuBotton v-if="$device.isMobile" />
+
+        <transition name="phone-menu">
+          <MobileMenu v-if="menuState" class="mobile-menu" />
+        </transition>
+
+        <Nuxt class="px-10 my-app" />
+      </div>
+    </client-only>
   </div>
 </template>
 

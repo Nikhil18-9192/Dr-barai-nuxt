@@ -159,6 +159,7 @@ export default {
         city,
       })
       if (validation.error) {
+        this.loading = false
         this.$toast.error(validation.error.message)
         return
       }
@@ -192,6 +193,7 @@ export default {
           this.$router.push(`/patients/${this.patient.id}`)
           this.$toast.success('Add Updated Successfully')
         }
+        this.loading = false
       } catch (error) {
         this.$toast.error(error.message)
       }

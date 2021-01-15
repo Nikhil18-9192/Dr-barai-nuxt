@@ -57,6 +57,7 @@
 import _ from 'lodash'
 import { patients } from '@/apollo/queries/patient/patients.gql'
 import { MultiSelect } from 'vue-search-select'
+import { SendSmsModal } from '@/utils/validation'
 export default {
   components: {
     MultiSelect,
@@ -157,6 +158,17 @@ export default {
         for (const i in this.items) {
           patients.push(this.items[i].value)
         }
+      }
+      if (patients.length < 1) {
+        this.$toast.error('select patient')
+        return
+      }
+      const validation = SendSmsModal({
+        message: this.message,
+      })
+      if (validation.error) {
+        this.$toast.error(validation.error.message)
+        return
       }
 
       const res = await this.$axios.$post(`/notifications`, {

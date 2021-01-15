@@ -1,5 +1,5 @@
 <template>
-  <div id="table-info">
+  <div id="patient-info">
     <div
       v-for="appointment in cardInfo.appointments"
       :key="appointment.id"
@@ -45,12 +45,8 @@
 <script>
 import formatDateTime from '@/utils/formatDateTime'
 export default {
-  props: {
-    cardInfo: {
-      type: Array,
-      default: () => [],
-    },
-  },
+  // eslint-disable-next-line
+  props: ['cardInfo'],
   computed: {
     formatter() {
       return formatDateTime

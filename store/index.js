@@ -5,6 +5,8 @@ export const state = () => ({
   loading: false,
   menuState: false,
   notifyModal: false,
+  addImages: [],
+  imageModal: false,
 })
 
 export const getters = {
@@ -13,6 +15,9 @@ export const getters = {
   },
   getMenuState: (state) => {
     return state.menuState
+  },
+  getImages: (state) => {
+    return state.addImages
   },
 }
 
@@ -34,6 +39,12 @@ export const mutations = {
   },
   toggleNotifyModal(state) {
     state.notifyModal = !state.notifyModal
+  },
+  PREVIEW_MODAL: (state) => {
+    state.imageModal = !state.imageModal
+  },
+  SET_PREVIEW: (state, payload) => {
+    state.addImages = payload
   },
 }
 

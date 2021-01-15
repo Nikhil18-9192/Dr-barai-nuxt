@@ -49,7 +49,10 @@
           autocomplete="on"
         ></textarea>
         <div class="mt-8 flex">
-          <MyButton class="mr-4" @click.native="submitClinicalNotes"
+          <MyButton
+            class="mr-4"
+            :loading="loading"
+            @click.native="submitClinicalNotes"
             >Submit</MyButton
           >
           <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
@@ -70,6 +73,7 @@ export default {
       observations: '',
       diagnoses: '',
       notes: '',
+      loading: false,
     }
   },
 

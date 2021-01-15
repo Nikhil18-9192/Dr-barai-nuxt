@@ -1,0 +1,45 @@
+<template>
+  <div id="vitalsign-info">
+    <div v-if="cardInfo" class="card p-4 mb-4 border cursor-pointer">
+      <p class="text-gray-600 text-xs font-normal">
+        WEIGHT (KG)
+        {{ cardInfo.weight == null ? '---' : cardInfo.weight }}
+      </p>
+      <p class="text-gray-600 text-xs font-normal">
+        B.P. (mmHg) :
+        {{
+          cardInfo.bp == null ||
+          cardInfo.bp.bpSystolic == null ||
+          cardInfo.bp.bpDiastolic == null
+            ? '---'
+            : cardInfo.bp.bpSystolic + '/' + cardInfo.bp.bpDiastolic
+        }}
+      </p>
+      <p class="text-gray-600 text-xs font-normal">
+        TEMPERATURE (°C) :
+        {{
+          cardInfo.temperature == null ||
+          cardInfo.temperature.temperature == null
+            ? '---'
+            : cardInfo.temperature.temperature
+        }}
+      </p>
+      <p class="text-gray-600 text-xs font-normal">
+        PULSE (Heart beats/min) :
+        {{ cardInfo.pulse == null ? '---' : cardInfo.pulse }}
+      </p>
+      <p class="text-gray-600 text-xs font-normal">
+        RESP. RATE (Breaths/min) :
+        {{ cardInfo.respRate }}
+      </p>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  // eslint-disable-next-line
+  props: ['cardInfo'],
+}
+</script>
+<style lang="scss" scopped></style>

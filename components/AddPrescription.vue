@@ -20,7 +20,7 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
         >
           <option disabled value="Select Drugs">Select Drugs</option>
-          <option v-for="item in drugs" :key="item.id" :value="item.id">
+          <option v-for="(item, i) in drugs" :key="i" :value="item">
             {{ item.name }}
           </option>
         </select>
@@ -103,12 +103,13 @@ export default {
   data() {
     return {
       selectedDurationUnitIndex: 0,
-      selectedDrug: 'Select Drugs',
+      selectedDrug: {},
       dosageFrequency: 'Select Dosage',
       intake: '',
       duration: '',
       drugs: [],
       instructions: '',
+      drugName: '',
     }
   },
   computed: {
@@ -124,15 +125,8 @@ export default {
   },
   methods: {
     async submitPrescriptionData() {
-      const {
-        selectedDrug,
-        dosageFrequency,
-        intake,
-        duration,
-        instructions,
-      } = this
+      const { dosageFrequency, intake, duration, instructions } = this
       const validation = AddPrescriptionValidation({
-        selectedDrug,
         dosageFrequency,
         intake,
         duration,
@@ -143,7 +137,18 @@ export default {
         return
       }
       const prescriptionData = {
-        drug: this.selectedDrug,
+        drug: this.selectedDrug.id,
+        frequency: {
+          frequency: this.dosageFrequency,
+          intake,
+          drugDuration: this.duration,
+          drugDurationFor: this.durationUnits[this.selectedDurationUnitIndex],
+          instructions,
+        },
+      }
+
+      const dataToParent = {
+        drug: this.selectedDrug.name,
         frequency: {
           frequency: this.dosageFrequency,
           intake,
@@ -154,12 +159,12 @@ export default {
       }
 
       await this.$axios.$put(
-        `http://localhost:1337/appointments/5ff01fbfb5c97c1e28afdfb3`,
+        `http://localhost:1337/appointments/5ff5abf5fa236623cc9de902`,
         {
           prescription: [...this.currentPrescription, prescriptionData],
         }
       )
-      this.$emit('prescriptionData', prescriptionData)
+      this.$emit('prescriptionData', dataToParent)
       this.$emit('dismiss')
     },
     async drug() {

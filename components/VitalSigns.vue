@@ -10,7 +10,7 @@
       <AddButton @click.native="modal = true" />
     </div>
 
-    <table v-if="vitalSigns" class="list w-full">
+    <table v-if="vitalSigns && $device.isDesktopOrTablet" class="list w-full">
       <tbody>
         <tr class="bg-gray-100 text-black-400 text-sm">
           <th
@@ -71,6 +71,7 @@
         </tr>
       </tbody>
     </table>
+    <VitalSignCard v-if="$device.isMobile" :card-info="vitalSigns" />
   </div>
 </template>
 
@@ -86,6 +87,7 @@ export default {
     return {
       modal: false,
       addVitals: false,
+      displayTable: false,
     }
   },
   computed: {

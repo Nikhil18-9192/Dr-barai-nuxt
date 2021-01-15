@@ -11,7 +11,10 @@
       <AddButton @click.native="addModal = true" />
     </div>
 
-    <table v-if="prescriptions" class="drugs-list w-full">
+    <table
+      v-if="prescriptions && $device.isDesktopOrTablet"
+      class="drugs-list w-full"
+    >
       <tbody>
         <tr class="bg-gray-100 text-black-400 text-sm">
           <th
@@ -41,11 +44,7 @@
           class="row my-6 text-sm font-normal text-center"
         >
           <td class="p-3">
-            {{
-              item.drug == null || item.drug.name == null
-                ? '---'
-                : item.drug.name
-            }}
+            {{ item.drug == null ? '---' : item.drug }}
           </td>
           <td class="p-3">
             {{
@@ -77,6 +76,7 @@
         </tr>
       </tbody>
     </table>
+    <PrescriptionCard v-if="$device.isMobile" :card-info="prescription" />
   </div>
 </template>
 

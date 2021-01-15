@@ -138,7 +138,7 @@ export default {
     return {
       addIcon: '/plus-circle.svg',
       totalItem: 0,
-      appointments: false,
+      appointments: [],
       perPage: 3,
       totalPages: 0,
       startDate: this.$dayjs().startOf('day').$d,
@@ -177,7 +177,7 @@ export default {
       if (data.appointments.length !== 0) {
         this.appointments = data.appointments
       } else {
-        this.appointments = false
+        this.appointments = []
       }
       this.$store.commit('UNSET_LOADING')
     },
@@ -211,7 +211,7 @@ export default {
       if (data.appointments.length !== 0) {
         this.appointments = data.appointments
       } else {
-        this.appointments = false
+        this.appointments = []
       }
       this.$store.commit('UNSET_LOADING')
     },

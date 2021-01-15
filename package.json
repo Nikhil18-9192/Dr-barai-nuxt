@@ -24,6 +24,7 @@
     "node-sass": "^5.0.0",
     "nuxt": "^2.14.6",
     "sass-loader": "^10.1.0",
+    "signature_pad": "^3.0.0-beta.4",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "vue-izitoast": "^1.2.1",
     "vue-search-select": "^2.9.3",
