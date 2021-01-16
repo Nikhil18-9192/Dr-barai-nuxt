@@ -23,7 +23,7 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
         >
           <option disabled value="Select Drugs">Select Drugs</option>
-          <option v-for="(item, i) in drugs" :key="i" :value="item.id">
+          <option v-for="(item, i) in drugs" :key="i" :value="item">
             {{ item.name }}
           </option>
         </select>
@@ -146,7 +146,18 @@ export default {
         return
       }
       const prescriptionData = {
-        drug: this.selectedDrug,
+        drug: this.selectedDrug.id,
+        frequency: {
+          frequency: this.dosageFrequency,
+          intake,
+          drugDuration: this.duration,
+          drugDurationFor: this.durationUnits[this.selectedDurationUnitIndex],
+          instructions,
+        },
+      }
+      const respData = {
+        drug: this.selectedDrug.id,
+        name: this.selectedDrug.name,
         frequency: {
           frequency: this.dosageFrequency,
           intake,
@@ -159,7 +170,7 @@ export default {
       await this.$axios.$put(`/appointments/60028095c339ef25d0e58065`, {
         prescription: [...this.currentPrescription, prescriptionData],
       })
-      this.$emit('prescriptionData', prescriptionData)
+      this.$emit('prescriptionData', respData)
       this.$emit('dismiss')
       this.loading = false
     },

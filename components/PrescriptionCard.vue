@@ -8,7 +8,7 @@
       <p class="text-gray-600 text-xs font-normal border-b mb-3">
         DRUG:
         <span class="text-blue-600 text-base">
-          {{ item.drug == null ? '---' : item.drug }}</span
+          {{ item.drug == null ? '---' : item.name }}</span
         >
       </p>
       <p class="text-gray-600 text-xs font-normal">

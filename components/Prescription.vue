@@ -44,7 +44,7 @@
             class="row my-6 text-sm font-normal text-center"
           >
             <td class="p-3">
-              {{ item.drug }}
+              {{ item.name }}
             </td>
             <td class="p-3">
               {{
