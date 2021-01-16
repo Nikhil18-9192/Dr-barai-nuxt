@@ -1,5 +1,5 @@
 <template>
-  <div id="prescription-info">
+  <div v-if="cardInfo.length > 0" id="prescription-info">
     <div
       v-for="(item, i) in cardInfo"
       :key="i"
