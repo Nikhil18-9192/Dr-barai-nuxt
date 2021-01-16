@@ -70,7 +70,7 @@ export default {
         this.$axios.setToken(res.jwt, 'bearer')
         this.$router.push('/')
       } catch (error) {
-        this.$toast.error('Invalid Credantial, Login Failed')
+        this.$toast.error('Login Failed')
         this.loading = false
       }
     },

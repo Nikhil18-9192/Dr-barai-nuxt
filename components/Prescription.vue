@@ -77,13 +77,20 @@
         </tbody>
       </table>
     </div>
-    <div ref="content">
+    <div ref="phone">
       <PrescriptionCard v-if="$device.isMobile" :card-info="prescription" />
     </div>
+
     <MyButton
-      v-if="prescription.length > 0"
+      v-if="prescription.length > 0 && $device.isDesktopOrTablet"
       class="download-btn mt-6"
       @click.native="download"
+      >Download PDF</MyButton
+    >
+    <MyButton
+      v-if="prescription.length > 0 && $device.isMobile"
+      class="download-btn mt-6"
+      @click.native="downloadPhone"
       >Download PDF</MyButton
     >
   </div>
@@ -136,7 +143,6 @@ export default {
     download() {
       // eslint-disable-next-line
       const doc = new jsPDF({ orientation: 'landscape' })
-      // const canvasElement = document.createElement('canvas')
       html2canvas(this.$refs.content, {
         scrollY: -window.scrollY,
       }).then(function (canvas) {
@@ -144,6 +150,19 @@ export default {
         const imgProps = doc.getImageProperties(img)
         const pdfWidth = doc.internal.pageSize.getWidth()
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
+        doc.addImage(img, 'JPEG', 0, 0, pdfWidth, pdfHeight)
+        doc.save('prescriptions.pdf')
+      })
+    },
+    downloadPhone() {
+      // eslint-disable-next-line
+      const doc = new jsPDF('p', 'mm', 'a4')
+      html2canvas(this.$refs.phone, {
+        scrollY: -window.scrollY,
+      }).then(function (canvas) {
+        const img = canvas.toDataURL('image/jpeg', 0.8)
+        const pdfWidth = doc.internal.pageSize.getWidth()
+        const pdfHeight = doc.internal.pageSize.getWidth()
         doc.addImage(img, 'JPEG', 0, 0, pdfWidth, pdfHeight)
         doc.save('prescriptions.pdf')
       })
