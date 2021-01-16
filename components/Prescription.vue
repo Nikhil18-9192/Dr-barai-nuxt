@@ -44,7 +44,7 @@
             class="row my-6 text-sm font-normal text-center"
           >
             <td class="p-3">
-              {{ drugName }}
+              {{ item.drug }}
             </td>
             <td class="p-3">
               {{
@@ -110,8 +110,6 @@ export default {
     return {
       addModal: false,
       addPrescription: false,
-      id: false,
-      drugName: '',
     }
   },
   computed: {
@@ -129,17 +127,10 @@ export default {
   methods: {
     submitPrescriptionData(val) {
       if (val) {
-        this.id = val.drug
         this.prescription.push(val)
-        this.getName()
       }
     },
-    async getName() {
-      const res = await this.$axios.$get(
-        `http://localhost:1337/drugs/${this.id}`
-      )
-      this.drugName = res.name
-    },
+
     download() {
       // eslint-disable-next-line
       const doc = new jsPDF({ orientation: 'landscape' })

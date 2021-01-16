@@ -5,11 +5,16 @@
     @click="$emit('dismiss')"
   >
     <div
-      class="add-modal bg-white relative rounded-md mx-auto mt-12 py-4 sm:py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
+      class="add-modal flex flex-col bg-white relative rounded-md mx-auto sm:mt-12 py-4 sm:py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-full sm:w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
-      <h1 class="text-lg font-medium text-center mb-4 sm:mb-8">Vital Signs</h1>
-      <div class="form">
+      <div class="heading h-14">
+        <h1 class="text-lg font-medium text-center mb-4 sm:mb-8">
+          Vital Signs
+        </h1>
+      </div>
+
+      <div class="form flex-grow">
         <form autocomplete="on">
           <label for="gender" class="text-sm font-light text-gray-400"
             >Weight (kg)</label
@@ -92,16 +97,15 @@
             placeholder="10"
             autocomplete="on"
           />
-
-          <div class="mt-8 flex">
-            <MyButton class="mr-4" @click.native="submitVitalSignData"
-              >Submit</MyButton
-            >
-            <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
-              >Cancel</MyButton
-            >
-          </div>
         </form>
+      </div>
+      <div class="mt-8 flex btn">
+        <MyButton class="mr-4" @click.native="submitVitalSignData"
+          >Submit</MyButton
+        >
+        <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
+          >Cancel</MyButton
+        >
       </div>
     </div>
   </div>
@@ -196,6 +200,9 @@ export default {
     option {
       color: #000;
     }
+  }
+  .add-modal {
+    height: 90vh;
   }
   input {
     &::placeholder {

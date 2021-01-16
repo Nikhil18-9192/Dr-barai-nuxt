@@ -5,7 +5,7 @@
     @click.stop="$emit('dismiss')"
   >
     <div
-      class="modal bg-white relative rounded-md mx-auto mt-12 py-6 px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
+      class="modal bg-white relative rounded-md mx-auto mt-12 py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-full sm:w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
       <h1 class="text-lg font-medium text-center mb-8">Send Message</h1>

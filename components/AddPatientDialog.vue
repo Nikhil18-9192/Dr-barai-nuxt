@@ -5,13 +5,15 @@
     @click.stop="$emit('dismiss')"
   >
     <div
-      class="add-modal bg-white relative rounded-md mx-auto mt-12 py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
+      class="add-modal flex flex-col bg-white relative rounded-md mx-auto sm:mt-12 py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-full sm:w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
-      <h1 class="text-lg font-medium text-center mb-2 sm:mb-4">
-        {{ patient ? 'Edit' : 'Add New' }} Patient
-      </h1>
-      <div class="form">
+      <div class="heading">
+        <h1 class="text-lg font-medium text-center mb-2 sm:mb-4">
+          {{ patient ? 'Edit' : 'Add New' }} Patient
+        </h1>
+      </div>
+      <div class="form flex-grow overflow-y-scroll">
         <label for="name" class="text-sm font-normal text-gray-400">Name</label>
         <input
           v-model="name"
@@ -88,14 +90,14 @@
           placeholder="Kolhapur"
           autocomplete="on"
         />
-        <div class="mt-8 flex">
-          <MyButton class="mr-4" :loading="loading" @click.native="addPatient"
-            >Submit</MyButton
-          >
-          <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
-            >Cancel</MyButton
-          >
-        </div>
+      </div>
+      <div class="mt-8 flex btn">
+        <MyButton class="mr-4" :loading="loading" @click.native="addPatient"
+          >Submit</MyButton
+        >
+        <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
+          >Cancel</MyButton
+        >
       </div>
     </div>
   </div>
@@ -216,8 +218,23 @@ export default {
     color: #000;
   }
   .add-modal {
-    @include for-phone-only {
-      width: 85%;
+    height: 90vh;
+  }
+  .btn {
+    min-height: 30px;
+  }
+  .heading {
+    min-height: 30px;
+  }
+  .form {
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+    &::-webkit-scrollbar-track {
+      background: #f9f9f9;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #888;
     }
   }
 }

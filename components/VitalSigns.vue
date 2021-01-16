@@ -64,7 +64,9 @@
             {{ vitalSigns.pulse == null ? '---' : vitalSigns.pulse }}
           </td>
           <td class="p-3 flex justify-center">
-            <p>{{ vitals.respRate == null ? '---' : vitalSigns.respRate }}</p>
+            <p>
+              {{ vitalSigns.respRate == null ? '---' : vitalSigns.respRate }}
+            </p>
             <img class="absolute ml-36 hidden" src="/edit_btn.svg" alt="" />
             <img class="absolute ml-56 hidden" src="/delete_btn.svg" alt="" />
           </td>

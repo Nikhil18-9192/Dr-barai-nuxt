@@ -139,7 +139,7 @@ export default {
       addIcon: '/plus-circle.svg',
       totalItem: 0,
       appointments: [],
-      perPage: 3,
+      perPage: 1,
       totalPages: 0,
       startDate: this.$dayjs().startOf('day').$d,
       endDate: this.$dayjs().startOf('day').$d,

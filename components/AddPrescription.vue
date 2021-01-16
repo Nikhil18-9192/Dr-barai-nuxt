@@ -5,13 +5,16 @@
     @click="$emit('dismiss')"
   >
     <div
-      class="add-modal bg-white relative rounded-md mx-auto mt-12 py-4 sm:py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
+      class="add-modal flex flex-col bg-white relative rounded-md mx-auto sm:mt-12 py-4 sm:py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-full sm:w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
-      <h1 class="text-lg font-medium text-center mb-4 sm:mb-8">
-        Add Prescription
-      </h1>
-      <div class="form">
+      <div class="heading h-14">
+        <h1 class="text-lg font-medium text-center mb-4 sm:mb-8">
+          Add Prescription
+        </h1>
+      </div>
+
+      <div class="form flex-grow">
         <label for="gender" class="text-sm font-light text-gray-400"
           >Drug</label
         >
@@ -76,17 +79,17 @@
         >
           {{ durationUnits[selectedDurationUnitIndex] }}
         </span>
-        <div class="mt-8 flex">
-          <MyButton
-            class="mr-4"
-            :loading="loading"
-            @click.native="submitPrescriptionData"
-            >Submit</MyButton
-          >
-          <MyButton class="cancel-btn mr-4" @click.native="$emit('dismiss')"
-            >Cancel</MyButton
-          >
-        </div>
+      </div>
+      <div class="mt-8 flex btn">
+        <MyButton
+          class="mr-4"
+          :loading="loading"
+          @click.native="submitPrescriptionData"
+          >Submit</MyButton
+        >
+        <MyButton class="cancel-btn mr-4" @click.native="$emit('dismiss')"
+          >Cancel</MyButton
+        >
       </div>
     </div>
   </div>
@@ -153,7 +156,7 @@ export default {
         },
       }
 
-      await this.$axios.$put(`/appointments/5ff01fbfb5c97c1e28afdfb3`, {
+      await this.$axios.$put(`/appointments/60028095c339ef25d0e58065`, {
         prescription: [...this.currentPrescription, prescriptionData],
       })
       this.$emit('prescriptionData', prescriptionData)
@@ -195,9 +198,10 @@ export default {
     }
   }
   .add-modal {
-    @include for-phone-only {
-      width: 85%;
-    }
+    height: 90vh;
+  }
+  .btn {
+    height: 37px;
   }
 }
 </style>
