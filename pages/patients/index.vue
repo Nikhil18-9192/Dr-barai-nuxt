@@ -158,9 +158,7 @@ export default {
       this.$store.commit('UNSET_LOADING')
     },
     async fetchTotalPatientCount() {
-      this.totalItem = await this.$axios.$get(
-        'http://localhost:1337/patients/count'
-      )
+      this.totalItem = await this.$axios.$get('/patients/count')
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
     },
     addPatient() {

@@ -166,9 +166,7 @@ export default {
       this.$store.commit('UNSET_LOADING')
     },
     async fetchTotalProductsCount() {
-      this.totalItem = await this.$axios.$get(
-        'http://localhost:1337/products/count'
-      )
+      this.totalItem = await this.$axios.$get('/products/count')
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
     },
     addNew() {

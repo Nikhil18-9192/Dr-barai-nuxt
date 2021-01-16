@@ -183,9 +183,7 @@ export default {
       this.$store.commit('UNSET_LOADING')
     },
     async fetchTotalNotificationCount() {
-      this.totalItem = await this.$axios.$get(
-        'http://localhost:1337/notifications/count'
-      )
+      this.totalItem = await this.$axios.$get('/notifications/count')
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
     },
     getName(patients) {
