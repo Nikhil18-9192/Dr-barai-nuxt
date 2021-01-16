@@ -3,11 +3,21 @@ export const state = () => ({
   user: false,
   jwt: false,
   loading: false,
+  menuState: false,
+  notifyModal: false,
+  addImages: [],
+  imageModal: false,
 })
 
 export const getters = {
   getUser: (state) => {
     return state.user
+  },
+  getMenuState: (state) => {
+    return state.menuState
+  },
+  getImages: (state) => {
+    return state.addImages
   },
 }
 
@@ -23,6 +33,18 @@ export const mutations = {
   },
   UNSET_LOADING: (state) => {
     state.loading = false
+  },
+  toggleMenuState(state) {
+    state.menuState = !state.menuState
+  },
+  toggleNotifyModal(state) {
+    state.notifyModal = !state.notifyModal
+  },
+  PREVIEW_MODAL: (state) => {
+    state.imageModal = !state.imageModal
+  },
+  SET_PREVIEW: (state, payload) => {
+    state.addImages = payload
   },
 }
 

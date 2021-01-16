@@ -16,7 +16,7 @@ const AddPatientValidation = (data) => {
 }
 const AddPrescriptionValidation = (data) => {
   const formSchema = Joi.object({
-    selectedDrug: Joi.string().min(3).max(50).label('Drugs').required(),
+    // selectedDrug: Joi.string().min(3).max(50).label('Drugs').required(),
     dosageFrequency: Joi.string()
       .min(3)
       .max(50)
@@ -51,10 +51,18 @@ const ClinicalNotesValidation = (data) => {
 
   return formSchema.validate(data)
 }
+const SendSmsModal = (data) => {
+  const formSchema = Joi.object({
+    message: Joi.string().min(3).max(250).label('Message').required(),
+  }).required()
+
+  return formSchema.validate(data)
+}
 
 export {
   AddPatientValidation,
   AddPrescriptionValidation,
   AddVitalSignValidation,
   ClinicalNotesValidation,
+  SendSmsModal,
 }

@@ -26,9 +26,10 @@
       <img
         v-for="(image, i) in addImages"
         :key="i"
-        class="w-52 h-52 mr-8 mt-8"
+        class="w-52 h-52 mr-8 mt-8 cursor-pointer"
         :src="image"
         alt=""
+        @click="previewModal"
       />
     </div>
   </div>
@@ -53,6 +54,10 @@ export default {
       for (let i = 0; i < files.length; i++) {
         this.addImages.push(URL.createObjectURL(files[i]))
       }
+    },
+    previewModal() {
+      this.$store.commit('SET_PREVIEW', this.addImages)
+      this.$store.commit('PREVIEW_MODAL')
     },
   },
 }

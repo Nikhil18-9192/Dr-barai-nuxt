@@ -11,14 +11,14 @@
       </p>
       <textarea
         :placeholder="notification.message"
-        class="border rounded border-gray-300 p-2 w-2/4 mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
+        class="border rounded border-gray-300 p-2 w-full sm:w-2/4 mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
         disabled
       ></textarea>
     </div>
 
     <div class="patients flex-grow">
       <h4>Sent To</h4>
-      <table class="patient-list w-full">
+      <table v-if="$device.isDesktopOrTablet" class="patient-list w-full">
         <tbody>
           <tr class="text-gray-400 text-sm font-normal">
             <th
@@ -70,6 +70,11 @@
           </tr>
         </tbody>
       </table>
+      <SmsLogCard
+        v-if="$device.isMobile"
+        class="mt-3"
+        :card-info="paginateItem"
+      />
     </div>
     <div v-if="paginateItem.length" class="pagination flex justify-between">
       <client-only>
@@ -91,7 +96,10 @@
         </paginate>
       </client-only>
 
-      <div class="pagination flex justify-between">
+      <div
+        v-if="$device.isDesktopOrTablet"
+        class="pagination flex justify-between"
+      >
         <div class="nextprev flex">
           <button
             class="prev bg-gray-200 p1 h-8 w-14 text-base font-medium rounded-l"

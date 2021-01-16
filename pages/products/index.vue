@@ -7,13 +7,16 @@
       @updatedProduct="updatedProduct"
     />
     <div class="title flex justify-between my-8">
-      <h1 class="text-2xl font-medium">Product List</h1>
+      <h1 class="text-xl sm:text-2xl font-medium">Product List</h1>
       <MyButton :icon="addBtnIcon" @click.native="addNew"
         >Add New Product</MyButton
       >
     </div>
 
-    <table class="product-list border-separate">
+    <table
+      v-if="$device.isDesktopOrTablet"
+      class="product-list border-separate"
+    >
       <tbody>
         <tr class="text-gray-600 text-sm font-normal">
           <th
@@ -45,7 +48,7 @@
         >
           <td class="p-3">{{ item.id }}</td>
           <td class="p-3">{{ item.name }}</td>
-          <td class="p-3">{{ item.stock }}{{ item.stockingUnit }}</td>
+          <td class="p-3">{{ item.stock }} {{ item.stockingUnit }}</td>
           <td class="p-3">{{ item.retailPrice }}</td>
         </tr>
         <tr>
@@ -53,6 +56,11 @@
         </tr>
       </tbody>
     </table>
+    <ProductCardForPhone
+      v-if="$device.isMobile"
+      :card-info="products"
+      @productEdit="productEdit"
+    />
     <div v-if="products.length" class="pagination flex justify-between">
       <client-only>
         <paginate
@@ -72,7 +80,10 @@
         >
         </paginate>
       </client-only>
-      <div class="pagination flex justify-between outline-none">
+      <div
+        v-if="$device.isDesktopOrTablet"
+        class="pagination flex justify-between outline-none"
+      >
         <div class="nextprev flex">
           <button
             class="bg-gray-200 p1 h-8 w-14 text-base font-medium rounded-l"
@@ -163,6 +174,10 @@ export default {
       this.modal = true
     },
     editProduct(product) {
+      this.productToEdit = product
+      this.modal = true
+    },
+    productEdit(product) {
       this.productToEdit = product
       this.modal = true
     },

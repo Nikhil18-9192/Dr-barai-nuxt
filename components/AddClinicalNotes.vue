@@ -5,10 +5,12 @@
     @click="$emit('dismiss')"
   >
     <div
-      class="add-modal bg-white relative rounded-md mx-auto mt-12 py-6 px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
+      class="add-modal bg-white relative rounded-md mx-auto mt-12 py-4 sm:py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
-      <h1 class="text-lg font-medium text-center mb-8">Add Clinical Notes</h1>
+      <h1 class="text-lg font-medium text-center mb-4 sm:mb-8">
+        Add Clinical Notes
+      </h1>
       <div class="form">
         <label for="complaints" class="text-sm font-light text-gray-400"
           >Complaints</label
@@ -47,7 +49,10 @@
           autocomplete="on"
         ></textarea>
         <div class="mt-8 flex">
-          <MyButton class="mr-4" @click.native="submitClinicalNotes"
+          <MyButton
+            class="mr-4"
+            :loading="loading"
+            @click.native="submitClinicalNotes"
             >Submit</MyButton
           >
           <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
@@ -68,6 +73,7 @@ export default {
       observations: '',
       diagnoses: '',
       notes: '',
+      loading: false,
     }
   },
 

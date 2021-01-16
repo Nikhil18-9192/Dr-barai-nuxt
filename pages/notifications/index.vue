@@ -2,19 +2,24 @@
   <div id="notification-page">
     <div class="sms-info flex-col flex">
       <SendSmsModal
-        v-if="modal"
-        @dismiss="modal = false"
+        v-if="$store.state.notifyModal"
+        @dismiss="$store.commit('toggleNotifyModal')"
         @addNotify="addNotify"
       />
       <div class="title flex justify-between my-8">
-        <h1 class="text-2xl font-medium">SMS Logs</h1>
-        <MyButton :icon="addBtnIcon" @click.native="modal = true"
+        <h1 class="text-xl sm:text-2xl font-medium">SMS Logs</h1>
+        <MyButton
+          :icon="addBtnIcon"
+          @click.native="$store.commit('toggleNotifyModal')"
           >Create New SMS</MyButton
         >
       </div>
     </div>
 
-    <table class="notification-list border-separate flex-grow">
+    <table
+      v-if="$device.isDesktopOrTablet"
+      class="notification-list border-separate flex-grow"
+    >
       <tbody>
         <tr class="text-gray-600 text-sm font-normal">
           <th
@@ -64,6 +69,10 @@
         </tr>
       </tbody>
     </table>
+    <NotificationCardForPhone
+      v-if="$device.isMobile"
+      :card-info="notifications"
+    />
     <div
       v-if="notifications.length"
       class="pagination-section flex justify-between"
@@ -87,7 +96,7 @@
         </paginate>
       </client-only>
 
-      <div class="paginate-section">
+      <div v-if="$device.isDesktopOrTablet" class="paginate-section">
         <div class="nextprev flex">
           <button
             class="bg-gray-200 p1 h-8 w-14 text-base font-medium rounded-l"

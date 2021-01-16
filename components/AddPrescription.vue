@@ -5,10 +5,12 @@
     @click="$emit('dismiss')"
   >
     <div
-      class="add-modal bg-white relative rounded-md mx-auto mt-12 py-6 px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
+      class="add-modal bg-white relative rounded-md mx-auto mt-12 py-4 sm:py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
-      <h1 class="text-lg font-medium text-center mb-8">Add Prescription</h1>
+      <h1 class="text-lg font-medium text-center mb-4 sm:mb-8">
+        Add Prescription
+      </h1>
       <div class="form">
         <label for="gender" class="text-sm font-light text-gray-400"
           >Drug</label
@@ -18,7 +20,7 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
         >
           <option disabled value="Select Drugs">Select Drugs</option>
-          <option v-for="item in drugs" :key="item.id" :value="item.id">
+          <option v-for="(item, i) in drugs" :key="i" :value="item.id">
             {{ item.name }}
           </option>
         </select>
@@ -75,10 +77,13 @@
           {{ durationUnits[selectedDurationUnitIndex] }}
         </span>
         <div class="mt-8 flex">
-          <MyButton class="mr-4" @click.native="submitPrescriptionData"
+          <MyButton
+            class="mr-4"
+            :loading="loading"
+            @click.native="submitPrescriptionData"
             >Submit</MyButton
           >
-          <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
+          <MyButton class="cancel-btn mr-4" @click.native="$emit('dismiss')"
             >Cancel</MyButton
           >
         </div>
@@ -91,6 +96,7 @@
 import { dosageFrequency, durationUnits } from '@/utils'
 import { AddPrescriptionValidation } from '@/utils/validation'
 import query from '@/apollo/queries/drug/drug.gql'
+
 export default {
   props: {
     currentPrescription: {
@@ -107,6 +113,7 @@ export default {
       duration: '',
       drugs: [],
       instructions: '',
+      loading: false,
     }
   },
   computed: {
@@ -122,15 +129,9 @@ export default {
   },
   methods: {
     async submitPrescriptionData() {
-      const {
-        selectedDrug,
-        dosageFrequency,
-        intake,
-        duration,
-        instructions,
-      } = this
+      this.loading = true
+      const { dosageFrequency, intake, duration, instructions } = this
       const validation = AddPrescriptionValidation({
-        selectedDrug,
         dosageFrequency,
         intake,
         duration,
@@ -138,6 +139,7 @@ export default {
       })
       if (validation.error) {
         this.$toast.error(validation.error.message)
+        this.loading = false
         return
       }
       const prescriptionData = {
@@ -156,6 +158,7 @@ export default {
       })
       this.$emit('prescriptionData', prescriptionData)
       this.$emit('dismiss')
+      this.loading = false
     },
     async drug() {
       const { data } = await this.$apollo.query({
@@ -180,6 +183,7 @@ export default {
     background: #f3f4f6;
     color: #000;
   }
+
   select {
     option {
       color: #000;
@@ -188,6 +192,11 @@ export default {
   input {
     &::placeholder {
       color: #a1a1a1;
+    }
+  }
+  .add-modal {
+    @include for-phone-only {
+      width: 85%;
     }
   }
 }
