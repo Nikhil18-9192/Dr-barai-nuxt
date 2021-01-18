@@ -115,6 +115,8 @@
 import { bpMeasurementPositions, tempMeasurementPositions } from '@/utils'
 import { AddVitalSignValidation } from '@/utils/validation'
 export default {
+  // eslint-disable-next-line
+  props: ['vitalsToEdit'],
   data() {
     return {
       bpMeasurementPositionIndex: 0,
@@ -135,7 +137,22 @@ export default {
       return tempMeasurementPositions
     },
   },
-  mounted() {},
+  mounted() {
+    if (this.vitalsToEdit) {
+      this.weight = this.vitalsToEdit.weight
+      this.systolic = this.vitalsToEdit.bp.bpSystolic
+      this.diastolic = this.vitalsToEdit.bp.bpDiastolic
+      this.respiration = this.vitalsToEdit.respRate
+      this.pulse = this.vitalsToEdit.pulse
+      this.bpMeasurementPositionIndex = this.bpMeasurementPositions.indexOf(
+        this.vitalsToEdit.bp.bpMeasurementPosition
+      )
+      this.tempMeasurementPositionIndex = this.tempMeasurementPositions.indexOf(
+        this.vitalsToEdit.temperature.tempMeasurementPosition
+      )
+      this.temperature = this.vitalsToEdit.temperature.temperature
+    }
+  },
   methods: {
     submitVitalSignData() {
       const {
@@ -176,8 +193,7 @@ export default {
           ],
         },
       }
-      this.$emit('vitalSignData', vitalSignData)
-      this.$emit('dismiss')
+      this.$emit('addVitals', vitalSignData)
     },
   },
 }

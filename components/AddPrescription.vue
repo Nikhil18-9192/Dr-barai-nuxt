@@ -81,10 +81,7 @@
         </span>
       </div>
       <div class="mt-8 flex btn">
-        <MyButton
-          class="mr-4"
-          :loading="loading"
-          @click.native="submitPrescriptionData"
+        <MyButton class="mr-4" @click.native="submitPrescriptionData"
           >Submit</MyButton
         >
         <MyButton class="cancel-btn mr-4" @click.native="$emit('dismiss')"
@@ -102,9 +99,9 @@ import query from '@/apollo/queries/drug/drug.gql'
 
 export default {
   props: {
-    currentPrescription: {
-      type: Array,
-      default: () => [],
+    editPrescription: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
@@ -116,7 +113,6 @@ export default {
       duration: '',
       drugs: [],
       instructions: '',
-      loading: false,
     }
   },
   computed: {
@@ -128,11 +124,20 @@ export default {
     },
   },
   mounted() {
-    this.drug()
+    this.fetchDrugs()
+    if (this.editPrescription) {
+      this.selectedDrug = this.editPrescription.drug
+      this.dosageFrequency = this.editPrescription.frequency.frequency
+      this.intake = this.editPrescription.frequency.intake
+      this.instructions = this.editPrescription.frequency.instructions
+      this.duration = this.editPrescription.frequency.drugDuration
+      this.selectedDurationUnitIndex = this.durationUnits.indexOf(
+        this.editPrescription.frequency.drugDurationFor
+      )
+    }
   },
   methods: {
-    async submitPrescriptionData() {
-      this.loading = true
+    submitPrescriptionData() {
       const { dosageFrequency, intake, duration, instructions } = this
       const validation = AddPrescriptionValidation({
         dosageFrequency,
@@ -142,39 +147,26 @@ export default {
       })
       if (validation.error) {
         this.$toast.error(validation.error.message)
-        this.loading = false
         return
       }
-      const prescriptionData = {
-        drug: this.selectedDrug.id,
-        frequency: {
-          frequency: this.dosageFrequency,
-          intake,
-          drugDuration: this.duration,
-          drugDurationFor: this.durationUnits[this.selectedDurationUnitIndex],
-          instructions,
-        },
-      }
-      const respData = {
-        drug: this.selectedDrug.id,
-        name: this.selectedDrug.name,
-        frequency: {
-          frequency: this.dosageFrequency,
-          intake,
-          drugDuration: this.duration,
-          drugDurationFor: this.durationUnits[this.selectedDurationUnitIndex],
-          instructions,
-        },
-      }
 
-      await this.$axios.$put(`/appointments/60028095c339ef25d0e58065`, {
-        prescription: [...this.currentPrescription, prescriptionData],
-      })
-      this.$emit('prescriptionData', respData)
-      this.$emit('dismiss')
-      this.loading = false
+      const respData = {
+        drug: this.selectedDrug,
+        frequency: {
+          frequency: this.dosageFrequency,
+          intake,
+          drugDuration: this.duration,
+          drugDurationFor: this.durationUnits[this.selectedDurationUnitIndex],
+          instructions,
+        },
+      }
+      if (this.editPrescription) {
+        this.$emit('updatePrescription', respData)
+        return
+      }
+      this.$emit('addPrescription', respData)
     },
-    async drug() {
+    async fetchDrugs() {
       const { data } = await this.$apollo.query({
         query,
       })

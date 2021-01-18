@@ -52,6 +52,7 @@
 <script>
 import { getPatientNames } from '@/apollo/queries/patient/patients.gql'
 import { ModelSelect } from 'vue-search-select'
+
 export default {
   name: 'NewAppointmentPage',
   components: {
@@ -112,11 +113,19 @@ export default {
     getTime() {
       return this.$dayjs().format('HH:mm')
     },
-    startSession() {
+    async startSession() {
       if (!this.selectedPatientId) {
         this.$toast.error('Please select a patient')
         return
       }
+
+      const res = await this.$axios.$post('/appointments', {
+        patient: this.selectedPatientId,
+        startDateTime: this.$dayjs(
+          this.sessionDate + this.sessionTime
+        ).format(),
+      })
+      console.log(res)
       this.startTime = Date.now()
       this.startTimer()
       this.sessionStarted = true

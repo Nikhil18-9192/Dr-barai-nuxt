@@ -1,14 +1,15 @@
 <template>
   <div id="prescription">
     <AddPrescription
-      v-if="addModal"
-      :current-prescription="prescription"
-      @prescriptionData="submitPrescriptionData"
-      @dismiss="addModal = false"
+      v-if="prescriptionModal"
+      :edit-prescription="prescription[prescriptionIndexToEdit]"
+      @addPrescription="submitPrescriptionData"
+      @updatePrescription="updatePrescription"
+      @dismiss="prescriptionModal = false"
     />
     <div class="title-container mb-6 flex">
-      <h1 class="text-xl font-medium">Prescription</h1>
-      <AddButton @click.native="addModal = true" />
+      <h1 class="text-xl font-medium">Prescriptions</h1>
+      <AddButton @click.native="prescriptionModal = true" />
     </div>
     <div ref="content">
       <table
@@ -44,7 +45,7 @@
             class="row my-6 text-sm font-normal text-center"
           >
             <td class="p-3">
-              {{ item.name }}
+              {{ item.drug.name }}
             </td>
             <td class="p-3">
               {{
@@ -70,8 +71,18 @@
                     : item.frequency.instructions
                 }}
               </p>
-              <img class="absolute ml-36 hidden" src="/edit_btn.svg" alt="" />
-              <img class="absolute ml-56 hidden" src="/delete_btn.svg" alt="" />
+              <img
+                class="absolute ml-36 hidden"
+                src="/edit_btn.svg"
+                alt=""
+                @click="editPrescription(i)"
+              />
+              <img
+                class="absolute ml-56 hidden"
+                src="/delete_btn.svg"
+                alt=""
+                @click="deletePrescription(i)"
+              />
             </td>
           </tr>
         </tbody>
@@ -108,8 +119,10 @@ export default {
   },
   data() {
     return {
-      addModal: false,
+      prescriptionModal: false,
       addPrescription: false,
+      prescriptionIndexToEdit: -1,
+      editedDrug: {},
     }
   },
   computed: {
@@ -124,13 +137,19 @@ export default {
   mounted() {
     this.submitPrescriptionData()
   },
+
   methods: {
     submitPrescriptionData(val) {
       if (val) {
         this.prescription.push(val)
       }
+      this.prescriptionModal = false
     },
-
+    updatePrescription(val) {
+      this.prescription[this.prescriptionIndexToEdit] = val
+      this.prescriptionIndexToEdit = -1
+      this.prescriptionModal = false
+    },
     download() {
       // eslint-disable-next-line
       const doc = new jsPDF({ orientation: 'landscape' })
@@ -157,6 +176,13 @@ export default {
         doc.addImage(img, 'JPEG', 0, 0, pdfWidth, pdfHeight)
         doc.save('prescriptions.pdf')
       })
+    },
+    editPrescription(index) {
+      this.prescriptionIndexToEdit = index
+      this.prescriptionModal = true
+    },
+    deletePrescription(index) {
+      this.prescription.splice(index, 1)
     },
   },
 }
