@@ -71,9 +71,9 @@
           <td class="py-3 px-0">{{ appointment.patient.mobile }}</td>
           <td class="py-3 px-0">
             {{
-              formatter.formatDate(appointment.date) +
+              formatter.formatDate(appointment.startDateTime) +
               ' at ' +
-              formatter.formatTime(appointment.date)
+              formatter.formatTime(appointment.startDateTime)
             }}
           </td>
         </tr>
@@ -139,7 +139,7 @@ export default {
       addIcon: '/plus-circle.svg',
       totalItem: 0,
       appointments: [],
-      perPage: 1,
+      perPage: 10,
       totalPages: 0,
       startDate: this.$dayjs().startOf('day').$d,
       endDate: this.$dayjs().startOf('day').$d,
@@ -217,7 +217,9 @@ export default {
     },
     async fetchTotalappointmentsCount() {
       this.totalItem = await this.$axios.$get(
-        `/appointments/count?date_gte=${this.startDate.toISOString()}&date_lte=${this.endDate.toISOString()}`
+        `/appointments/count?startDateTime_gte=${this.startDate.toISOString()}&startDateTime_lte=${this.modifyEndDate(
+          this.endDate
+        ).$d.toISOString()}`
       )
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
     },

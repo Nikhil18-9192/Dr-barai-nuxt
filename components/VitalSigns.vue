@@ -1,13 +1,14 @@
 <template>
   <div id="vital-signs">
     <VitalSignModal
-      v-if="modal"
-      @dismiss="modal = false"
-      @vitalSignData="submitVitalSignData"
+      v-if="vitalsModal"
+      :vitals-to-edit="vitalSigns"
+      @dismiss="vitalsModal = false"
+      @addVitals="submitVitalSignData"
     />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Vital Signs</h1>
-      <AddButton @click.native="modal = true" />
+      <AddButton v-if="!vitalSigns" @click.native="vitalsModal = true" />
     </div>
 
     <table v-if="vitalSigns && $device.isDesktopOrTablet" class="list w-full">
@@ -67,8 +68,18 @@
             <p>
               {{ vitalSigns.respRate == null ? '---' : vitalSigns.respRate }}
             </p>
-            <img class="absolute ml-36 hidden" src="/edit_btn.svg" alt="" />
-            <img class="absolute ml-56 hidden" src="/delete_btn.svg" alt="" />
+            <img
+              class="absolute ml-36 hidden"
+              src="/edit_btn.svg"
+              alt=""
+              @click="editVitals"
+            />
+            <img
+              class="absolute ml-56 hidden"
+              src="/delete_btn.svg"
+              alt=""
+              @click="deleteVitals"
+            />
           </td>
         </tr>
       </tbody>
@@ -87,7 +98,7 @@ export default {
   },
   data() {
     return {
-      modal: false,
+      vitalsModal: false,
       addVitals: false,
       displayTable: false,
     }
@@ -96,7 +107,7 @@ export default {
     vitalSigns() {
       if (this.$route.name === 'appointments-newAppointment') {
         return this.addVitals
-      } else if (Object.entries(this.vitals).length !== 0) {
+      } else if (Object.entries(this.clinicalNotes).length !== 0) {
         return this.vitals
       } else return false
     },
@@ -109,6 +120,13 @@ export default {
       if (val) {
         this.addVitals = val
       }
+      this.vitalsModal = false
+    },
+    editVitals() {
+      this.vitalsModal = true
+    },
+    deleteVitals() {
+      this.addVitals = false
     },
   },
 }

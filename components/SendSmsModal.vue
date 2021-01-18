@@ -19,7 +19,7 @@
         >
         </multi-select>
         <p class="text-base font-normal text-gray-400 my-4">
-          <span class="text-lg text-black">{{ count }}</span> Pateints Selected
+          <span class="text-lg text-black">{{ count }}</span> Patients Selected
         </p>
         <label for="message" class="text-sm font-light text-gray-400"
           >Message</label

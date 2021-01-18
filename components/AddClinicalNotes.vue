@@ -70,6 +70,8 @@
 <script>
 import { ClinicalNotesValidation } from '@/utils/validation'
 export default {
+  // eslint-disable-next-line
+  props: ['notesToEdit'],
   data() {
     return {
       complaints: '',
@@ -79,7 +81,14 @@ export default {
       loading: false,
     }
   },
-
+  mounted() {
+    if (this.notesToEdit) {
+      this.complaints = this.notesToEdit.complaints
+      this.observations = this.notesToEdit.observations
+      this.diagnoses = this.notesToEdit.diagnoses
+      this.notes = this.notesToEdit.notes
+    }
+  },
   methods: {
     submitClinicalNotes() {
       const { complaints, observations, diagnoses, notes } = this
@@ -100,7 +109,6 @@ export default {
         notes,
       }
       this.$emit('clinicalNotesData', clinicalNotesData)
-      this.$emit('dismiss')
     },
   },
 }
