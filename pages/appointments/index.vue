@@ -141,8 +141,8 @@ export default {
       appointments: [],
       perPage: 10,
       totalPages: 0,
-      startDate: this.$dayjs().startOf('day').$d,
-      endDate: this.$dayjs().startOf('day').$d,
+      startDate: new Date(),
+      endDate: new Date(),
       currentPage: 1,
       maxPage: 5,
     }
@@ -156,6 +156,14 @@ export default {
         to: this.startDate,
       }
       return disabledDates
+    },
+
+    startDateISO() {
+      return this.$dayjs(this.startDate).format('YYYY-MM-DDT00:00:00.01[Z]')
+    },
+
+    endDateISO() {
+      return this.$dayjs(this.endDate).format('YYYY-MM-DDT24:00:00.00[Z]')
     },
   },
   mounted() {
@@ -204,8 +212,8 @@ export default {
         variables: {
           limit: this.perPage,
           start: this.currentPage * this.perPage - this.perPage,
-          startDate: this.startDate,
-          endDate: this.modifyEndDate(this.endDate),
+          startDate: this.startDateISO,
+          endDate: this.endDateISO,
         },
       })
       if (data.appointments.length !== 0) {
@@ -217,9 +225,7 @@ export default {
     },
     async fetchTotalappointmentsCount() {
       this.totalItem = await this.$axios.$get(
-        `/appointments/count?startDateTime_gte=${this.startDate.toISOString()}&startDateTime_lte=${this.modifyEndDate(
-          this.endDate
-        ).$d.toISOString()}`
+        `/appointments/count?startDateTime_gte=${this.startDateISO}&startDateTime_lte=${this.endDateISO}`
       )
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
     },
