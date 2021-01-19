@@ -63,7 +63,7 @@
         <tr
           v-for="(appointment, i) in appointments"
           :key="i"
-          class="bg-gray-100 my-5 text-sm font-normal"
+          class="bg-gray-100 my-5 text-sm font-normal cursor-pointer"
           @click="onAppointmentClick(appointment.id)"
         >
           <td class="py-3 pl-2">{{ appointment.id }}</td>

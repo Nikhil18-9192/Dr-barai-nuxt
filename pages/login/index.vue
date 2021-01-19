@@ -5,30 +5,36 @@
         Dr. Barai’s Clinic
       </h1>
       <div class="login-form p-10 bg-white rounded">
-        <label for="email" class="text-sm mb-1 font-bold text-gray-800"
-          >Email</label
-        >
-        <input
-          v-model="username"
-          class="border rounded border-gray-300 p-2"
-          type="email"
-          placeholder="elonmusk@teslamotors.com"
-        />
-        <label class="mt-2 mb-1 text-sm font-bold text-gray-800" for="password"
-          >Password</label
-        >
-        <input
-          v-model="password"
-          class="border rounded border-gray-300 p-2"
-          type="password"
-          placeholder="Password"
-        />
-        <div class="grid grid-cols-2 my-6">
-          <MyButton :loading="loading" @click.native="login">Sign In</MyButton>
-          <p class="text-right text-blue-500 font-bold text-sm">
-            Forgot Password?
-          </p>
-        </div>
+        <form action="" @submit="login">
+          <label for="email" class="text-sm mb-1 font-bold text-gray-800"
+            >Email</label
+          >
+          <input
+            v-model="username"
+            class="border rounded border-gray-300 p-2"
+            type="email"
+            placeholder="elonmusk@teslamotors.com"
+          />
+          <label
+            class="mt-2 mb-1 text-sm font-bold text-gray-800"
+            for="password"
+            >Password</label
+          >
+          <input
+            v-model="password"
+            class="border rounded border-gray-300 p-2"
+            type="password"
+            placeholder="Password"
+          />
+          <div class="grid grid-cols-2 my-6">
+            <MyButton :loading="loading" @click.native="login"
+              >Sign In</MyButton
+            >
+            <p class="text-right text-blue-500 font-bold text-sm">
+              Forgot Password?
+            </p>
+          </div>
+        </form>
       </div>
     </div>
   </div>

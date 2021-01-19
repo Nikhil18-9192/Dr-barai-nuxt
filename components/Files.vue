@@ -14,7 +14,10 @@
         @change="onImageAdded"
       />
     </div>
-    <div v-if="images.length != 0" class="preview flex flex-wrap">
+    <div
+      v-if="images.length != 0"
+      class="preview flex flex-wrap object-contain"
+    >
       <img
         v-for="(image, i) in images"
         :key="i"
@@ -23,7 +26,10 @@
         alt=""
       />
     </div>
-    <div v-if="selectedImages.length != 0" class="preview flex flex-wrap">
+    <div
+      v-if="selectedImages.length != 0"
+      class="preview flex flex-wrap object-contain"
+    >
       <img
         v-for="(image, i) in selectedImages"
         :key="i"
