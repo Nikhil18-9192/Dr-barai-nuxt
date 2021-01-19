@@ -41,13 +41,8 @@
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "autoprefixer": "^9",
     "babel-eslint": "^10.1.0",
-<<<<<<< HEAD
-    "eslint": "^7.10.0",
-    "eslint-config-prettier": "^7.2.0",
-=======
     "eslint": "^7.18.0",
     "eslint-config-prettier": "^6.12.0",
->>>>>>> origin/dependabot/npm_and_yarn/eslint-7.18.0
     "eslint-plugin-nuxt": "^1.0.0",
     "eslint-plugin-prettier": "^3.1.4",
     "postcss": "^7",
