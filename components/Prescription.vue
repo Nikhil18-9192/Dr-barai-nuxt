@@ -131,13 +131,13 @@
             }}
           </p>
           <img
-            class="absolute right-10 bottom-2"
+            class="absolute right-10 bottom-2 hidden"
             src="/edit_btn.svg"
             alt=""
             @click="editPrescription(i)"
           />
           <img
-            class="absolute right-2 bottom-2"
+            class="absolute right-2 bottom-2 hidden"
             src="/delete_btn.svg"
             alt=""
             @click="deletePrescription(i)"
@@ -270,6 +270,11 @@ export default {
         cursor: pointer;
       }
     }
+  }
+}
+.card {
+  &:hover img {
+    display: block;
   }
 }
 .add-btn {

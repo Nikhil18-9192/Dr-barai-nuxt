@@ -32,7 +32,6 @@ export default {
         prescription: this.prescriptionInfo,
         vitalSigns: this.vitalSignInfo,
         clinicalNotes: this.clinicalNoteInfo,
-        endDateTime: new Date(),
       })
       if (this.files.length) {
         const data = {

@@ -103,7 +103,7 @@
             >
               {{
                 appointment.clinicalNotes !== null
-                  ? appointment.clinicalNotes.observation
+                  ? appointment.clinicalNotes.observations
                   : ''
               }}
             </td>
