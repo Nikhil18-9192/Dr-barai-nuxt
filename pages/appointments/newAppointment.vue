@@ -1,5 +1,6 @@
 <template>
   <div id="new-appointment">
+    <ImageViewModal v-if="$store.state.imageModal" />
     <AddAppointment class="new" />
     <Prescription class="new" />
     <VitalSigns class="new" />

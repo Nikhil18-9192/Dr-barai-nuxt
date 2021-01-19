@@ -1,6 +1,9 @@
 <template>
   <div id="menu-bar" class="border-b-2 py-3 z-40 text-center">
-    <p class="text-gray-800 font-medium text-lg uppercase">
+    <p
+      class="text-gray-800 font-medium text-lg uppercase cursor-pointer"
+      @click="goHome"
+    >
       Dr. Barai’s Clinic
     </p>
     <div v-if="$store.state.loading" class="loader">
@@ -14,7 +17,13 @@
 </template>
 
 <script>
-export default {}
+export default {
+  methods: {
+    goHome() {
+      this.$router.push('/')
+    },
+  },
+}
 </script>
 
 <style lang="scss" scoped>

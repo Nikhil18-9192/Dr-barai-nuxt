@@ -5,10 +5,17 @@
       :patient="patient"
       @dismiss="patientUpdated"
     />
+    <SendSmsModal
+      v-if="$store.state.notifyModal"
+      :patient="patient"
+      @dismiss="$store.commit('toggleNotifyModal')"
+    />
     <div v-if="patient" class="patient-profile flex my-8">
       <div class="patient-info w-2/4">
         <div class="name border-b pb-3 w-full">
-          <h1 class="text-2xl font-medium capitalize">{{ patient.name }}</h1>
+          <h1 class="text-xl sm:text-2xl font-medium capitalize">
+            {{ patient.name }}
+          </h1>
           <p class="text-gray-400 text-sm font-normal">
             <span>{{ patient.gender }}</span
             ><span class="mx-1">{{ age }} Years</span
@@ -21,7 +28,12 @@
         </div>
       </div>
       <div class="btn-section flex flex-col items-end w-2/4">
-        <MyButton class="mb-4" :icon="notifyBtnIcon">Notify</MyButton>
+        <MyButton
+          class="mb-4"
+          :icon="notifyBtnIcon"
+          @click.native="$store.commit('toggleNotifyModal')"
+          >Notify</MyButton
+        >
         <MyButton
           class="edit-btn"
           :icon="editBtnIcon"
@@ -33,7 +45,7 @@
 
     <div class="appintment">
       <h4>Appointment History</h4>
-      <table class="patient-list">
+      <table v-if="$device.isDesktopOrTablet" class="patient-list">
         <tbody>
           <tr class="text-gray-400 text-sm font-normal">
             <th
@@ -107,6 +119,11 @@
           </tr>
         </tbody>
       </table>
+      <PatientAppointmentCard
+        v-if="$device.isMobile"
+        class="mt-4"
+        :card-info="patient"
+      />
     </div>
   </div>
 </template>
@@ -120,16 +137,7 @@ export default {
       modal: false,
       editBtnIcon: '/pencil-alt.svg',
       notifyBtnIcon: '/bell.svg',
-      totalItem: 0,
       age: false,
-      perPage: 5,
-      totalPages: 0,
-      pages: [],
-      start: 0,
-      currentPage: 1,
-      maxPage: 5,
-      startPage: 0,
-      endPage: 0,
       patient: false,
     }
   },

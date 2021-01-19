@@ -70,7 +70,8 @@ export default {
         this.$axios.setToken(res.jwt, 'bearer')
         this.$router.push('/')
       } catch (error) {
-        this.$toast.error(error.message)
+        this.$toast.error('Invalid Credantial, Login Failed')
+        this.loading = false
       }
     },
   },
@@ -85,6 +86,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+
   .center {
     h1 {
       font-size: 18px;
@@ -96,10 +98,14 @@ export default {
       width: 100%;
       display: inline-grid;
       padding: 25px;
+
       input {
         width: 370px;
         height: 40px;
         outline: none;
+        @include for-phone-only {
+          width: 100%;
+        }
       }
       .btn {
         height: 32px;

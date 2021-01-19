@@ -5,10 +5,10 @@
     @click.stop="$emit('dismiss')"
   >
     <div
-      class="add-modal bg-white relative rounded-md mx-auto mt-12 py-6 px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
+      class="add-modal bg-white relative rounded-md mx-auto mt-12 py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
-      <h1 class="text-lg font-medium text-center mb-4">
+      <h1 class="text-lg font-medium text-center mb-2 sm:mb-4">
         {{ patient ? 'Edit' : 'Add New' }} Patient
       </h1>
       <div class="form">
@@ -159,6 +159,7 @@ export default {
         city,
       })
       if (validation.error) {
+        this.loading = false
         this.$toast.error(validation.error.message)
         return
       }
@@ -192,6 +193,7 @@ export default {
           this.$router.push(`/patients/${this.patient.id}`)
           this.$toast.success('Add Updated Successfully')
         }
+        this.loading = false
       } catch (error) {
         this.$toast.error(error.message)
       }
@@ -212,6 +214,11 @@ export default {
   .cancel-btn {
     background: #f3f4f6;
     color: #000;
+  }
+  .add-modal {
+    @include for-phone-only {
+      width: 85%;
+    }
   }
 }
 </style>

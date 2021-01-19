@@ -39,6 +39,7 @@ export default {
     { src: '~/plugins/vue-search-select.js', ssr: false },
     { src: '~plugins/datepicker.js', ssr: false },
     { src: '~plugins/pagination.js', ssr: false },
+    { src: '~plugins/signiture.js', ssr: false },
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -58,6 +59,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
     '@nuxtjs/dayjs',
+    '@nuxtjs/device',
   ],
   apollo: {
     clientConfigs: {

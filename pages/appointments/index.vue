@@ -1,39 +1,42 @@
 <template>
   <div id="appointments-page">
-    <div class="title flex justify-between my-8">
-      <h1 class="text-2xl font-medium">Appointments</h1>
-      <button
-        class="bg-blue-500 rounded-md text-white text-sm font-medium add-btn flex items-center justify-center outline-none"
-        @click="newAppointment()"
+    <div class="title sm:flex justify-between my-4 sm:my-8">
+      <h1 class="text-xl sm:text-2xl font-medium mb-4 sm:mb-0">Appointments</h1>
+
+      <MyButton
+        class="appointment-btn"
+        :icon="addIcon"
+        @click.native="newAppointment()"
+        >Start New Appointment</MyButton
       >
-        <img class="mr-1" src="/plus-circle.svg" alt="" />
-        Start New Appointment
-      </button>
     </div>
     <client-only>
-      <div class="date-picker flex">
+      <div class="date-picker flex-none sm:flex">
         <p class="p-2">From-</p>
         <datepicker
           v-model="startDate"
-          class="mt-2 text-blue-500"
+          class="mt-0 sm:mt-2 text-blue-500"
           placeholder="Select Date"
         ></datepicker>
         <p class="p-2">To-</p>
         <datepicker
           v-model="endDate"
-          class="mt-2 text-blue-500"
+          class="mt-0 sm:mt-2 text-blue-500"
           :disabled-dates="getDisabledDates"
           placeholder="Select Date"
         ></datepicker>
         <button
-          class="p-2 bg-blue-500 text-white rounded cursor-pointer"
+          class="p-2 my-4 sm:my-0 bg-blue-500 text-white rounded cursor-pointer"
           @click="refresh"
         >
           Refresh
         </button>
       </div>
     </client-only>
-    <table class="appointments-list border-separate">
+    <table
+      v-if="$device.isDesktopOrTablet"
+      class="appointments-list border-separate"
+    >
       <tbody>
         <tr class="text-gray-600 text-sm font-normal">
           <th
@@ -79,6 +82,10 @@
         </tr>
       </tbody>
     </table>
+    <AppointmentCardForPhone
+      v-if="$device.isMobile"
+      :card-info="appointments"
+    />
     <div v-if="appointments.length" class="pagination flex justify-between">
       <client-only>
         <paginate
@@ -99,7 +106,10 @@
         </paginate>
       </client-only>
 
-      <div class="pagination flex justify-between outline-none">
+      <div
+        v-if="$device.isDesktopOrTablet"
+        class="pagination flex justify-between outline-none"
+      >
         <div class="nextprev flex">
           <button
             class="bg-gray-200 p1 h-8 w-14 text-base font-medium rounded-l"
@@ -126,9 +136,10 @@ export default {
   name: 'AppointmentsPage',
   data() {
     return {
+      addIcon: '/plus-circle.svg',
       totalItem: 0,
-      appointments: false,
-      perPage: 1,
+      appointments: [],
+      perPage: 3,
       totalPages: 0,
       startDate: this.$dayjs().startOf('day').$d,
       endDate: this.$dayjs().startOf('day').$d,
@@ -166,7 +177,7 @@ export default {
       if (data.appointments.length !== 0) {
         this.appointments = data.appointments
       } else {
-        this.appointments = false
+        this.appointments = []
       }
       this.$store.commit('UNSET_LOADING')
     },
@@ -200,7 +211,7 @@ export default {
       if (data.appointments.length !== 0) {
         this.appointments = data.appointments
       } else {
-        this.appointments = false
+        this.appointments = []
       }
       this.$store.commit('UNSET_LOADING')
     },
@@ -260,6 +271,9 @@ export default {
     &:hover {
       transform: scale(1.05);
     }
+  }
+  .appointment-btn {
+    width: 230px;
   }
 }
 </style>

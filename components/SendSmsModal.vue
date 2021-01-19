@@ -57,9 +57,16 @@
 import _ from 'lodash'
 import { patients } from '@/apollo/queries/patient/patients.gql'
 import { MultiSelect } from 'vue-search-select'
+import { SendSmsModal } from '@/utils/validation'
 export default {
   components: {
     MultiSelect,
+  },
+  props: {
+    patient: {
+      type: Object,
+      default: () => null,
+    },
   },
   data() {
     return {
@@ -70,6 +77,7 @@ export default {
       icon: '/bell.svg',
       message: '',
       sendToAll: false,
+      disabled: false,
       patients: [
         {
           value: false,
@@ -79,12 +87,24 @@ export default {
     }
   },
   mounted() {
+    if (this.patient) {
+      const selectedPatient = [
+        {
+          text: this.patient.name,
+          value: this.patient.id,
+        },
+      ]
+      this.items = selectedPatient
+      this.count = 1
+    } else {
+      this.items = []
+    }
     this.fetchPatients()
   },
   methods: {
     propsToPass() {
       let isDisable = false
-      if (this.sendToAll) {
+      if (this.sendToAll || this.patient) {
         // eslint-disable-next-line
         return (isDisable = true)
       }
@@ -139,6 +159,17 @@ export default {
           patients.push(this.items[i].value)
         }
       }
+      if (patients.length < 1) {
+        this.$toast.error('select patient')
+        return
+      }
+      const validation = SendSmsModal({
+        message: this.message,
+      })
+      if (validation.error) {
+        this.$toast.error(validation.error.message)
+        return
+      }
 
       const res = await this.$axios.$post(`/notifications`, {
         patients,
@@ -146,6 +177,7 @@ export default {
         sendToAll: this.sendToAll,
       })
       this.$emit('dismiss')
+
       this.$emit('addNotify', res)
     },
   },
