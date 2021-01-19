@@ -3,7 +3,7 @@
     <div
       v-for="(item, i) in cardInfo"
       :key="i"
-      class="card p-4 mb-4 border cursor-pointer"
+      class="card relative p-4 mb-4 border cursor-pointer"
     >
       <p class="text-gray-600 text-xs font-normal border-b mb-3">
         DRUG:
@@ -35,6 +35,18 @@
             : item.frequency.instructions
         }}
       </p>
+      <img
+        class="absolute right-10 bottom-2"
+        src="/edit_btn.svg"
+        alt=""
+        @click="$emit('edit', i)"
+      />
+      <img
+        class="absolute right-2 bottom-2"
+        src="/delete_btn.svg"
+        alt=""
+        @click="$emit('delete', i)"
+      />
     </div>
   </div>
 </template>

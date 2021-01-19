@@ -1,6 +1,6 @@
 <template>
   <div id="vitalsign-info">
-    <div v-if="cardInfo" class="card p-4 mb-4 border cursor-pointer">
+    <div v-if="cardInfo" class="card relative p-4 mb-4 border cursor-pointer">
       <p class="text-gray-600 text-xs font-normal">
         WEIGHT (KG)
         {{ cardInfo.weight == null ? '---' : cardInfo.weight }}
@@ -32,6 +32,18 @@
         RESP. RATE (Breaths/min) :
         {{ cardInfo.respRate }}
       </p>
+      <img
+        class="absolute right-10 bottom-2"
+        src="/edit_btn.svg"
+        alt=""
+        @click="$emit('edit')"
+      />
+      <img
+        class="absolute right-2 bottom-2"
+        src="/delete_btn.svg"
+        alt=""
+        @click="$emit('delete')"
+      />
     </div>
   </div>
 </template>

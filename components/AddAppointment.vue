@@ -125,7 +125,7 @@ export default {
           this.sessionDate + this.sessionTime
         ).format(),
       })
-      console.log(res)
+      this.$emit('input', res.id)
       this.startTime = Date.now()
       this.startTimer()
       this.sessionStarted = true

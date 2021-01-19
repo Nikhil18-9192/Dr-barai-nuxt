@@ -7,6 +7,7 @@
       </label>
       <input
         id="add-image"
+        ref="fileInput"
         type="file"
         accept="image/*"
         multiple
@@ -22,9 +23,9 @@
         alt=""
       />
     </div>
-    <div v-if="addImages.length != 0" class="preview flex flex-wrap">
+    <div v-if="selectedImages.length != 0" class="preview flex flex-wrap">
       <img
-        v-for="(image, i) in addImages"
+        v-for="(image, i) in selectedImages"
         :key="i"
         class="w-52 h-52 mr-8 mt-8 cursor-pointer"
         :src="image"
@@ -45,18 +46,19 @@ export default {
   },
   data() {
     return {
-      addImages: [],
+      selectedImages: [],
     }
   },
   methods: {
     onImageAdded(event) {
-      const files = event.target.files
+      const files = this.$refs.fileInput.files
       for (let i = 0; i < files.length; i++) {
-        this.addImages.push(URL.createObjectURL(files[i]))
+        this.selectedImages.push(URL.createObjectURL(files[i]))
       }
+      this.$emit('input', files)
     },
     previewModal() {
-      this.$store.commit('SET_PREVIEW', this.addImages)
+      this.$store.commit('SET_PREVIEW', this.selectedImages)
       this.$store.commit('PREVIEW_MODAL')
     },
   },

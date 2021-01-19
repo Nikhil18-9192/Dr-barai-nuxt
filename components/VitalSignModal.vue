@@ -138,7 +138,7 @@ export default {
     },
   },
   mounted() {
-    if (this.vitalsToEdit) {
+    if (this.vitalsToEdit.weight) {
       this.weight = this.vitalsToEdit.weight
       this.systolic = this.vitalsToEdit.bp.bpSystolic
       this.diastolic = this.vitalsToEdit.bp.bpDiastolic

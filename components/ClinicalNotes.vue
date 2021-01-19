@@ -67,6 +67,7 @@ export default {
         this.addNotes = val
       }
       this.notesModal = false
+      this.$emit('input', this.addNotes)
     },
     editNotes() {
       this.notesModal = true

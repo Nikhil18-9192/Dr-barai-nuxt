@@ -45,7 +45,7 @@
             class="row my-6 text-sm font-normal text-center"
           >
             <td class="p-3">
-              {{ item.drug.name }}
+              {{ item.name }}
             </td>
             <td class="p-3">
               {{
@@ -89,7 +89,12 @@
       </table>
     </div>
     <div ref="phone">
-      <PrescriptionCard v-if="$device.isMobile" :card-info="prescription" />
+      <PrescriptionCard
+        v-if="$device.isMobile"
+        :card-info="prescription"
+        @edit="editPrescription"
+        @delete="deletePrescription"
+      />
     </div>
 
     <MyButton
@@ -144,11 +149,13 @@ export default {
         this.prescription.push(val)
       }
       this.prescriptionModal = false
+      this.$emit('input', this.prescription)
     },
     updatePrescription(val) {
       this.prescription[this.prescriptionIndexToEdit] = val
       this.prescriptionIndexToEdit = -1
       this.prescriptionModal = false
+      this.$emit('input', this.prescription)
     },
     download() {
       // eslint-disable-next-line

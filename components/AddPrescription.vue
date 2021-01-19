@@ -152,6 +152,7 @@ export default {
 
       const respData = {
         drug: this.selectedDrug,
+        name: this.selectedDrug.name,
         frequency: {
           frequency: this.dosageFrequency,
           intake,
