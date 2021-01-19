@@ -1696,7 +1696,11 @@
     vue-cli-plugin-apollo "^0.22.2"
     webpack-node-externals "^2.5.2"
 
+<<<<<<< HEAD
 "@nuxtjs/axios@^5.12.2":
+=======
+"@nuxtjs/axios@^5.12.5":
+>>>>>>> origin/dependabot/npm_and_yarn/nuxtjs/axios-5.12.5
   version "5.12.5"
   resolved "https://registry.yarnpkg.com/@nuxtjs/axios/-/axios-5.12.5.tgz#d4a1003052d21e54d93d97a895ca84f58e4bc8d9"
   integrity sha512-KCZMLRZFYOKcGt9mKxJMH6UJMB6H6g+BF/YxXEYz3Urrf2U2XiNkj6rmBqgw0XLRY5XD9Wm8knTGp6955512fQ==
