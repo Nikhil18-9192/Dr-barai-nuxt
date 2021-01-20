@@ -128,7 +128,7 @@ export default {
       addBtnIcon: '/plus-circle.svg',
       totalItem: 0,
       notifications: [],
-      perPage: 5,
+      perPage: 10,
       totalPages: 0,
       currentPage: 1,
     }

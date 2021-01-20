@@ -20,7 +20,10 @@
       <p class="my-5 text-base font-normal">Diagnosis: {{ notes.diagnoses }}</p>
       <p class="my-5 text-base font-normal">Notes: {{ notes.notes }}</p>
       <div class="line"></div>
-      <div class="edit-btns absolute flex bottom-4 right-0 hidden">
+      <div
+        v-if="$route.path == '/appointments/newAppointment'"
+        class="edit-btns absolute flex bottom-4 right-0 hidden"
+      >
         <img
           class="mr-6 cursor-pointer"
           src="/edit_btn.svg"
@@ -50,6 +53,7 @@ export default {
     return {
       notesModal: false,
       addNotes: false,
+      path: '',
     }
   },
   computed: {
@@ -60,6 +64,9 @@ export default {
         return this.clinicalNotes
       } else return false
     },
+  },
+  mounted() {
+    this.path = this.$route.path
   },
   methods: {
     submitClinicalNotes(val) {

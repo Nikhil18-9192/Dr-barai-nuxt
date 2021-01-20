@@ -105,7 +105,7 @@ export default {
       totalItem: 0,
       modal: false,
       patients: [],
-      perPage: 5,
+      perPage: 10,
       totalPages: 0,
       currentPage: 1,
       maxPage: 5,

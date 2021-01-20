@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { appointmentFromId } from '@/apollo/queries/appointment/appointments.gql'
+import query from '@/apollo/queries/appointment/appointment.gql'
 import formatDateTime from '@/utils/formatDateTime'
 export default {
   data() {
@@ -35,13 +35,12 @@ export default {
 
       try {
         const { data } = await this.$apollo.query({
-          query: appointmentFromId,
+          query,
           variables: {
             id,
           },
         })
-
-        const result = data.appointments[0]
+        const result = data.appointment
         this.patient = result.patient
         this.prescription = result.prescription
         this.vitalSigns = result.vitalSigns

@@ -45,7 +45,7 @@
             class="row my-6 text-sm font-normal text-center"
           >
             <td class="p-3">
-              {{ item.name }}
+              {{ item.name ? item.name : item.drug.name }}
             </td>
             <td class="p-3">
               {{
@@ -101,7 +101,7 @@
           <p class="text-gray-600 text-xs font-normal border-b mb-3">
             DRUG:
             <span class="text-blue-600 text-base">
-              {{ item.drug == null ? '---' : item.name }}</span
+              {{ item.name ? item.name : item.drug.name }}</span
             >
           </p>
           <p class="text-gray-600 text-xs font-normal">
