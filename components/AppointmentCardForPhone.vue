@@ -40,7 +40,6 @@ export default {
     },
   },
   methods: {
-    // todo: cardpadding, cursor pointer
     onAppointmentClick(id) {
       this.$router.push(`/appointments/${id}`)
     },

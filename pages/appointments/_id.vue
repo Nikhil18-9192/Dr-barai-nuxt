@@ -1,6 +1,6 @@
 <template>
   <div id="appointment">
-    <AppointmentTitle :appointment-info="appointmentInfo" />
+    <AppointmentTitle :appointment-info="appointmentInfo" :patient="patient" />
     <Prescription :prescription="prescription" />
     <VitalSigns :vitals="vitalSigns" />
     <ClinicalNotes :clinical-notes="clinicalNotes" />
@@ -23,6 +23,7 @@ export default {
       vitalSigns: {},
       clinicalNotes: {},
       files: [],
+      patient: {},
     }
   },
   mounted() {
@@ -41,6 +42,7 @@ export default {
         })
 
         const result = data.appointments[0]
+        this.patient = result.patient
         this.prescription = result.prescription
         this.vitalSigns = result.vitalSigns
         this.clinicalNotes = result.clinicalNotes

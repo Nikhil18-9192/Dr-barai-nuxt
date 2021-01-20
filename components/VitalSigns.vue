@@ -98,6 +98,7 @@
 
 <script>
 export default {
+  name: 'VitalSignComponent',
   props: {
     vitals: {
       type: Object,
@@ -115,9 +116,9 @@ export default {
     vitalSigns() {
       if (this.$route.name === 'appointments-newAppointment') {
         return this.addVitals
-      } else if (Object.entries(this.clinicalNotes).length !== 0) {
+      } else if (Object.entries(this.vitals).length !== 0) {
         return this.vitals
-      } else return false
+      } else return {}
     },
   },
   mounted() {
