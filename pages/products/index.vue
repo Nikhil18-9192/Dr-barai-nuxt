@@ -223,9 +223,16 @@ export default {
   .product-list {
     border-spacing: 0 1.5em;
     width: 90%;
+    table-layout: fixed;
     th {
       text-align: left;
       font-weight: normal;
+    }
+    td {
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   button {

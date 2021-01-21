@@ -21,7 +21,7 @@
       class="notification-list border-separate flex-grow"
     >
       <tbody>
-        <tr class="text-gray-600 text-sm font-normal">
+        <tr class="text-gray-600 text-sm font-normal ml-2">
           <th
             class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
           >
@@ -221,6 +221,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+td {
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .add-btn {
   width: 180px;
   height: 37px;

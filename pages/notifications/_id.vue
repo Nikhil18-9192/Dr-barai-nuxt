@@ -18,7 +18,10 @@
 
     <div class="patients flex-grow">
       <h4>Sent To</h4>
-      <table v-if="$device.isDesktopOrTablet" class="patient-list w-full">
+      <table
+        v-if="$device.isDesktopOrTablet"
+        class="patient-list table-fixed w-full"
+      >
         <tbody>
           <tr class="text-gray-400 text-sm font-normal">
             <th
@@ -197,6 +200,12 @@ export default {
 </script>
 
 <style lang="scss" scopped>
+td {
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .message-info {
   min-height: 150px;
 }

@@ -46,8 +46,12 @@ export default {
         this.vitalSigns = result.vitalSigns
         this.clinicalNotes = result.clinicalNotes
         this.files = result.files
-        this.appointmentInfo.date = formatDateTime.formatDate(result.date)
-        this.appointmentInfo.time = formatDateTime.formatTime(result.date)
+        this.appointmentInfo.date = formatDateTime.formatDate(
+          result.startDateTime
+        )
+        this.appointmentInfo.time = formatDateTime.formatTime(
+          result.startDateTime
+        )
         this.appointmentInfo.name = result.patient.name
       } catch (e) {
         this.$toast.error(e.message)

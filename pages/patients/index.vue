@@ -41,10 +41,10 @@
           class="bg-gray-100 my-6 text-sm font-normal cursor-pointer"
           @click="patientInfo(item.id)"
         >
-          <td class="p-3">{{ item.id }}</td>
-          <td class="p-3">{{ item.name }}</td>
-          <td class="p-3">{{ item.mobile }}</td>
-          <td class="p-3">{{ item.appointments.length }}</td>
+          <td class="py-3">{{ item.id }}</td>
+          <td class="py-3">{{ item.name }}</td>
+          <td class="py-3">{{ item.mobile }}</td>
+          <td class="py-3">{{ item.appointments.length }}</td>
         </tr>
         <tr>
           <td v-if="!patients.length">No patients Yet</td>
@@ -190,9 +190,16 @@ export default {
   .patient-list {
     border-spacing: 0 1.5em;
     width: 90%;
+    table-layout: fixed;
     th {
       text-align: left;
       font-weight: normal;
+    }
+    td {
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   button {
