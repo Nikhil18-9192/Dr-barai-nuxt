@@ -1,6 +1,5 @@
 <template>
   <div id="new-appointment">
-    <ImageViewModal v-if="$store.state.imageModal" />
     <AddAppointment v-model="appointmentId" class="new" />
     <Prescription v-model="prescriptionInfo" class="new" />
     <VitalSigns v-model="vitalSignInfo" class="new" />
@@ -32,6 +31,7 @@ export default {
         prescription: this.prescriptionInfo,
         vitalSigns: this.vitalSignInfo,
         clinicalNotes: this.clinicalNoteInfo,
+        endDateTIme: new Date(),
       })
       if (this.files.length) {
         const data = {

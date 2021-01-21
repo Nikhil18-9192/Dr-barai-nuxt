@@ -32,7 +32,15 @@ query appointments($id: ID!) {
       notes
     }
     patient {
+      id
       name
+      mobile
+      email
+      gender
+      birthDate
+      address
+      pincode
+      city
     }
     files {
       formats

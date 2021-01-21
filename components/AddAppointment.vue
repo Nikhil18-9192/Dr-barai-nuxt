@@ -38,13 +38,13 @@
       >
         Start Session
       </button>
-      <button
+      <!-- <button
         v-if="sessionStarted"
         class="session-btn relative sm:absolute bg-red-500 rounded-md text-white text-sm font-medium ml-8 mb-2 p-3"
         @click="finishSession()"
       >
         Finish Session
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
@@ -132,10 +132,7 @@ export default {
       this.startTimer()
       this.sessionStarted = true
     },
-    async finishSession() {
-      await this.$axios.$put(`/appointments/${this.appointmentId}`, {
-        endDateTime: new Date(),
-      })
+    finishSession() {
       clearInterval(this.interval)
       this.time = '00:00:00'
       this.sessionStarted = false
