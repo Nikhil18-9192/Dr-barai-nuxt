@@ -23,16 +23,33 @@
           placeholder="Add compaints"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
           autocomplete="on"
+          wo
         ></textarea>
+
         <label for="observations" class="text-sm font-light text-gray-400"
           >Observations</label
         >
+
         <textarea
           v-model="observations"
           placeholder="Add observations"
-          class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
+          class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm break-all"
           autocomplete="on"
+          @input="observationInput"
         ></textarea>
+        <div
+          v-if="obsDataList && observationList.length > 0"
+          class="search-list overflow-y-scroll max-h-20"
+        >
+          <div
+            v-for="item in observationList"
+            :key="item.id"
+            class="cursor-pointer"
+            @click="setObservationValue(item.value)"
+          >
+            {{ item.value }}
+          </div>
+        </div>
         <label for="diagnoses" class="text-sm font-light text-gray-400"
           >Diagnoses</label
         >
@@ -41,7 +58,21 @@
           placeholder="Add diagnoses"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
           autocomplete="on"
+          @input="diagnoseInput"
         ></textarea>
+        <div
+          v-if="diagnoseData && diagnoseList.length > 0"
+          class="search-list overflow-y-scroll max-h-20"
+        >
+          <div
+            v-for="item in diagnoseList"
+            :key="item.id"
+            class="cursor-pointer"
+            @click="setDiagnoseValue(item.value)"
+          >
+            {{ item.value }}
+          </div>
+        </div>
         <label for="notes" class="text-sm font-light text-gray-400"
           >Notes</label
         >
@@ -69,16 +100,22 @@
 
 <script>
 import { ClinicalNotesValidation } from '@/utils/validation'
+
 export default {
   // eslint-disable-next-line
   props: ['notesToEdit'],
   data() {
     return {
+      input: '',
       complaints: '',
       observations: '',
       diagnoses: '',
       notes: '',
       loading: false,
+      observationList: [],
+      obsDataList: false,
+      diagnoseList: [],
+      diagnoseData: false,
     }
   },
   mounted() {
@@ -109,6 +146,51 @@ export default {
         notes,
       }
       this.$emit('clinicalNotesData', clinicalNotesData)
+    },
+    async observationInput() {
+      this.obsDataList = true
+      if (this.observations <= 0) return (this.observationList = [])
+      if (
+        this.observationList.findIndex(
+          (obs) => obs.value === this.observations
+        ) !== -1
+      )
+        return
+      const res = await this.$axios.$get(
+        `/observation-templates?_q=${this.observations}`
+      )
+      if (res && res.length) {
+        this.observationList = res
+      } else {
+        this.observationList = []
+        this.obsDataList = false
+      }
+    },
+    setObservationValue(item) {
+      this.observations = `${item}`
+      this.obsDataList = false
+    },
+    async diagnoseInput() {
+      this.diagnoseData = true
+      if (this.diagnoses <= 0) return (this.diagnoseList = [])
+      if (
+        this.diagnoseList.findIndex((obs) => obs.value === this.diagnoses) !==
+        -1
+      )
+        return
+      const res = await this.$axios.$get(
+        `/diagnose-templates?_q=${this.diagnoses}`
+      )
+      if (res && res.length) {
+        this.diagnoseList = res
+      } else {
+        this.diagnoseList = []
+        this.diagnoseData = false
+      }
+    },
+    setDiagnoseValue(item) {
+      this.diagnoses = `${item}`
+      this.diagnoseData = false
     },
   },
 }

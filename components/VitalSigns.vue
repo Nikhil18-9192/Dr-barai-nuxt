@@ -8,10 +8,13 @@
     />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Vital Signs</h1>
-      <AddButton v-if="!vitalSigns" @click.native="vitalsModal = true" />
+      <AddButton v-if="!vitalSigns.weight" @click.native="vitalsModal = true" />
     </div>
 
-    <table v-if="vitalSigns && $device.isDesktopOrTablet" class="list w-full">
+    <table
+      v-if="vitalSigns.weight && $device.isDesktopOrTablet"
+      class="list w-full"
+    >
       <tbody>
         <tr class="bg-gray-100 text-black-400 text-sm">
           <th
@@ -84,12 +87,18 @@
         </tr>
       </tbody>
     </table>
-    <VitalSignCard v-if="$device.isMobile" :card-info="vitalSigns" />
+    <VitalSignCard
+      v-if="vitalSigns.weight && $device.isMobile"
+      :card-info="vitalSigns"
+      @edit="vitalsModal = true"
+      @delete="deleteVitals"
+    />
   </div>
 </template>
 
 <script>
 export default {
+  name: 'VitalSignComponent',
   props: {
     vitals: {
       type: Object,
@@ -99,7 +108,7 @@ export default {
   data() {
     return {
       vitalsModal: false,
-      addVitals: false,
+      addVitals: {},
       displayTable: false,
     }
   },
@@ -107,9 +116,9 @@ export default {
     vitalSigns() {
       if (this.$route.name === 'appointments-newAppointment') {
         return this.addVitals
-      } else if (Object.entries(this.clinicalNotes).length !== 0) {
+      } else if (Object.entries(this.vitals).length !== 0) {
         return this.vitals
-      } else return false
+      } else return {}
     },
   },
   mounted() {
@@ -121,6 +130,7 @@ export default {
         this.addVitals = val
       }
       this.vitalsModal = false
+      this.$emit('input', this.addVitals)
     },
     editVitals() {
       this.vitalsModal = true

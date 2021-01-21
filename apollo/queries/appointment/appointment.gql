@@ -1,0 +1,41 @@
+query appointments($id: ID!) {
+  appointment(id: $id) {
+    id
+    startDateTime
+    prescription {
+      drug {
+        name
+      }
+      frequency {
+        frequency
+        drugDuration
+        drugDurationFor
+        instructions
+      }
+    }
+    vitalSigns {
+      weight
+      bp {
+        bpSystolic
+        bpDiastolic
+      }
+      temperature {
+        temperature
+      }
+      pulse
+      respRate
+    }
+    clinicalNotes {
+      complaints
+      observations
+      diagnoses
+      notes
+    }
+    patient {
+      name
+    }
+    files {
+      formats
+    }
+  }
+}

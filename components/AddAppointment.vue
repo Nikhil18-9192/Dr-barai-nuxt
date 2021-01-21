@@ -60,6 +60,7 @@ export default {
   },
   data() {
     return {
+      appointmentId: false,
       sessionStarted: false,
       time: '00:00:00',
       interval: false,
@@ -125,12 +126,16 @@ export default {
           this.sessionDate + this.sessionTime
         ).format(),
       })
-      console.log(res)
+      this.appointmentId = res.id
+      this.$emit('input', this.appointmentId)
       this.startTime = Date.now()
       this.startTimer()
       this.sessionStarted = true
     },
-    finishSession() {
+    async finishSession() {
+      await this.$axios.$put(`/appointments/${this.appointmentId}`, {
+        endDateTime: new Date(),
+      })
       clearInterval(this.interval)
       this.time = '00:00:00'
       this.sessionStarted = false

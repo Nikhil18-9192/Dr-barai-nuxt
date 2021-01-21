@@ -45,7 +45,7 @@
             class="row my-6 text-sm font-normal text-center"
           >
             <td class="p-3">
-              {{ item.drug.name }}
+              {{ item.name ? item.name : item.drug.name }}
             </td>
             <td class="p-3">
               {{
@@ -89,7 +89,61 @@
       </table>
     </div>
     <div ref="phone">
-      <PrescriptionCard v-if="$device.isMobile" :card-info="prescription" />
+      <div
+        v-if="prescription.length > 0 && $device.isMobile"
+        id="prescription-info"
+      >
+        <div
+          v-for="(item, i) in prescription"
+          :key="i"
+          class="card relative p-4 mb-4 border cursor-pointer"
+        >
+          <p class="text-gray-600 text-xs font-normal border-b mb-3">
+            DRUG:
+            <span class="text-blue-600 text-base">
+              {{ item.name ? item.name : item.drug.name }}</span
+            >
+          </p>
+          <p class="text-gray-600 text-xs font-normal">
+            DOSAGE & FREQUENCY :
+            {{
+              item.frequency == null || item.frequency.frequency == null
+                ? '---'
+                : item.frequency.frequency
+            }}
+          </p>
+          <p class="text-gray-600 text-xs font-normal">
+            DURATION :
+            {{
+              item.frequency == null || item.frequency.drugDuration == null
+                ? '---'
+                : item.frequency.drugDuration +
+                  ' ' +
+                  item.frequency.drugDurationFor
+            }}
+          </p>
+          <p class="text-gray-600 text-xs font-normal">
+            INSTRUCTIONS :
+            {{
+              item.frequency == null || item.frequency.instructions == null
+                ? '---'
+                : item.frequency.instructions
+            }}
+          </p>
+          <img
+            class="absolute right-10 bottom-2 hidden"
+            src="/edit_btn.svg"
+            alt=""
+            @click="editPrescription(i)"
+          />
+          <img
+            class="absolute right-2 bottom-2 hidden"
+            src="/delete_btn.svg"
+            alt=""
+            @click="deletePrescription(i)"
+          />
+        </div>
+      </div>
     </div>
 
     <MyButton
@@ -123,6 +177,7 @@ export default {
       addPrescription: false,
       prescriptionIndexToEdit: -1,
       editedDrug: {},
+      prescriptionCardKey: 111,
     }
   },
   computed: {
@@ -144,11 +199,13 @@ export default {
         this.prescription.push(val)
       }
       this.prescriptionModal = false
+      this.$emit('input', this.prescription)
     },
     updatePrescription(val) {
       this.prescription[this.prescriptionIndexToEdit] = val
       this.prescriptionIndexToEdit = -1
       this.prescriptionModal = false
+      this.$emit('input', this.prescription)
     },
     download() {
       // eslint-disable-next-line
@@ -178,6 +235,7 @@ export default {
       })
     },
     editPrescription(index) {
+      this.prescriptionCardKey = Math.random() * 100
       this.prescriptionIndexToEdit = index
       this.prescriptionModal = true
     },
@@ -212,6 +270,11 @@ export default {
         cursor: pointer;
       }
     }
+  }
+}
+.card {
+  &:hover img {
+    display: block;
   }
 }
 .add-btn {

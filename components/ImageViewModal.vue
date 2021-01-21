@@ -18,7 +18,7 @@
         v-for="(image, i) in images"
         v-show="i == currentSlide"
         :key="i"
-        class="w-full flex justify-center items-center"
+        class="w-full flex justify-center items-center object-contain"
       >
         <img class="w-64 sm:w-96 h-64 sm:h-96" :src="image" alt="" />
       </div>
