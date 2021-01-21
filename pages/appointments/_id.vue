@@ -2,9 +2,10 @@
   <div id="appointment">
     <AppointmentTitle :appointment-info="appointmentInfo" :patient="patient" />
     <Prescription :prescription="prescription" />
-    <VitalSigns :vitals="vitalSigns" />
-    <ClinicalNotes :clinical-notes="clinicalNotes" />
+    <VitalSigns v-model="vitalSigns" />
+    <ClinicalNotes v-model="clinicalNotes" />
     <Files :images="files" />
+    <MyButton @click.native="submit">Submit</MyButton>
   </div>
 </template>
 
@@ -32,7 +33,7 @@ export default {
   methods: {
     async fetchAppointment() {
       const id = this.$route.params.id
-
+      this.$store.commit('SET_LOADING')
       try {
         const { data } = await this.$apollo.query({
           query,
@@ -49,12 +50,21 @@ export default {
         this.appointmentInfo.date = formatDateTime.formatDate(result.date)
         this.appointmentInfo.time = formatDateTime.formatTime(result.date)
         this.appointmentInfo.name = result.patient.name
+        this.$store.commit('UNSET_LOADING')
       } catch (e) {
         this.$toast.error(e.message)
       }
+    },
+    submit() {
+      console.log(this.vitalSigns, this.clinicalNotes, this.prescription)
     },
   },
 }
 </script>
 
-<style></style>
+<style lang="scss" scopped>
+.add-btn {
+  width: 185px;
+  height: 37px;
+}
+</style>

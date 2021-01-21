@@ -1,8 +1,8 @@
 <template>
   <div id="new-appointment">
     <AddAppointment v-model="appointmentId" class="new" />
-    <Prescription v-model="prescriptionInfo" class="new" />
-    <VitalSigns v-model="vitalSignInfo" class="new" />
+    <Prescription v-model="prescriptionInfo" />
+    <VitalSigns v-model="vitalSignInfo" />
     <ClinicalNotes v-model="clinicalNoteInfo" class="new" />
     <Files v-model="files" class="new" />
     <MyButton :loading="loading" @click.native="submitAppointment"
