@@ -216,7 +216,6 @@ export default {
       this.$store.commit('UNSET_LOADING')
     },
     async fetchTotalappointmentsCount() {
-    
       this.totalItem = await this.$axios.$get(
         `/appointments/count?startDateTime_gte=${this.startDate.toISOString()}&startDateTime_lte=${this.modifyEndDate(
           this.endDate
