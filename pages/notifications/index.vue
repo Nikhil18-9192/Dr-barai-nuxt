@@ -15,7 +15,6 @@
         >
       </div>
     </div>
-
     <table
       v-if="$device.isDesktopOrTablet"
       class="notification-list border-separate flex-grow table-fixed"

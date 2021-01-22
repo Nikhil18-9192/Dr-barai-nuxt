@@ -33,14 +33,9 @@
         </button>
       </div>
     </client-only>
-    <h1
-      v-if="$device.isDesktopOrTablet && appointments.length == 0"
-      class="empty-layout text-gray-400 text-3xl absolute top-1/2 left-1/3"
-    >
-      No Appointments Today
-    </h1>
+
     <table
-      v-if="$device.isDesktopOrTablet && appointments.length != 0"
+      v-if="$device.isDesktopOrTablet"
       class="appointments-list border-separate"
     >
       <tbody>
@@ -84,7 +79,7 @@
           </td>
         </tr>
         <tr>
-          <td v-if="!appointments">No appointments Yet</td>
+          <td v-if="!appointments.length">No appointments Yet</td>
         </tr>
       </tbody>
     </table>
