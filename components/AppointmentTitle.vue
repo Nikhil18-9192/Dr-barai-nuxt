@@ -68,7 +68,7 @@ export default {
 
   methods: {
     updatedPatient(val) {
-      console.log(val)
+      this.$emit('updatedPatient', val)
     },
   },
 }

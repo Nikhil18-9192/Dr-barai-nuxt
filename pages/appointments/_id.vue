@@ -1,11 +1,15 @@
 <template>
   <div id="appointment">
-    <AppointmentTitle :appointment-info="appointmentInfo" :patient="patient" />
+    <AppointmentTitle
+      :appointment-info="appointmentInfo"
+      :patient="patient"
+      @updatedPatient="updatedData"
+    />
     <Prescription :prescription="prescription" />
     <VitalSigns v-model="vitalSigns" />
     <ClinicalNotes v-model="clinicalNotes" />
     <Files :images="files" @uploadImages="newImages" />
-    <MyButton @click.native="submit">Submit</MyButton>
+    <MyButton :loading="loading" @click.native="submit">Submit</MyButton>
   </div>
 </template>
 
@@ -27,6 +31,7 @@ export default {
       patient: {},
       newFiles: [],
       currentFiles: [],
+      loading: false,
     }
   },
   mounted() {
@@ -44,6 +49,7 @@ export default {
           },
         })
         const result = data.appointment
+        console.log(result)
         this.patient = result.patient
         this.prescription = result.prescription
         this.vitalSigns = result.vitalSigns
@@ -60,6 +66,10 @@ export default {
       } catch (e) {
         this.$toast.error(e.message)
       }
+    },
+    updatedData(val) {
+      this.patient = val
+      this.appointmentInfo.name = val.name
     },
     newImages(val) {
       this.newFiles = val.images
@@ -86,7 +96,7 @@ export default {
         }
         await this.$axios.$put(`/appointments/${this.$route.params.id}`, {
           prescription: this.prescription,
-          vitalSigns: this.vitalSign,
+          vitalSigns: this.vitalSigns,
           clinicalNotes: this.clinicalNotes,
           files: this.currentFiles,
         })

@@ -1,14 +1,13 @@
 <template>
   <div id="new-appointment">
     <h1 class="my-4 sm:my-10 text-lg font-medium">Create New Appointment</h1>
-    <h2 class="timer sm:absolute text-6xl">{{ time }}</h2>
     <div class="container relative flex-none sm:flex">
       <div class="form flex flex-col w-full sm:w-6/12">
         <label for="name" class="w-50 text-sm font-normal text-gray-400 my-1"
           >Name</label
         >
         <model-select
-          v-model="selectedPatientId"
+          v-model="form.selectedPatientId"
           :options="patients"
           placeholder="Search Patient"
           autocomplete="on"
@@ -17,7 +16,7 @@
           >Date</label
         >
         <input
-          v-model="sessionDate"
+          v-model="form.sessionDate"
           type="date"
           class="border rounded border-gray-300 p-2 mt-1 mb-2 outline-none"
         />
@@ -25,26 +24,11 @@
           >Time</label
         >
         <input
-          v-model="sessionTime"
+          v-model="form.sessionTime"
           type="time"
           class="border rounded border-gray-300 p-2 mt-1 mb-2 outline-none"
         />
       </div>
-
-      <button
-        v-if="!sessionStarted"
-        class="session-btn relative sm:absolute bg-black rounded-md text-white text-sm font-medium ml-8 mb-2 p-3"
-        @click="startSession()"
-      >
-        Start Session
-      </button>
-      <!-- <button
-        v-if="sessionStarted"
-        class="session-btn relative sm:absolute bg-red-500 rounded-md text-white text-sm font-medium ml-8 mb-2 p-3"
-        @click="finishSession()"
-      >
-        Finish Session
-      </button> -->
     </div>
   </div>
 </template>
@@ -60,14 +44,11 @@ export default {
   },
   data() {
     return {
-      appointmentId: false,
-      sessionStarted: false,
-      time: '00:00:00',
-      interval: false,
-      startTime: false,
-      sessionDate: this.getDate(),
-      sessionTime: this.getTime(),
-      selectedPatientId: false,
+      form: {
+        selectedPatientId: '',
+        sessionDate: this.getDate(),
+        sessionTime: this.getTime(),
+      },
       patients: [
         {
           value: false,
@@ -75,6 +56,14 @@ export default {
         },
       ],
     }
+  },
+  watch: {
+    form: {
+      handler(val) {
+        this.$emit('input', val)
+      },
+      deep: true,
+    },
   },
   beforeMount() {
     window.addEventListener('beforeunload', (event) => {
@@ -113,53 +102,6 @@ export default {
     },
     getTime() {
       return this.$dayjs().format('HH:mm')
-    },
-    async startSession() {
-      if (!this.selectedPatientId) {
-        this.$toast.error('Please select a patient')
-        return
-      }
-
-      const res = await this.$axios.$post('/appointments', {
-        patient: this.selectedPatientId,
-        startDateTime: this.$dayjs(
-          this.sessionDate + this.sessionTime
-        ).format(),
-      })
-      this.appointmentId = res.id
-      this.$emit('input', this.appointmentId)
-      this.startTime = Date.now()
-      this.startTimer()
-      this.sessionStarted = true
-    },
-    finishSession() {
-      clearInterval(this.interval)
-      this.time = '00:00:00'
-      this.sessionStarted = false
-    },
-    startTimer() {
-      const parent = this
-      this.interval = setInterval(function () {
-        const elaspsedTime = Date.now() - parent.startTime
-        parent.formatTime(elaspsedTime)
-      }, 1000)
-    },
-
-    formatTime(time) {
-      const hour = time / 3600000
-      const hh = Math.floor(hour)
-
-      const min = (hour - hh) * 60
-      const mm = Math.floor(min)
-
-      const sec = (min - mm) * 60
-      const ss = Math.floor(sec)
-
-      const HH = hh.toString().padStart(2, '0')
-      const MM = mm.toString().padStart(2, '0')
-      const SS = ss.toString().padStart(2, '0')
-
-      this.time = `${HH}:${MM}:${SS}`
     },
   },
 }
