@@ -29,11 +29,46 @@
 export default {
   data() {
     return {
-      patientCount: 50,
-      totalAppointment: 120,
-      newPatient: 5,
-      newAppointment: 5,
+      patientCount: 0,
+      totalAppointment: 0,
+      newPatient: 0,
+      newAppointment: 0,
     }
+  },
+  mounted() {
+    this.fetchTotalPatientsCount()
+    this.fetchTotalAppointmentsCount()
+    console.log(this.startDateISO + this.endDateISO())
+  },
+  methods: {
+    async fetchTotalPatientsCount() {
+      try {
+        this.patientCount = await this.$axios.$get(`/patients/count`)
+        this.newPatient = await this.$axios.$get(
+          `/patients/count?createdAt_gte=${this.startDateISO()}&createdAt_lte=${this.endDateISO()}`
+        )
+      } catch (error) {
+        this.$toast.error(error.message)
+      }
+    },
+    async fetchTotalAppointmentsCount() {
+      try {
+        this.totalAppointment = await this.$axios.$get(`/appointments/count`)
+        this.newAppointment = await this.$axios.$get(
+          `/appointments/count?startDateTime_gte=${this.startDateISO()}&startDateTime_lte=${this.endDateISO()}`
+        )
+      } catch (error) {
+        this.$toast.error(error.message)
+      }
+    },
+
+    startDateISO() {
+      return this.$dayjs().format('YYYY-MM-DDT00:00:00.01[Z]')
+    },
+
+    endDateISO() {
+      return this.$dayjs().format('YYYY-MM-DDT24:00:00.00[Z]')
+    },
   },
 }
 </script>

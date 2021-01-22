@@ -1,0 +1,13 @@
+query appointments($startDate: String, $endDate: String) {
+  appointments(
+    where: { startDateTime_gte: $startDate, startDateTime_lte: $endDate }
+    sort: "startDateTime:desc"
+  ) {
+    id
+    startDateTime
+    patient {
+      id
+      name
+    }
+  }
+}

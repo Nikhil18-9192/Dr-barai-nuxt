@@ -1,14 +1,22 @@
 <template>
-  <div id="today-appointment">
+  <div id="today-appointment" class="relative">
     <h1 class="text-2xl font-bold text-gray-500 pb-6">Today's Appointment</h1>
     <div class="list bg-gray-50 border border-gray-300 rounded-xl">
-      <div class="container mt-4">
+      <p
+        v-if="appointments.length == 0"
+        class="text-gray-400 absolute top-1/2 left-1/4"
+      >
+        No Appointments Today..
+      </p>
+      <div v-else class="container mt-4">
         <div
           v-for="(appointment, i) in appointments"
           :key="i"
-          class="container py-3 px-6"
+          class="py-3 px-6"
         >
-          <p class="text-gray-500 text-sm mb-1">{{ appointment.time }}</p>
+          <p class="text-gray-500 text-sm mb-1">
+            {{ formatter(appointment.startDateTime) }}
+          </p>
           <h2 class="name text-xl capitalize font-normal">
             {{ appointment.patient.name }}
           </h2>
@@ -19,42 +27,46 @@
 </template>
 
 <script>
+import { appointments } from '@/apollo/queries/appointment/todayAppointment.gql'
+import formatDateTime from '@/utils/formatDateTime'
 export default {
   data() {
     return {
-      appointments: [
-        {
-          time: '11:15 AM',
-          patient: {
-            name: ' Elon musk',
-          },
-        },
-        {
-          time: '11:16 AM',
-          patient: {
-            name: 'Mr.Smith',
-          },
-        },
-        {
-          time: '11:18 AM',
-          patient: {
-            name: 'John Smith',
-          },
-        },
-        {
-          time: '12:15 PM',
-          patient: {
-            name: 'Jane Smith',
-          },
-        },
-        {
-          time: '01:35 PM',
-          patient: {
-            name: 'John Jon',
-          },
-        },
-      ],
+      appointments: [],
     }
+  },
+  mounted() {
+    this.fetchAppointments()
+  },
+  methods: {
+    async fetchAppointments() {
+      try {
+        const { data } = await this.$apollo.query({
+          query: appointments,
+          variables: {
+            startDate: this.startDateISO(),
+            endDate: this.endDateISO(),
+          },
+        })
+        if (data.appointments.length !== 0) {
+          this.appointments = data.appointments
+        } else {
+          this.appointments = []
+        }
+      } catch (error) {
+        this.$toast.error(error.message)
+      }
+    },
+    startDateISO() {
+      return this.$dayjs().format('YYYY-MM-DDT00:00:00.01[Z]')
+    },
+
+    endDateISO() {
+      return this.$dayjs().format('YYYY-MM-DDT24:00:00.00[Z]')
+    },
+    formatter(date) {
+      return formatDateTime.formatTime(date)
+    },
   },
 }
 </script>
@@ -64,14 +76,14 @@ export default {
   .list {
     width: 350px;
     min-height: 65vh;
-    overflow-y: scroll;
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
-      display: none;
-    }
+
     @include for-phone-only {
       width: 300px;
     }
+  }
+  .container {
+    max-height: 65vh;
+    overflow-y: scroll;
   }
   .name {
     padding-bottom: 10px;
