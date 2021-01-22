@@ -26,9 +26,9 @@
             :key="i"
             class="items py-5 mx-6 flex justify-between"
           >
-            <p class="text-lg mb-1">{{ item.product }}</p>
+            <p class="text-lg mb-1">{{ item.name }}</p>
             <h2 class="qty text-lg capitalize font-normal pr-3">
-              {{ item.qty }}
+              {{ item.stock }}
             </h2>
           </div>
         </div>
@@ -38,52 +38,28 @@
 </template>
 
 <script>
+// import { products } from '@/apollo/queries/products/restock.gql'
 export default {
   data() {
     return {
-      itemsToBeStocked: [
-        {
-          product: 'Pain Killer',
-          qty: 5,
-        },
-        {
-          product: 'Pain Killer',
-          qty: 4,
-        },
-        {
-          product: 'Pain Killer',
-          qty: 3,
-        },
-        {
-          product: 'Pain Killer',
-          qty: 2,
-        },
-        {
-          product: 'Pain Killers',
-          qty: 2,
-        },
-        {
-          product: 'Pain Killer',
-          qty: 5,
-        },
-        {
-          product: 'Pain Killer',
-          qty: 4,
-        },
-        {
-          product: 'Pain Killer',
-          qty: 3,
-        },
-        {
-          product: 'Pain Killer',
-          qty: 2,
-        },
-        {
-          product: 'Pain Killers',
-          qty: 2,
-        },
-      ],
+      itemsToBeStocked: [],
     }
+  },
+  mounted() {
+    // this.fetchLowQtyProducts()
+  },
+  methods: {
+    async fetchLowQtyProducts() {
+      // try {
+      //   const { data } = await this.$apollo.query({
+      //     query: products,
+      //     variables: {},
+      //   })
+      //   this.itemsToBeStocked = data.products
+      // } catch (error) {
+      //   this.$toast.error(error.message)
+      // }
+    },
   },
 }
 </script>
