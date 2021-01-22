@@ -3,6 +3,7 @@
     <AddPatientDialog
       v-if="$store.state.patientModal"
       @dismiss="$store.commit('togglePatientModal')"
+      @patientData="newPatient"
     />
     <div class="title flex justify-between my-8">
       <h1 class="text-xl sm:text-2xl font-medium mb-4">Patient List</h1>

@@ -4,7 +4,7 @@
     <Prescription :prescription="prescription" />
     <VitalSigns v-model="vitalSigns" />
     <ClinicalNotes v-model="clinicalNotes" />
-    <Files :images="files" />
+    <Files :images="files" @uploadImages="newImages" />
     <MyButton @click.native="submit">Submit</MyButton>
   </div>
 </template>
@@ -25,6 +25,8 @@ export default {
       clinicalNotes: {},
       files: [],
       patient: {},
+      newFiles: [],
+      currentFiles: [],
     }
   },
   mounted() {
@@ -46,21 +48,53 @@ export default {
         this.prescription = result.prescription
         this.vitalSigns = result.vitalSigns
         this.clinicalNotes = result.clinicalNotes
-        this.files = result.files
-        this.appointmentInfo.date = formatDateTime.formatDate(
-          result.startDateTime
-        )
-        this.appointmentInfo.time = formatDateTime.formatTime(
-          result.startDateTime
-        )
+        for (const i in result.files) {
+          // eslint-disable-next-line
+          this.currentFiles.push(result.files[i].id)
+          this.files.push(result.files[i].url)
+        }
+        this.appointmentInfo.date = formatDateTime.formatDate(result.date)
+        this.appointmentInfo.time = formatDateTime.formatTime(result.date)
         this.appointmentInfo.name = result.patient.name
         this.$store.commit('UNSET_LOADING')
       } catch (e) {
         this.$toast.error(e.message)
       }
     },
-    submit() {
-      console.log(this.vitalSigns, this.clinicalNotes, this.prescription)
+    newImages(val) {
+      this.newFiles = val.images
+      this.files = [...this.files, ...val.urls]
+    },
+    async submit() {
+      try {
+        this.loading = true
+        if (this.newFiles.length) {
+          const data = new FormData()
+          for (let i = 0; i < this.newFiles.length; i++) {
+            data.append(`files`, this.newFiles[i])
+          }
+          data.append('ref', 'appointments')
+          data.append('refId', this.$route.params.id)
+          const res = await this.$axios.$post(`/upload`, data, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          for (const i in res) {
+            this.currentFiles.push(res[i].id)
+          }
+        }
+        await this.$axios.$put(`/appointments/${this.$route.params.id}`, {
+          prescription: this.prescription,
+          vitalSigns: this.vitalSign,
+          clinicalNotes: this.clinicalNotes,
+          files: this.currentFiles,
+        })
+        this.loading = false
+        this.$toast.success('Appointment updated successfully')
+      } catch (error) {
+        this.$toast.error(error.message)
+      }
     },
   },
 }

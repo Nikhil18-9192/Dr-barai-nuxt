@@ -4,6 +4,7 @@
       v-if="$store.state.patientModal"
       :patient="patient"
       @dismiss="$store.commit('togglePatientModal')"
+      @patientData="patientUpdated"
     />
     <SendSmsModal
       v-if="$store.state.notifyModal"
