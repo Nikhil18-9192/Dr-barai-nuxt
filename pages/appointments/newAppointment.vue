@@ -26,34 +26,38 @@ export default {
   },
   methods: {
     async submitAppointment() {
-      this.loading = true
-      await this.$axios.$put(`/appointments/${this.appointmentId}`, {
-        prescription: this.prescriptionInfo,
-        vitalSigns: this.vitalSignInfo,
-        clinicalNotes: this.clinicalNoteInfo,
-        endDateTIme: new Date(),
-      })
-      if (this.files.length) {
-        const data = {
-          ref: 'appointments',
-          field: 'files',
-          refId: this.appointmentId,
-        }
-        const fd = new FormData()
-        for (let i = 0; i < this.files.length; i++) {
-          const file = this.files[i]
-
-          fd.append(`files.files`, file, file.name)
-        }
-
-        fd.append('data', JSON.stringify(data))
-        await this.$axios.$put(`/appointments/${this.appointmentId}`, fd, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+      try {
+        this.loading = true
+        await this.$axios.$put(`/appointments/${this.appointmentId}`, {
+          prescription: this.prescriptionInfo,
+          vitalSigns: this.vitalSignInfo,
+          clinicalNotes: this.clinicalNoteInfo,
+          endDateTime: new Date(),
         })
+        if (this.files.length) {
+          const data = {
+            ref: 'appointments',
+            field: 'files',
+            refId: this.appointmentId,
+          }
+          const fd = new FormData()
+          for (let i = 0; i < this.files.length; i++) {
+            const file = this.files[i]
+            fd.append(`files.files`, file, file.name)
+          }
+
+          fd.append('data', JSON.stringify(data))
+          await this.$axios.$put(`/appointments/${this.appointmentId}`, fd, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+        }
+        this.loading = false
+        this.$toast.success('Appointment add successfully')
+      } catch (error) {
+        this.$toast.error(error.message)
       }
-      this.loading = false
     },
   },
 }
