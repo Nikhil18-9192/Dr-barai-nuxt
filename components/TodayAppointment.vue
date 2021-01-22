@@ -69,6 +69,9 @@ export default {
     &::-webkit-scrollbar {
       display: none;
     }
+    @include for-phone-only {
+      width: 300px;
+    }
   }
   .name {
     padding-bottom: 10px;

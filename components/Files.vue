@@ -7,7 +7,7 @@
     />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Files</h1>
-      <label for="add-image" class="add-images mt-1 hidden">
+      <label for="add-image" class="add-images cursor-pointer">
         <AddButton />
       </label>
       <input
@@ -76,12 +76,6 @@ export default {
   margin-bottom: 55px;
   input[type='file'] {
     display: none;
-  }
-}
-.new {
-  .add-images {
-    display: block;
-    cursor: pointer;
   }
 }
 </style>

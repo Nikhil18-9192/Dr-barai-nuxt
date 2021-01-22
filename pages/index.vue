@@ -22,5 +22,8 @@ export default {
 #home-page {
   width: 100%;
   position: relative;
+  @include for-phone-only {
+    flex-direction: column;
+  }
 }
 </style>

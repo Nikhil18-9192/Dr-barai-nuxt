@@ -7,7 +7,7 @@
         @addNotify="addNotify"
       />
       <div class="title flex justify-between my-8">
-        <h1 class="text-xl sm:text-2xl font-medium">SMS Logs</h1>
+        <h1 class="text-xl sm:text-2xl font-medium mb-4">SMS Logs</h1>
         <MyButton
           :icon="addBtnIcon"
           @click.native="$store.commit('toggleNotifyModal')"
@@ -18,7 +18,7 @@
 
     <table
       v-if="$device.isDesktopOrTablet"
-      class="notification-list border-separate flex-grow"
+      class="notification-list border-separate flex-grow table-fixed"
     >
       <tbody>
         <tr class="text-gray-600 text-sm font-normal ml-2">
@@ -221,6 +221,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.title {
+  @include for-phone-only {
+    flex-direction: column;
+  }
+}
 td {
   text-align: left;
   overflow: hidden;

@@ -70,6 +70,9 @@ export default {
     &::-webkit-scrollbar {
       display: none;
     }
+    @include for-phone-only {
+      width: 300px;
+    }
   }
   .title {
     padding-bottom: 24px;

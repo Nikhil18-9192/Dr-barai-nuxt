@@ -1,6 +1,6 @@
 <template>
   <div id="total-p-a" class="flex flex-col justify-between">
-    <div class="list relative border border-gray-300 rounded-xl mt-14">
+    <div class="list relative border border-gray-300 rounded-xl my-14">
       <div class="container py-3">
         <p class="title text-gray-400 text-center">Total Patients</p>
         <p class="text-black text-7xl mt-7 mb-1 text-center">
@@ -43,6 +43,10 @@ export default {
   .list {
     width: 350px;
     min-height: 40%;
+    @include for-phone-only {
+      width: 300px;
+      height: 200px;
+    }
   }
 
   .title {

@@ -213,19 +213,24 @@ export default {
     },
     async fetchappointments() {
       this.$store.commit('SET_LOADING')
-      const { data } = await this.$apollo.query({
-        query: appointments,
-        variables: {
-          limit: this.perPage,
-          start: this.currentPage * this.perPage - this.perPage,
-          startDate: this.startDateISO,
-          endDate: this.endDateISO,
-        },
-      })
-      if (data.appointments.length !== 0) {
-        this.appointments = data.appointments
-      } else {
-        this.appointments = []
+      try {
+        const { data } = await this.$apollo.query({
+          query: appointments,
+          variables: {
+            limit: this.perPage,
+            start: this.currentPage * this.perPage - this.perPage,
+            startDate: this.startDateISO,
+            endDate: this.endDateISO,
+          },
+        })
+        if (data.appointments.length !== 0) {
+          this.appointments = data.appointments
+        } else {
+          this.appointments = []
+        }
+      } catch (error) {
+        this.$toast.error(error.message)
+        console.log(error)
       }
       this.$store.commit('UNSET_LOADING')
     },

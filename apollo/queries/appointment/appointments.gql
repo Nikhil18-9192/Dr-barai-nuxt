@@ -13,6 +13,7 @@ query appointments(
     id
     startDateTime
     patient {
+      id
       name
       mobile
     }

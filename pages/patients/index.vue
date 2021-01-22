@@ -5,7 +5,7 @@
       @dismiss="$store.commit('togglePatientModal')"
     />
     <div class="title flex justify-between my-8">
-      <h1 class="text-xl sm:text-2xl font-medium">Patient List</h1>
+      <h1 class="text-xl sm:text-2xl font-medium mb-4">Patient List</h1>
       <MyButton
         :icon="addBtnIcon"
         @click.native="$store.commit('togglePatientModal')"
@@ -181,6 +181,11 @@ export default {
 
 <style lang="scss" scoped>
 #patient-page {
+  .title {
+    @include for-phone-only {
+      flex-direction: column;
+    }
+  }
   .add-btn {
     width: 180px;
     height: 37px;
