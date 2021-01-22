@@ -149,7 +149,6 @@ export default {
         this.$toast.error(validation.error.message)
         return
       }
-
       const respData = {
         drug: this.selectedDrug.id,
         name: this.selectedDrug.name,

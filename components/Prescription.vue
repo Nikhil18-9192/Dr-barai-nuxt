@@ -131,13 +131,13 @@
             }}
           </p>
           <img
-            class="absolute right-10 bottom-2 hidden"
+            class="absolute right-10 bottom-2"
             src="/edit_btn.svg"
             alt=""
             @click="editPrescription(i)"
           />
           <img
-            class="absolute right-2 bottom-2 hidden"
+            class="absolute right-2 bottom-2"
             src="/delete_btn.svg"
             alt=""
             @click="deletePrescription(i)"
@@ -177,7 +177,6 @@ export default {
       addPrescription: false,
       prescriptionIndexToEdit: -1,
       editedDrug: {},
-      prescriptionCardKey: 111,
     }
   },
   computed: {
@@ -235,12 +234,12 @@ export default {
       })
     },
     editPrescription(index) {
-      this.prescriptionCardKey = Math.random() * 100
       this.prescriptionIndexToEdit = index
       this.prescriptionModal = true
     },
     deletePrescription(index) {
       this.prescription.splice(index, 1)
+      this.$emit('input', this.prescription)
     },
   },
 }
@@ -254,24 +253,23 @@ export default {
   }
 }
 
-.new {
-  .row {
-    &:hover {
-      background: #c4c4c411;
-    }
+.row {
+  &:hover {
+    background: #c4c4c411;
+  }
 
-    &:hover img {
-      display: block;
-    }
-    img {
-      padding: 4px;
-      &:hover {
-        transform: scale(1.05);
-        cursor: pointer;
-      }
+  &:hover img {
+    display: block;
+  }
+  img {
+    padding: 4px;
+    &:hover {
+      transform: scale(1.05);
+      cursor: pointer;
     }
   }
 }
+
 .card {
   &:hover img {
     display: block;

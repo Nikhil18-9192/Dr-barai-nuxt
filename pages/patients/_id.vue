@@ -1,9 +1,9 @@
 <template>
   <div id="patient-page">
     <AddPatientDialog
-      v-if="modal"
+      v-if="$store.state.patientModal"
       :patient="patient"
-      @dismiss="patientUpdated"
+      @dismiss="$store.commit('togglePatientModal')"
     />
     <SendSmsModal
       v-if="$store.state.notifyModal"
@@ -37,7 +37,7 @@
         <MyButton
           class="edit-btn"
           :icon="editBtnIcon"
-          @click.native="modal = true"
+          @click.native="$store.commit('togglePatientModal')"
           >Edit Profile</MyButton
         >
       </div>
@@ -134,7 +134,6 @@ import formatDateTime from '@/utils/formatDateTime'
 export default {
   data() {
     return {
-      modal: false,
       editBtnIcon: '/pencil-alt.svg',
       notifyBtnIcon: '/bell.svg',
       age: false,

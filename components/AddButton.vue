@@ -6,17 +6,17 @@
 export default {
   name: 'AddButton',
   mounted() {
-    this.checkRoute()
+    // this.checkRoute()
   },
   methods: {
-    checkRoute() {
-      if (this.$route.name !== 'appointments-newAppointment') {
-        const buttons = document.getElementsByClassName('add-button')
-        for (let i = 0; i < buttons.length; i++) {
-          buttons[i].style.display = 'none'
-        }
-      }
-    },
+    // checkRoute() {
+    //   if (this.$route.name !== 'appointments-newAppointment') {
+    //     const buttons = document.getElementsByClassName('add-button')
+    //     for (let i = 0; i < buttons.length; i++) {
+    //       buttons[i].style.display = 'none'
+    //     }
+    //   }
+    // },
   },
 }
 </script>

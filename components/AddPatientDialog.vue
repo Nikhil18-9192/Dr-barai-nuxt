@@ -192,7 +192,8 @@ export default {
             city,
           })
           this.$emit('dismiss', res)
-          this.$router.push(`/patients/${this.patient.id}`)
+          const path = this.$route.path
+          this.$router.push(`${path}`)
           this.$toast.success('Add Updated Successfully')
         }
         this.loading = false

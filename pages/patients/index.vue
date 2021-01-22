@@ -1,9 +1,14 @@
 <template>
   <div id="patient-page">
-    <AddPatientDialog v-if="modal" :patient="patient" @dismiss="newPatient" />
+    <AddPatientDialog
+      v-if="$store.state.patientModal"
+      @dismiss="$store.commit('togglePatientModal')"
+    />
     <div class="title flex justify-between my-8">
       <h1 class="text-xl sm:text-2xl font-medium">Patient List</h1>
-      <MyButton :icon="addBtnIcon" @click.native="addPatient"
+      <MyButton
+        :icon="addBtnIcon"
+        @click.native="$store.commit('togglePatientModal')"
         >Add New Patient</MyButton
       >
     </div>
@@ -160,9 +165,6 @@ export default {
     async fetchTotalPatientCount() {
       this.totalItem = await this.$axios.$get('/patients/count')
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
-    },
-    addPatient() {
-      this.modal = true
     },
     newPatient(val) {
       if (val) {
