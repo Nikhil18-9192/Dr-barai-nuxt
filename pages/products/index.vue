@@ -7,7 +7,7 @@
       @updatedProduct="updatedProduct"
     />
     <div class="title flex justify-between my-8">
-      <h1 class="text-xl sm:text-2xl font-medium">Product List</h1>
+      <h1 class="text-xl sm:text-2xl font-medium mb-4">Product List</h1>
       <MyButton :icon="addBtnIcon" @click.native="addNew"
         >Add New Product</MyButton
       >
@@ -212,6 +212,11 @@ export default {
 
 <style lang="scss" scoped>
 #product-page {
+  .title {
+    @include for-phone-only {
+      flex-direction: column;
+    }
+  }
   .add-btn {
     width: 180px;
     height: 37px;
@@ -223,9 +228,16 @@ export default {
   .product-list {
     border-spacing: 0 1.5em;
     width: 90%;
+    table-layout: fixed;
     th {
       text-align: left;
       font-weight: normal;
+    }
+    td {
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   button {

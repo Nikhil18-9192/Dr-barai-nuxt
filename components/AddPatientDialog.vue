@@ -106,12 +106,8 @@
 <script>
 import { AddPatientValidation } from '@/utils/validation'
 export default {
-  props: {
-    patient: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
+  // eslint-disable-next-line
+  props: ['patient'],
   data() {
     return {
       loading: false,
@@ -139,34 +135,35 @@ export default {
   },
   methods: {
     async addPatient() {
-      this.loading = true
-      const {
-        name,
-        mobile,
-        email,
-        gender,
-        birthDate,
-        address,
-        pincode,
-        city,
-      } = this
-      const validation = AddPatientValidation({
-        name,
-        mobile,
-        email,
-        gender,
-        birthDate,
-        address,
-        pincode,
-        city,
-      })
-      if (validation.error) {
-        this.loading = false
-        this.$toast.error(validation.error.message)
-        return
-      }
       try {
-        if (this.patient == null) {
+        this.loading = true
+        const {
+          name,
+          mobile,
+          email,
+          gender,
+          birthDate,
+          address,
+          pincode,
+          city,
+        } = this
+        const validation = AddPatientValidation({
+          name,
+          mobile,
+          email,
+          gender,
+          birthDate,
+          address,
+          pincode,
+          city,
+        })
+        if (validation.error) {
+          this.loading = false
+          this.$toast.error(validation.error.message)
+          return
+        }
+
+        if (!this.patient) {
           const result = await this.$axios.$post(`/patients`, {
             name,
             mobile,
@@ -177,7 +174,8 @@ export default {
             pincode,
             city,
           })
-          this.$emit('dismiss', result)
+          this.$emit('dismiss')
+          this.$emit('PatientData', result)
           this.$router.push('/patients')
           this.$toast.success('Add Patient Successfully')
         } else {
@@ -192,6 +190,7 @@ export default {
             city,
           })
           this.$emit('dismiss', res)
+          this.$emit('patientData', res)
           const path = this.$route.path
           this.$router.push(`${path}`)
           this.$toast.success('Add Updated Successfully')

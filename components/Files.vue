@@ -7,7 +7,7 @@
     />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Files</h1>
-      <label for="add-image" class="add-images mt-1 hidden">
+      <label for="add-image" class="add-images cursor-pointer">
         <AddButton />
       </label>
       <input
@@ -50,38 +50,28 @@ export default {
   computed: {
     previewImages() {
       if (this.images.length !== 0) {
-        for (const i in this.images) {
-          // eslint-disable-next-line
-          this.imagesToView.push(this.images[i].formats.thumbnail.url)
-        }
-        return this.imagesToView
+        return this.images
       }
       return this.selectedImages
     },
   },
   methods: {
     onImageAdded(event) {
-      const files = this.$refs.fileInput.files
-      for (let i = 0; i < files.length; i++) {
-        this.selectedImages.push(URL.createObjectURL(files[i]))
+      const images = this.$refs.fileInput.files
+      for (let i = 0; i < images.length; i++) {
+        this.selectedImages.push(URL.createObjectURL(images[i]))
       }
-      this.$emit('input', files)
+      this.$emit('input', images)
+      this.$emit('uploadImages', { images, urls: this.selectedImages })
     },
   },
 }
 </script>
-
 <style lang="scss" scoped>
 #files {
   margin-bottom: 55px;
   input[type='file'] {
     display: none;
-  }
-}
-.new {
-  .add-images {
-    display: block;
-    cursor: pointer;
   }
 }
 </style>

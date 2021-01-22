@@ -3,9 +3,10 @@
     <AddPatientDialog
       v-if="$store.state.patientModal"
       @dismiss="$store.commit('togglePatientModal')"
+      @patientData="newPatient"
     />
     <div class="title flex justify-between my-8">
-      <h1 class="text-xl sm:text-2xl font-medium">Patient List</h1>
+      <h1 class="text-xl sm:text-2xl font-medium mb-4">Patient List</h1>
       <MyButton
         :icon="addBtnIcon"
         @click.native="$store.commit('togglePatientModal')"
@@ -46,10 +47,10 @@
           class="bg-gray-100 my-6 text-sm font-normal cursor-pointer"
           @click="patientInfo(item.id)"
         >
-          <td class="p-3">{{ item.id }}</td>
-          <td class="p-3">{{ item.name }}</td>
-          <td class="p-3">{{ item.mobile }}</td>
-          <td class="p-3">{{ item.appointments.length }}</td>
+          <td class="py-3">{{ item.id }}</td>
+          <td class="py-3">{{ item.name }}</td>
+          <td class="py-3">{{ item.mobile }}</td>
+          <td class="py-3">{{ item.appointments.length }}</td>
         </tr>
         <tr>
           <td v-if="!patients.length">No patients Yet</td>
@@ -181,6 +182,11 @@ export default {
 
 <style lang="scss" scoped>
 #patient-page {
+  .title {
+    @include for-phone-only {
+      flex-direction: column;
+    }
+  }
   .add-btn {
     width: 180px;
     height: 37px;
@@ -192,9 +198,16 @@ export default {
   .patient-list {
     border-spacing: 0 1.5em;
     width: 90%;
+    table-layout: fixed;
     th {
       text-align: left;
       font-weight: normal;
+    }
+    td {
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   button {

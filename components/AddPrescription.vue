@@ -24,7 +24,7 @@
         >
           <option disabled value="Select Drugs">Select Drugs</option>
           <option v-for="(item, i) in drugs" :key="i" :value="item">
-            {{ item.name }}
+            {{ item.name ? item.name : item.drug.name }}
           </option>
         </select>
         <label for="gender" class="text-sm font-light text-gray-400"

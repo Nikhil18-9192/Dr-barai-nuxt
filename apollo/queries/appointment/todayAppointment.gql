@@ -1,13 +1,6 @@
-query appointments(
-  $limit: Int
-  $start: Int
-  $startDate: String
-  $endDate: String
-) {
+query appointments($startDate: String, $endDate: String) {
   appointments(
-    start: $start
     where: { startDateTime_gte: $startDate, startDateTime_lte: $endDate }
-    limit: $limit
     sort: "startDateTime:desc"
   ) {
     id
@@ -15,7 +8,6 @@ query appointments(
     patient {
       id
       name
-      mobile
     }
   }
 }

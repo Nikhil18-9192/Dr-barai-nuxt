@@ -8,10 +8,7 @@
     />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Clinical Notes</h1>
-      <AddButton
-        v-if="!currentNotes.observations"
-        @click.native="notesModal = true"
-      />
+      <AddButton @click.native="notesModal = true" />
     </div>
     <div v-if="currentNotes.observations" class="container relative">
       <p class="my-5 text-base font-normal">
