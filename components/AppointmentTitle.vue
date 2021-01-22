@@ -1,9 +1,22 @@
 <template>
   <div
     id="appointment-title"
-    class="flex relative bg-gray-100 justify-between p-4 my-6 rounded"
+    class="sm:flex relative bg-gray-100 justify-between p-4 my-6 rounded"
   >
-    <div class="date-time absolute ml-5 py-4 pr-5">
+    <AddPatientDialog
+      v-if="$store.state.patientModal"
+      :patient="patient"
+      @dismiss="$store.commit('togglePatientModal')"
+      @patientData="updatedPatient"
+    />
+    <SendSmsModal
+      v-if="$store.state.notifyModal"
+      :patient="patient"
+      @dismiss="$store.commit('toggleNotifyModal')"
+    />
+    <div
+      class="date-time border-b sm:border-r sm:border-b-0 sm:absolute sm:ml-5 py-4 pr-5"
+    >
       <h2 class="text-gray-600 text-lg font-medium mt-1">
         {{ appointmentInfo.date == null ? '---' : appointmentInfo.date }}
       </h2>
@@ -11,24 +24,24 @@
         {{ appointmentInfo.time == null ? '---' : appointmentInfo.time }}
       </p>
     </div>
-    <div class="patient-info ml-48 mt-4">
+    <div class="patient-info sm:ml-48 mt-2 mb-2 sm:mb-0 sm:mt-4">
       <h1 class="text-black text-3xl font-medium">
         {{ appointmentInfo.name }}
       </h1>
     </div>
-    <div class="actions">
-      <div
-        class="edit-profile action-button relative bg-white flex rounded m-2 p-1 px-2"
+    <div class="actions flex sm:flex-col">
+      <MyButton
+        class="edit-btn mb-2"
+        :icon="editBtnIcon"
+        @click.native="$store.commit('togglePatientModal')"
+        >Edit Profile</MyButton
       >
-        <img class="left-0 mx-2" src="/edit_profile.svg" alt="" />
-        <p class="text-gray-400">Edit Profile</p>
-      </div>
-      <div
-        class="notify action-button relative flex bg-blue-500 rounded m-2 p-1 px-2"
+      <MyButton
+        class="mb-4"
+        :icon="notifyBtnIcon"
+        @click.native="$store.commit('toggleNotifyModal')"
+        >Notify</MyButton
       >
-        <img class="left-0 mx-2" src="/bell_icon.svg" alt="" />
-        <p class="text-white">Notify</p>
-      </div>
     </div>
   </div>
 </template>
@@ -40,19 +53,29 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    patient: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   data() {
-    return {}
+    return {
+      editBtnIcon: '/pencil-alt.svg',
+      notifyBtnIcon: '/bell.svg',
+      currentPatient: {},
+    }
   },
-  methods: {},
+
+  methods: {
+    updatedPatient(val) {
+      console.log(val)
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 #appointment-title {
-  .date-time {
-    border-right: 1px solid #d4d4d8;
-  }
   .actions {
     .action-button {
       &:hover {
@@ -60,6 +83,14 @@ export default {
         cursor: pointer;
       }
     }
+  }
+  button {
+    width: 133px;
+    height: 37px;
+  }
+  .edit-btn {
+    background: #f3f3f3;
+    color: #52525b;
   }
 }
 </style>

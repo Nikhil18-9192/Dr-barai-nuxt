@@ -2,23 +2,25 @@
   <div id="clinical-notes">
     <AddClinicalNotes
       v-if="notesModal"
-      :notes-to-edit="notes"
+      :notes-to-edit="currentNotes"
       @dismiss="notesModal = false"
       @clinicalNotesData="submitClinicalNotes"
     />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Clinical Notes</h1>
-      <AddButton v-if="!notes" @click.native="notesModal = true" />
+      <AddButton @click.native="notesModal = true" />
     </div>
-    <div v-if="notes" class="container relative">
+    <div v-if="currentNotes.observations" class="container relative">
       <p class="my-5 text-base font-normal">
-        Complaints: {{ notes.complaints }}
+        Complaints: {{ currentNotes.complaints }}
       </p>
       <p class="my-5 text-base font-normal">
-        Observations: {{ notes.observations }}
+        Observations: {{ currentNotes.observations }}
       </p>
-      <p class="my-5 text-base font-normal">Diagnosis: {{ notes.diagnoses }}</p>
-      <p class="my-5 text-base font-normal">Notes: {{ notes.notes }}</p>
+      <p class="my-5 text-base font-normal">
+        Diagnosis: {{ currentNotes.diagnoses }}
+      </p>
+      <p class="my-5 text-base font-normal">Notes: {{ currentNotes.notes }}</p>
       <div class="line"></div>
       <div class="edit-btns absolute flex bottom-4 right-0 hidden">
         <img
@@ -41,7 +43,7 @@
 <script>
 export default {
   props: {
-    clinicalNotes: {
+    value: {
       type: Object,
       default: () => ({}),
     },
@@ -49,30 +51,34 @@ export default {
   data() {
     return {
       notesModal: false,
-      addNotes: false,
+      currentNotes: {},
+      path: '',
     }
   },
-  computed: {
-    notes() {
-      if (this.$route.name === 'appointments-newAppointment') {
-        return this.addNotes
-      } else if (Object.entries(this.clinicalNotes).length !== 0) {
-        return this.clinicalNotes
-      } else return false
+
+  watch: {
+    value: {
+      handler(val) {
+        this.currentNotes = val
+      },
+      deep: true,
     },
   },
+  mounted() {},
   methods: {
     submitClinicalNotes(val) {
       if (val) {
-        this.addNotes = val
+        this.currentNotes = val
       }
       this.notesModal = false
+      this.$emit('input', val)
     },
     editNotes() {
       this.notesModal = true
     },
     deleteNotes() {
-      this.addNotes = false
+      this.currentNotes = {}
+      this.$emit('input', this.currentNotes)
     },
   },
 }

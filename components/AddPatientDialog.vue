@@ -5,7 +5,7 @@
     @click.stop="$emit('dismiss')"
   >
     <div
-      class="add-modal flex flex-col bg-white relative rounded-md mx-auto sm:mt-12 py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-full sm:w-2/6 md:w-3/5 xl:w-2/5"
+      class="add-modal flex flex-col bg-white relative rounded-md mx-auto sm:mt-12 py-6 w-full sm:w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
       <div class="heading">
@@ -13,7 +13,7 @@
           {{ patient ? 'Edit' : 'Add New' }} Patient
         </h1>
       </div>
-      <div class="form flex-grow overflow-y-scroll">
+      <div class="form px-4 sm:px-12 md:px-8 flex-grow overflow-y-scroll">
         <label for="name" class="text-sm font-normal text-gray-400">Name</label>
         <input
           v-model="name"
@@ -91,7 +91,7 @@
           autocomplete="on"
         />
       </div>
-      <div class="mt-8 flex btn">
+      <div class="mt-8 flex btn px-4 sm:px-12 md:px-8">
         <MyButton class="mr-4" :loading="loading" @click.native="addPatient"
           >Submit</MyButton
         >
@@ -106,12 +106,8 @@
 <script>
 import { AddPatientValidation } from '@/utils/validation'
 export default {
-  props: {
-    patient: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
+  // eslint-disable-next-line
+  props: ['patient'],
   data() {
     return {
       loading: false,
@@ -139,34 +135,35 @@ export default {
   },
   methods: {
     async addPatient() {
-      this.loading = true
-      const {
-        name,
-        mobile,
-        email,
-        gender,
-        birthDate,
-        address,
-        pincode,
-        city,
-      } = this
-      const validation = AddPatientValidation({
-        name,
-        mobile,
-        email,
-        gender,
-        birthDate,
-        address,
-        pincode,
-        city,
-      })
-      if (validation.error) {
-        this.loading = false
-        this.$toast.error(validation.error.message)
-        return
-      }
       try {
-        if (this.patient == null) {
+        this.loading = true
+        const {
+          name,
+          mobile,
+          email,
+          gender,
+          birthDate,
+          address,
+          pincode,
+          city,
+        } = this
+        const validation = AddPatientValidation({
+          name,
+          mobile,
+          email,
+          gender,
+          birthDate,
+          address,
+          pincode,
+          city,
+        })
+        if (validation.error) {
+          this.loading = false
+          this.$toast.error(validation.error.message)
+          return
+        }
+
+        if (!this.patient) {
           const result = await this.$axios.$post(`/patients`, {
             name,
             mobile,
@@ -177,7 +174,8 @@ export default {
             pincode,
             city,
           })
-          this.$emit('dismiss', result)
+          this.$emit('dismiss')
+          this.$emit('PatientData', result)
           this.$router.push('/patients')
           this.$toast.success('Add Patient Successfully')
         } else {
@@ -192,7 +190,9 @@ export default {
             city,
           })
           this.$emit('dismiss', res)
-          this.$router.push(`/patients/${this.patient.id}`)
+          this.$emit('patientData', res)
+          const path = this.$route.path
+          this.$router.push(`${path}`)
           this.$toast.success('Add Updated Successfully')
         }
         this.loading = false

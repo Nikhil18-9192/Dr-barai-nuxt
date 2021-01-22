@@ -33,6 +33,7 @@
         </button>
       </div>
     </client-only>
+
     <table
       v-if="$device.isDesktopOrTablet"
       class="appointments-list border-separate"
@@ -63,7 +64,7 @@
         <tr
           v-for="(appointment, i) in appointments"
           :key="i"
-          class="bg-gray-100 my-5 text-sm font-normal"
+          class="bg-gray-100 my-5 text-sm font-normal cursor-pointer"
           @click="onAppointmentClick(appointment.id)"
         >
           <td class="py-3 pl-2">{{ appointment.id }}</td>
@@ -78,7 +79,7 @@
           </td>
         </tr>
         <tr>
-          <td v-if="!appointments">No appointments Yet</td>
+          <td v-if="!appointments.length">No appointments Yet</td>
         </tr>
       </tbody>
     </table>
@@ -207,19 +208,24 @@ export default {
     },
     async fetchappointments() {
       this.$store.commit('SET_LOADING')
-      const { data } = await this.$apollo.query({
-        query: appointments,
-        variables: {
-          limit: this.perPage,
-          start: this.currentPage * this.perPage - this.perPage,
-          startDate: this.startDateISO,
-          endDate: this.endDateISO,
-        },
-      })
-      if (data.appointments.length !== 0) {
-        this.appointments = data.appointments
-      } else {
-        this.appointments = []
+      try {
+        const { data } = await this.$apollo.query({
+          query: appointments,
+          variables: {
+            limit: this.perPage,
+            start: this.currentPage * this.perPage - this.perPage,
+            startDate: this.startDateISO,
+            endDate: this.endDateISO,
+          },
+        })
+        if (data.appointments.length !== 0) {
+          this.appointments = data.appointments
+        } else {
+          this.appointments = []
+        }
+      } catch (error) {
+        this.$toast.error(error.message)
+        console.log(error)
       }
       this.$store.commit('UNSET_LOADING')
     },
@@ -238,7 +244,7 @@ export default {
     },
 
     newAppointment() {
-      this.$router.push('/appointments/newAppointment')
+      this.$router.push('/appointments/new')
     },
 
     modifyEndDate(date) {
@@ -281,7 +287,8 @@ export default {
     }
   }
   .appointment-btn {
-    width: 230px;
+    width: 250px;
+    padding-right: 15px;
   }
 }
 </style>

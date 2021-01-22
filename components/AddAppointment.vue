@@ -38,13 +38,13 @@
       >
         Start Session
       </button>
-      <button
+      <!-- <button
         v-if="sessionStarted"
         class="session-btn relative sm:absolute bg-red-500 rounded-md text-white text-sm font-medium ml-8 mb-2 p-3"
         @click="finishSession()"
       >
         Finish Session
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
@@ -60,6 +60,7 @@ export default {
   },
   data() {
     return {
+      appointmentId: false,
       sessionStarted: false,
       time: '00:00:00',
       interval: false,
@@ -125,7 +126,8 @@ export default {
           this.sessionDate + this.sessionTime
         ).format(),
       })
-      console.log(res)
+      this.appointmentId = res.id
+      this.$emit('input', this.appointmentId)
       this.startTime = Date.now()
       this.startTimer()
       this.sessionStarted = true

@@ -7,7 +7,7 @@
       @updatedProduct="updatedProduct"
     />
     <div class="title flex justify-between my-8">
-      <h1 class="text-xl sm:text-2xl font-medium">Product List</h1>
+      <h1 class="text-xl sm:text-2xl font-medium mb-4">Product List</h1>
       <MyButton :icon="addBtnIcon" @click.native="addNew"
         >Add New Product</MyButton
       >
@@ -56,11 +56,24 @@
         </tr>
       </tbody>
     </table>
-    <ProductCardForPhone
-      v-if="$device.isMobile"
-      :card-info="products"
-      @productEdit="productEdit"
-    />
+    <div v-if="$device.isMobile" id="product-info">
+      <div
+        v-for="(item, i) in products"
+        :key="i"
+        class="card p-4 mb-4 border cursor-pointer"
+        @click="editProduct(item)"
+      >
+        <p class="text-gray-600 text-xs font-normal border-b mb-3">
+          Name: <span class="text-blue-600 text-base">{{ item.name }}</span>
+        </p>
+        <p class="text-gray-600 text-xs font-normal">
+          Stock Qty : {{ item.stock }}{{ item.stockingUnit }}
+        </p>
+        <p class="text-gray-600 text-xs font-normal">
+          Price(INR) : {{ item.retailPrice }}
+        </p>
+      </div>
+    </div>
     <div v-if="products.length" class="pagination flex justify-between">
       <client-only>
         <paginate
@@ -113,7 +126,7 @@ export default {
       totalItem: 0,
       modal: false,
       products: [],
-      perPage: 5,
+      perPage: 10,
       totalPages: 0,
       currentPage: 1,
       maxPage: 5,
@@ -199,6 +212,11 @@ export default {
 
 <style lang="scss" scoped>
 #product-page {
+  .title {
+    @include for-phone-only {
+      flex-direction: column;
+    }
+  }
   .add-btn {
     width: 180px;
     height: 37px;
@@ -210,9 +228,16 @@ export default {
   .product-list {
     border-spacing: 0 1.5em;
     width: 90%;
+    table-layout: fixed;
     th {
       text-align: left;
       font-weight: normal;
+    }
+    td {
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   button {

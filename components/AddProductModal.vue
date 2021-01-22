@@ -5,7 +5,7 @@
     @click.stop="$emit('dismiss')"
   >
     <div
-      class="add-modal flex flex-col bg-white relative rounded-md mx-auto sm:mt-12 py-4 sm:py-6 px-4 sm:px-12 md:px-8 w-full sm:w-2/6 md:w-3/5 xl:w-2/5"
+      class="add-modal flex flex-col bg-white relative rounded-md mx-auto sm:mt-12 py-4 sm:py-6 w-full sm:w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
       <div class="heading">
@@ -14,7 +14,7 @@
         </h1>
       </div>
 
-      <div class="form flex-grow overflow-y-scroll">
+      <div class="form flex-grow overflow-y-scroll px-4 sm:px-12 md:px-8">
         <label for="name" class="text-sm font-normal text-gray-400"
           >item name</label
         >
@@ -118,7 +118,7 @@
           >Krishi kalyan Cess</label
         >
       </div>
-      <div class="mt-8 flex btn">
+      <div class="mt-8 flex btn px-4 sm:px-12 md:px-8">
         <MyButton class="mr-4" @click.native="submitProduct">Submit</MyButton>
         <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
           >Cancel</MyButton
@@ -203,6 +203,7 @@ export default {
             retailPrice,
           })
           this.$emit('dismiss', result)
+          this.$toast.success('Product Added')
           this.$router.push('/products')
         } else {
           const res = await this.$axios.$put(`/products/${this.product.id}`, {
@@ -219,6 +220,7 @@ export default {
             retailPrice,
           })
           this.$emit('dismiss')
+          this.$toast.success('Product Updated')
           this.$emit('updatedProduct', res)
           this.$router.push('/products')
         }

@@ -2,7 +2,7 @@
   <div
     id="preview"
     class="fixed w-full z-50 top-0 left-0 h-screen bg-black bg-opacity-50"
-    @click.stop="$store.commit('PREVIEW_MODAL')"
+    @click.stop="$emit('dismiss')"
   >
     <div
       class="image-container flex bg-white relative rounded-md mx-auto mt-12 py-2 sm:py-6 px-2 sm:px-12 md:px-8 w-2/6 md:w-3/5 xl:w-2/5"
@@ -18,7 +18,7 @@
         v-for="(image, i) in images"
         v-show="i == currentSlide"
         :key="i"
-        class="w-full flex justify-center items-center"
+        class="w-full flex justify-center items-center object-contain"
       >
         <img class="w-64 sm:w-96 h-64 sm:h-96" :src="image" alt="" />
       </div>
@@ -29,16 +29,20 @@
 
 <script>
 export default {
-  props: {},
+  props: {
+    images: {
+      type: Array,
+      default: () => [],
+    },
+    selectedimgs: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       currentSlide: 0,
     }
-  },
-  computed: {
-    images() {
-      return this.$store.getters.getImages
-    },
   },
   methods: {
     next() {

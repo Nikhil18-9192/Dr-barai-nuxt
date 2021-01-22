@@ -17,36 +17,32 @@ const AddPatientValidation = (data) => {
 const AddPrescriptionValidation = (data) => {
   const formSchema = Joi.object({
     // selectedDrug: Joi.string().min(3).max(50).label('Drugs').required(),
-    dosageFrequency: Joi.string()
-      .min(3)
-      .max(50)
-      .label('Dosage & Frequency')
-      .required(),
-    intake: Joi.string().min(3).max(50).label('Intake').required(),
-    duration: Joi.number().label('Duration').required(),
-    instructions: Joi.string().min(3).max(250).label('Instruction').required(),
+    dosageFrequency: Joi.string().min(3).max(50).label('Dosage & Frequency'),
+    intake: Joi.string().min(3).max(50).label('Intake'),
+    duration: Joi.number().label('Duration'),
+    instructions: Joi.string().min(3).max(250).label('Instruction'),
   }).required()
 
   return formSchema.validate(data)
 }
 const AddVitalSignValidation = (data) => {
   const formSchema = Joi.object({
-    weight: Joi.number().label('Weight').required(),
-    systolic: Joi.number().label('systolic').required(),
-    diastolic: Joi.number().label('diastolic').required(),
-    temperature: Joi.number().label('temperature').required(),
-    respiration: Joi.number().label('respiration').required(),
-    pulse: Joi.number().label('respiration').required(),
+    weight: Joi.number().label('Weight'),
+    systolic: Joi.number().label('systolic'),
+    diastolic: Joi.number().label('diastolic'),
+    temperature: Joi.number().label('temperature'),
+    respiration: Joi.number().label('respiration'),
+    pulse: Joi.number().label('respiration'),
   }).required()
 
   return formSchema.validate(data)
 }
 const ClinicalNotesValidation = (data) => {
   const formSchema = Joi.object({
-    complaints: Joi.string().min(3).max(250).label('complaints').required(),
-    observations: Joi.string().min(3).max(250).label('observations').required(),
-    diagnoses: Joi.string().min(3).max(250).label('diagnoses').required(),
-    notes: Joi.string().min(3).max(250).label('notes').required(),
+    complaints: Joi.string().min(3).max(250).label('complaints'),
+    observations: Joi.string().min(3).max(250).label('observations'),
+    diagnoses: Joi.string().min(3).max(250).label('diagnoses'),
+    notes: Joi.string().min(3).max(250).label('notes'),
   }).required()
 
   return formSchema.validate(data)

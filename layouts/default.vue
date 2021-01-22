@@ -1,6 +1,7 @@
 <template>
   <div id="dash-view">
     <client-only>
+      <AddPatientDialog v-if="patientDialog" @dismiss="patientDialog = false" />
       <Drawer v-if="$device.isDesktopOrTablet" />
       <div class="nuxt-view">
         <MenuBar />
@@ -12,6 +13,7 @@
 
         <Nuxt class="px-10 my-app" />
       </div>
+      <MenuFab @click-add-patient="patientDialog = true" />
     </client-only>
   </div>
 </template>
@@ -22,6 +24,7 @@ export default {
   data() {
     return {
       menuState: false,
+      patientDialog: false,
     }
   },
   computed: {

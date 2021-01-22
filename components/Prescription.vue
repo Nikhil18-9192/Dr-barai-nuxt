@@ -5,7 +5,7 @@
       :edit-prescription="prescription[prescriptionIndexToEdit]"
       @addPrescription="submitPrescriptionData"
       @updatePrescription="updatePrescription"
-      @dismiss="prescriptionModal = false"
+      @dismiss="clearModal"
     />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Prescriptions</h1>
@@ -45,7 +45,7 @@
             class="row my-6 text-sm font-normal text-center"
           >
             <td class="p-3">
-              {{ item.drug.name }}
+              {{ item.name ? item.name : item.drug.name }}
             </td>
             <td class="p-3">
               {{
@@ -89,7 +89,61 @@
       </table>
     </div>
     <div ref="phone">
-      <PrescriptionCard v-if="$device.isMobile" :card-info="prescription" />
+      <div
+        v-if="prescription.length > 0 && $device.isMobile"
+        id="prescription-info"
+      >
+        <div
+          v-for="(item, i) in prescription"
+          :key="i"
+          class="card relative p-4 mb-4 border cursor-pointer"
+        >
+          <p class="text-gray-600 text-xs font-normal border-b mb-3">
+            DRUG:
+            <span class="text-blue-600 text-base">
+              {{ item.name ? item.name : item.drug.name }}</span
+            >
+          </p>
+          <p class="text-gray-600 text-xs font-normal">
+            DOSAGE & FREQUENCY :
+            {{
+              item.frequency == null || item.frequency.frequency == null
+                ? '---'
+                : item.frequency.frequency
+            }}
+          </p>
+          <p class="text-gray-600 text-xs font-normal">
+            DURATION :
+            {{
+              item.frequency == null || item.frequency.drugDuration == null
+                ? '---'
+                : item.frequency.drugDuration +
+                  ' ' +
+                  item.frequency.drugDurationFor
+            }}
+          </p>
+          <p class="text-gray-600 text-xs font-normal">
+            INSTRUCTIONS :
+            {{
+              item.frequency == null || item.frequency.instructions == null
+                ? '---'
+                : item.frequency.instructions
+            }}
+          </p>
+          <img
+            class="absolute right-10 bottom-2"
+            src="/edit_btn.svg"
+            alt=""
+            @click="editPrescription(i)"
+          />
+          <img
+            class="absolute right-2 bottom-2"
+            src="/delete_btn.svg"
+            alt=""
+            @click="deletePrescription(i)"
+          />
+        </div>
+      </div>
     </div>
 
     <MyButton
@@ -127,7 +181,7 @@ export default {
   },
   computed: {
     prescriptions() {
-      if (this.$route.name === 'appointments-newAppointment') {
+      if (this.$route.name === 'appointments-new') {
         return this.addprescription
       } else if (Object.entries(this.prescription).length !== 0) {
         return this.prescription
@@ -144,11 +198,13 @@ export default {
         this.prescription.push(val)
       }
       this.prescriptionModal = false
+      this.$emit('input', this.prescription)
     },
     updatePrescription(val) {
       this.prescription[this.prescriptionIndexToEdit] = val
       this.prescriptionIndexToEdit = -1
       this.prescriptionModal = false
+      this.$emit('input', this.prescription)
     },
     download() {
       // eslint-disable-next-line
@@ -183,6 +239,11 @@ export default {
     },
     deletePrescription(index) {
       this.prescription.splice(index, 1)
+      this.$emit('input', this.prescription)
+    },
+    clearModal() {
+      this.prescriptionModal = false
+      this.prescriptionIndexToEdit = -1
     },
   },
 }
@@ -196,22 +257,26 @@ export default {
   }
 }
 
-.new {
-  .row {
-    &:hover {
-      background: #c4c4c411;
-    }
+.row {
+  &:hover {
+    background: #c4c4c411;
+  }
 
-    &:hover img {
-      display: block;
+  &:hover img {
+    display: block;
+  }
+  img {
+    padding: 4px;
+    &:hover {
+      transform: scale(1.05);
+      cursor: pointer;
     }
-    img {
-      padding: 4px;
-      &:hover {
-        transform: scale(1.05);
-        cursor: pointer;
-      }
-    }
+  }
+}
+
+.card {
+  &:hover img {
+    display: block;
   }
 }
 .add-btn {

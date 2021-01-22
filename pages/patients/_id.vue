@@ -1,9 +1,10 @@
 <template>
   <div id="patient-page">
     <AddPatientDialog
-      v-if="modal"
+      v-if="$store.state.patientModal"
       :patient="patient"
-      @dismiss="patientUpdated"
+      @dismiss="$store.commit('togglePatientModal')"
+      @patientData="patientUpdated"
     />
     <SendSmsModal
       v-if="$store.state.notifyModal"
@@ -37,7 +38,7 @@
         <MyButton
           class="edit-btn"
           :icon="editBtnIcon"
-          @click.native="modal = true"
+          @click.native="$store.commit('togglePatientModal')"
           >Edit Profile</MyButton
         >
       </div>
@@ -82,12 +83,12 @@
             <td
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
             >
-              {{ formatter.formatDate(appointment.date) }}
+              {{ formatter.formatDate(appointment.startDateTime) }}
             </td>
             <td
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
             >
-              {{ formatter.formatTime(appointment.date) }}
+              {{ formatter.formatTime(appointment.startDateTime) }}
             </td>
             <td
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
@@ -95,7 +96,7 @@
               {{
                 appointment.clinicalNotes !== null
                   ? appointment.clinicalNotes.complaints
-                  : ''
+                  : '---'
               }}
             </td>
             <td
@@ -103,8 +104,8 @@
             >
               {{
                 appointment.clinicalNotes !== null
-                  ? appointment.clinicalNotes.observation
-                  : ''
+                  ? appointment.clinicalNotes.observations
+                  : '---'
               }}
             </td>
             <td
@@ -113,8 +114,13 @@
               {{
                 appointment.clinicalNotes !== null
                   ? appointment.clinicalNotes.diagnoses
-                  : ''
+                  : '---'
               }}
+            </td>
+          </tr>
+          <tr>
+            <td v-if="patient && !patient.appointments.length">
+              No Appointments Yet
             </td>
           </tr>
         </tbody>
@@ -134,7 +140,6 @@ import formatDateTime from '@/utils/formatDateTime'
 export default {
   data() {
     return {
-      modal: false,
       editBtnIcon: '/pencil-alt.svg',
       notifyBtnIcon: '/bell.svg',
       age: false,

@@ -9,20 +9,28 @@
           </p>
         </div>
         <div class="container-1">
-          <div class="header flex py-3 justify-between">
+          <p
+            v-if="itemsToBeStocked.length == 0"
+            class="text-gray-400 absolute top-1/2 left-1/3"
+          >
+            All products in stock
+          </p>
+          <div v-else class="header flex py-3 justify-between">
             <p class="pl-6">Product</p>
             <p class="pr-3">Quantity</p>
           </div>
         </div>
-        <div
-          v-for="(item, i) in itemsToBeStocked"
-          :key="i"
-          class="items py-5 mx-6 flex justify-between"
-        >
-          <p class="text-lg mb-1">{{ item.product }}</p>
-          <h2 class="qty text-lg capitalize font-normal pr-3">
-            {{ item.qty }}
-          </h2>
+        <div class="container-2">
+          <div
+            v-for="(item, i) in itemsToBeStocked"
+            :key="i"
+            class="items py-5 mx-6 flex justify-between"
+          >
+            <p class="text-lg mb-1">{{ item.name }}</p>
+            <h2 class="qty text-lg capitalize font-normal pr-3">
+              {{ item.stock }}
+            </h2>
+          </div>
         </div>
       </div>
     </div>
@@ -30,32 +38,28 @@
 </template>
 
 <script>
+// import { products } from '@/apollo/queries/products/restock.gql'
 export default {
   data() {
     return {
-      itemsToBeStocked: [
-        {
-          product: 'Pain Killer',
-          qty: 5,
-        },
-        {
-          product: 'Pain Killer',
-          qty: 4,
-        },
-        {
-          product: 'Pain Killer',
-          qty: 3,
-        },
-        {
-          product: 'Pain Killer',
-          qty: 2,
-        },
-        {
-          product: 'Pain Killers',
-          qty: 2,
-        },
-      ],
+      itemsToBeStocked: [],
     }
+  },
+  mounted() {
+    // this.fetchLowQtyProducts()
+  },
+  methods: {
+    async fetchLowQtyProducts() {
+      // try {
+      //   const { data } = await this.$apollo.query({
+      //     query: products,
+      //     variables: {},
+      //   })
+      //   this.itemsToBeStocked = data.products
+      // } catch (error) {
+      //   this.$toast.error(error.message)
+      // }
+    },
   },
 }
 </script>
@@ -65,10 +69,17 @@ export default {
   .list {
     width: 350px;
     min-height: 65vh;
+
+    @include for-phone-only {
+      width: 300px;
+    }
+  }
+  .container-2 {
+    max-height: 47vh;
     overflow-y: scroll;
-    scrollbar-width: none;
+    scrollbar-width: 1px;
     &::-webkit-scrollbar {
-      display: none;
+      // display: block;
     }
   }
   .title {

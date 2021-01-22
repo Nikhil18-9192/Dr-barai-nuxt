@@ -24,7 +24,7 @@
         >
           <option disabled value="Select Drugs">Select Drugs</option>
           <option v-for="(item, i) in drugs" :key="i" :value="item">
-            {{ item.name }}
+            {{ item.name ? item.name : item.drug.name }}
           </option>
         </select>
         <label for="gender" class="text-sm font-light text-gray-400"
@@ -149,9 +149,9 @@ export default {
         this.$toast.error(validation.error.message)
         return
       }
-
       const respData = {
-        drug: this.selectedDrug,
+        drug: this.selectedDrug.id,
+        name: this.selectedDrug.name,
         frequency: {
           frequency: this.dosageFrequency,
           intake,
