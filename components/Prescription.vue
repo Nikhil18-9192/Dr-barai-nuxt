@@ -181,7 +181,7 @@ export default {
   },
   computed: {
     prescriptions() {
-      if (this.$route.name === 'appointments-newAppointment') {
+      if (this.$route.name === 'appointments-new') {
         return this.addprescription
       } else if (Object.entries(this.prescription).length !== 0) {
         return this.prescription

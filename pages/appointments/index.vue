@@ -238,7 +238,7 @@ export default {
     },
 
     newAppointment() {
-      this.$router.push('/appointments/newAppointment')
+      this.$router.push('/appointments/new')
     },
 
     modifyEndDate(date) {
