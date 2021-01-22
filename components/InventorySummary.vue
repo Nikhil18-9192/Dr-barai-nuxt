@@ -3,10 +3,7 @@
     <div class="list relative border border-gray-300 rounded-xl mt-14">
       <div class="container py-3">
         <div class="title py-4">
-          <p class="text-black text-center font-semibold">Quantity Low</p>
-          <p class="qty-low text-center text-gray-400">
-            {{ itemsToBeStocked.length }} products need to be restocked!
-          </p>
+          <p class="text-black text-center font-semibold">Inventory Summary</p>
         </div>
         <div class="container-1">
           <p
@@ -38,7 +35,7 @@
 </template>
 
 <script>
-// import { products } from '@/apollo/queries/products/restock.gql'
+import { products } from '@/apollo/queries/products/restock.gql'
 export default {
   data() {
     return {
@@ -46,19 +43,21 @@ export default {
     }
   },
   mounted() {
-    // this.fetchLowQtyProducts()
+    this.fetchLowQtyProducts()
   },
   methods: {
     async fetchLowQtyProducts() {
-      // try {
-      //   const { data } = await this.$apollo.query({
-      //     query: products,
-      //     variables: {},
-      //   })
-      //   this.itemsToBeStocked = data.products
-      // } catch (error) {
-      //   this.$toast.error(error.message)
-      // }
+      try {
+        const { data } = await this.$apollo.query({
+          query: products,
+          variables: {
+            limit: 25,
+          },
+        })
+        this.itemsToBeStocked = data.products
+      } catch (error) {
+        this.$toast.error(error.message)
+      }
     },
   },
 }
