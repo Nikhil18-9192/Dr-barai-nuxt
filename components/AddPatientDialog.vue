@@ -135,8 +135,8 @@ export default {
   },
   methods: {
     async addPatient() {
+      this.loading = true
       try {
-        this.loading = true
         const {
           name,
           mobile,
@@ -188,7 +188,7 @@ export default {
             pincode,
             city,
           })
-          this.$emit('dismiss', res)
+          this.$emit('dismiss')
           this.$emit('patientData', res)
           this.$toast.success('Add Updated Successfully')
         }

@@ -38,7 +38,6 @@ export default {
   mounted() {
     this.fetchTotalPatientsCount()
     this.fetchTotalAppointmentsCount()
-    console.log(this.startDateISO + this.endDateISO())
   },
   methods: {
     async fetchTotalPatientsCount() {

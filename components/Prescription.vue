@@ -90,7 +90,7 @@
     </div>
     <div ref="phone">
       <div
-        v-if="prescription.length > 0 && $device.isMobile"
+        v-if="prescription.length && $device.isMobile"
         id="prescription-info"
       >
         <div

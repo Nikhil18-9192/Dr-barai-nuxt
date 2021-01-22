@@ -1,6 +1,6 @@
 <template>
   <div id="new-appointment">
-    <AddAppointment v-model="appointmentId" class="new" />
+    <AddAppointment v-model="patientInfo" class="new" />
     <Prescription v-model="prescriptionInfo" />
     <VitalSigns v-model="vitalSignInfo" />
     <ClinicalNotes v-model="clinicalNoteInfo" class="new" />
@@ -19,21 +19,27 @@ export default {
       prescriptionInfo: [],
       vitalSignInfo: {},
       clinicalNoteInfo: {},
-      appointmentId: false,
+      patientInfo: {},
       files: [],
       loading: false,
+      appointmentId: false,
     }
   },
   methods: {
     async submitAppointment() {
       try {
         this.loading = true
-        await this.$axios.$put(`/appointments/${this.appointmentId}`, {
+        const response = await this.$axios.$post(`/appointments`, {
+          patient: this.patientInfo.selectedPatientId,
+          startDateTime: this.$dayjs(
+            this.patientInfo.sessionDate + this.patientInfo.sessionTime
+          ),
           prescription: this.prescriptionInfo,
           vitalSigns: this.vitalSignInfo,
           clinicalNotes: this.clinicalNoteInfo,
           endDateTime: new Date(),
         })
+        this.appointmentId = response.id
         if (this.files.length) {
           const data = {
             ref: 'appointments',
