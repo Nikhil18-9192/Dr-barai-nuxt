@@ -4,6 +4,7 @@ query appointments($id: ID!) {
     startDateTime
     prescription {
       drug {
+        id
         name
       }
       frequency {
@@ -11,6 +12,7 @@ query appointments($id: ID!) {
         drugDuration
         drugDurationFor
         instructions
+        intake
       }
     }
     vitalSigns {
@@ -18,9 +20,11 @@ query appointments($id: ID!) {
       bp {
         bpSystolic
         bpDiastolic
+        bpMeasurementPosition
       }
       temperature {
         temperature
+        tempMeasurementPosition
       }
       pulse
       respRate
@@ -32,7 +36,15 @@ query appointments($id: ID!) {
       notes
     }
     patient {
+      id
       name
+      mobile
+      email
+      gender
+      birthDate
+      address
+      pincode
+      city
     }
     files {
       formats

@@ -1,9 +1,8 @@
 <template>
   <div id="new-appointment">
-    <ImageViewModal v-if="$store.state.imageModal" />
     <AddAppointment v-model="appointmentId" class="new" />
-    <Prescription v-model="prescriptionInfo" class="new" />
-    <VitalSigns v-model="vitalSignInfo" class="new" />
+    <Prescription v-model="prescriptionInfo" />
+    <VitalSigns v-model="vitalSignInfo" />
     <ClinicalNotes v-model="clinicalNoteInfo" class="new" />
     <Files v-model="files" class="new" />
     <MyButton :loading="loading" @click.native="submitAppointment"
@@ -32,6 +31,7 @@ export default {
         prescription: this.prescriptionInfo,
         vitalSigns: this.vitalSignInfo,
         clinicalNotes: this.clinicalNoteInfo,
+        endDateTIme: new Date(),
       })
       if (this.files.length) {
         const data = {

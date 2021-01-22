@@ -4,7 +4,7 @@
       <h1 class="tracking-widest font-medium text-center">
         Dr. Barai’s Clinic
       </h1>
-      <form action="" @submit="login">
+      <form @action.prevent="login">
         <div class="login-form p-10 bg-white rounded">
           <label for="email" class="text-sm mb-1 font-bold text-gray-800"
             >Email</label

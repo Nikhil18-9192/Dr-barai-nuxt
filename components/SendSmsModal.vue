@@ -149,36 +149,40 @@ export default {
       }
     },
     async submitNotification() {
-      const patients = []
-      if (this.sendToAll) {
-        for (const i in this.patients) {
-          patients.push(this.patients[i].value)
+      try {
+        const patients = []
+        if (this.sendToAll) {
+          for (const i in this.patients) {
+            patients.push(this.patients[i].value)
+          }
+        } else {
+          for (const i in this.items) {
+            patients.push(this.items[i].value)
+          }
         }
-      } else {
-        for (const i in this.items) {
-          patients.push(this.items[i].value)
+        if (patients.length < 1) {
+          this.$toast.error('select patient')
+          return
         }
-      }
-      if (patients.length < 1) {
-        this.$toast.error('select patient')
-        return
-      }
-      const validation = SendSmsModal({
-        message: this.message,
-      })
-      if (validation.error) {
-        this.$toast.error(validation.error.message)
-        return
-      }
+        const validation = SendSmsModal({
+          message: this.message,
+        })
+        if (validation.error) {
+          this.$toast.error(validation.error.message)
+          return
+        }
 
-      const res = await this.$axios.$post(`/notifications`, {
-        patients,
-        message: this.message,
-        sendToAll: this.sendToAll,
-      })
-      this.$emit('dismiss')
-
-      this.$emit('addNotify', res)
+        const res = await this.$axios.$post(`/notifications`, {
+          patients,
+          message: this.message,
+          sendToAll: this.sendToAll,
+        })
+        this.$emit('dismiss')
+        this.$toast.success('Notify successfully')
+        this.$emit('addNotify', res)
+      } catch (error) {
+        this.$toast.error(error.message)
+      }
     },
   },
 }

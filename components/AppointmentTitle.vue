@@ -3,6 +3,11 @@
     id="appointment-title"
     class="sm:flex relative bg-gray-100 justify-between p-4 my-6 rounded"
   >
+    <AddPatientDialog
+      v-if="$store.state.patientModal"
+      :patient="patient"
+      @dismiss="$store.commit('togglePatientModal')"
+    />
     <SendSmsModal
       v-if="$store.state.notifyModal"
       :patient="patient"
@@ -24,7 +29,10 @@
       </h1>
     </div>
     <div class="actions flex sm:flex-col">
-      <MyButton class="edit-btn mb-2" :icon="editBtnIcon"
+      <MyButton
+        class="edit-btn mb-2"
+        :icon="editBtnIcon"
+        @click.native="$store.commit('togglePatientModal')"
         >Edit Profile</MyButton
       >
       <MyButton

@@ -203,6 +203,7 @@ export default {
             retailPrice,
           })
           this.$emit('dismiss', result)
+          this.$toast.success('Product Added')
           this.$router.push('/products')
         } else {
           const res = await this.$axios.$put(`/products/${this.product.id}`, {
@@ -219,6 +220,7 @@ export default {
             retailPrice,
           })
           this.$emit('dismiss')
+          this.$toast.success('Product Updated')
           this.$emit('updatedProduct', res)
           this.$router.push('/products')
         }

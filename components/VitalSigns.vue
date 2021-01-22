@@ -2,17 +2,20 @@
   <div id="vital-signs">
     <VitalSignModal
       v-if="vitalsModal"
-      :vitals-to-edit="vitalSigns"
+      :vitals-to-edit="currentVitals"
       @dismiss="vitalsModal = false"
       @addVitals="submitVitalSignData"
     />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Vital Signs</h1>
-      <AddButton v-if="!vitalSigns.weight" @click.native="vitalsModal = true" />
+      <AddButton
+        v-if="!currentVitals.weight"
+        @click.native="vitalsModal = true"
+      />
     </div>
 
     <table
-      v-if="vitalSigns.weight && $device.isDesktopOrTablet"
+      v-if="currentVitals.weight && $device.isDesktopOrTablet"
       class="list w-full"
     >
       <tbody>
@@ -45,37 +48,41 @@
         </tr>
         <tr class="row my-6 text-sm font-normal text-center">
           <td class="p-3">
-            {{ vitalSigns.weight == null ? '---' : vitalSigns.weight }}
+            {{ currentVitals.weight == null ? '---' : currentVitals.weight }}
           </td>
           <td class="p-3">
             {{
-              vitalSigns.bp == null ||
-              vitalSigns.bp.bpSystolic == null ||
-              vitalSigns.bp.bpDiastolic == null
+              currentVitals.bp == null ||
+              currentVitals.bp.bpSystolic == null ||
+              currentVitals.bp.bpDiastolic == null
                 ? '---'
-                : vitalSigns.bp.bpSystolic + '/' + vitalSigns.bp.bpDiastolic
+                : currentVitals.bp.bpSystolic +
+                  '/' +
+                  currentVitals.bp.bpDiastolic
             }}
           </td>
           <td class="p-3">
             {{
-              vitalSigns.temperature == null ||
-              vitalSigns.temperature.temperature == null
+              currentVitals.temperature == null ||
+              currentVitals.temperature.temperature == null
                 ? '---'
-                : vitalSigns.temperature.temperature
+                : currentVitals.temperature.temperature
             }}
           </td>
           <td class="p-3">
-            {{ vitalSigns.pulse == null ? '---' : vitalSigns.pulse }}
+            {{ currentVitals.pulse == null ? '---' : currentVitals.pulse }}
           </td>
           <td class="p-3 flex justify-center">
             <p>
-              {{ vitalSigns.respRate == null ? '---' : vitalSigns.respRate }}
+              {{
+                currentVitals.respRate == null ? '---' : currentVitals.respRate
+              }}
             </p>
             <img
               class="absolute ml-36 hidden"
               src="/edit_btn.svg"
               alt=""
-              @click="editVitals"
+              @click="vitalsModal = true"
             />
             <img
               class="absolute ml-56 hidden"
@@ -88,8 +95,8 @@
       </tbody>
     </table>
     <VitalSignCard
-      v-if="vitalSigns.weight && $device.isMobile"
-      :card-info="vitalSigns"
+      v-if="currentVitals.weight && $device.isMobile"
+      :card-info="currentVitals"
       @edit="vitalsModal = true"
       @delete="deleteVitals"
     />
@@ -99,44 +106,38 @@
 <script>
 export default {
   name: 'VitalSignComponent',
-  props: {
-    vitals: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
+  // eslint-disable-next-line
+  props: ['value'],
   data() {
     return {
       vitalsModal: false,
-      addVitals: {},
       displayTable: false,
+      editedVitals: {},
+      currentVitals: {},
     }
   },
-  computed: {
-    vitalSigns() {
-      if (this.$route.name === 'appointments-newAppointment') {
-        return this.addVitals
-      } else if (Object.entries(this.vitals).length !== 0) {
-        return this.vitals
-      } else return {}
+  watch: {
+    value: {
+      handler(val) {
+        this.currentVitals = val
+      },
+      deep: true,
     },
   },
   mounted() {
-    this.submitVitalSignData()
+    if (this.value && this.value.weight) {
+      this.currentVitals = this.value
+    }
   },
   methods: {
     submitVitalSignData(val) {
-      if (val) {
-        this.addVitals = val
-      }
+      this.currentVitals = val
+      this.$emit('input', val)
       this.vitalsModal = false
-      this.$emit('input', this.addVitals)
-    },
-    editVitals() {
-      this.vitalsModal = true
     },
     deleteVitals() {
-      this.addVitals = false
+      this.currentVitals = {}
+      this.$emit('input', this.currentVitals)
     },
   },
 }
@@ -149,21 +150,20 @@ export default {
     border-bottom: 1px solid #c4c4c4;
   }
 }
-.new {
-  .row {
-    &:hover {
-      background: #c4c4c411;
-    }
 
-    &:hover img {
-      display: block;
-    }
-    img {
-      padding: 4px;
-      &:hover {
-        transform: scale(1.05);
-        cursor: pointer;
-      }
+.row {
+  &:hover {
+    background: #c4c4c411;
+  }
+
+  &:hover img {
+    display: block;
+  }
+  img {
+    padding: 4px;
+    &:hover {
+      transform: scale(1.05);
+      cursor: pointer;
     }
   }
 }
