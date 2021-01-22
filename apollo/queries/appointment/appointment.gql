@@ -47,7 +47,8 @@ query appointments($id: ID!) {
       city
     }
     files {
-      formats
+      id
+      url
     }
   }
 }

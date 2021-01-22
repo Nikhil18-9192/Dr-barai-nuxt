@@ -5,7 +5,7 @@
       :edit-prescription="prescription[prescriptionIndexToEdit]"
       @addPrescription="submitPrescriptionData"
       @updatePrescription="updatePrescription"
-      @dismiss="prescriptionModal = false"
+      @dismiss="clearModal"
     />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Prescriptions</h1>
@@ -240,6 +240,10 @@ export default {
     deletePrescription(index) {
       this.prescription.splice(index, 1)
       this.$emit('input', this.prescription)
+    },
+    clearModal() {
+      this.prescriptionModal = false
+      this.prescriptionIndexToEdit = -1
     },
   },
 }

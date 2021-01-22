@@ -7,6 +7,7 @@
       v-if="$store.state.patientModal"
       :patient="patient"
       @dismiss="$store.commit('togglePatientModal')"
+      @patientData="updatedPatient"
     />
     <SendSmsModal
       v-if="$store.state.notifyModal"
@@ -61,9 +62,15 @@ export default {
     return {
       editBtnIcon: '/pencil-alt.svg',
       notifyBtnIcon: '/bell.svg',
+      currentPatient: {},
     }
   },
-  methods: {},
+
+  methods: {
+    updatedPatient(val) {
+      console.log(val)
+    },
+  },
 }
 </script>
 

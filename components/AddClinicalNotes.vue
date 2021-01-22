@@ -39,7 +39,7 @@
         ></textarea>
         <div
           v-if="obsDataList && observationList.length > 0"
-          class="search-list overflow-y-scroll max-h-20"
+          class="search-list overflow-y-scroll max-h-20 border w-3/6 p-2 shadow-lg"
         >
           <div
             v-for="item in observationList"
@@ -62,7 +62,7 @@
         ></textarea>
         <div
           v-if="diagnoseData && diagnoseList.length > 0"
-          class="search-list overflow-y-scroll max-h-20"
+          class="search-list overflow-y-scroll max-h-20 border w-3/6 p-2 shadow-lg"
         >
           <div
             v-for="item in diagnoseList"
