@@ -5,7 +5,7 @@
     @click.stop="$emit('dismiss')"
   >
     <div
-      class="modal bg-white relative rounded-md mx-auto mt-12 py-6 px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
+      class="modal bg-white relative rounded-md mx-auto mt-12 py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-full sm:w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
       <h1 class="text-lg font-medium text-center mb-8">Send Message</h1>
@@ -19,7 +19,7 @@
         >
         </multi-select>
         <p class="text-base font-normal text-gray-400 my-4">
-          <span class="text-lg text-black">{{ count }}</span> Pateints Selected
+          <span class="text-lg text-black">{{ count }}</span> Patients Selected
         </p>
         <label for="message" class="text-sm font-light text-gray-400"
           >Message</label
@@ -57,6 +57,7 @@
 import _ from 'lodash'
 import { patients } from '@/apollo/queries/patient/patients.gql'
 import { MultiSelect } from 'vue-search-select'
+import { SendSmsModal } from '@/utils/validation'
 export default {
   components: {
     MultiSelect,
@@ -157,6 +158,17 @@ export default {
         for (const i in this.items) {
           patients.push(this.items[i].value)
         }
+      }
+      if (patients.length < 1) {
+        this.$toast.error('select patient')
+        return
+      }
+      const validation = SendSmsModal({
+        message: this.message,
+      })
+      if (validation.error) {
+        this.$toast.error(validation.error.message)
+        return
       }
 
       const res = await this.$axios.$post(`/notifications`, {

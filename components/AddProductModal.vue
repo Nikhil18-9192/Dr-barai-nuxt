@@ -5,13 +5,16 @@
     @click.stop="$emit('dismiss')"
   >
     <div
-      class="add-modal bg-white relative rounded-md mx-auto mt-12 py-6 px-12 md:px-8 w-2/6 md:w-3/5 xl:w-2/5"
+      class="add-modal flex flex-col bg-white relative rounded-md mx-auto sm:mt-12 py-4 sm:py-6 px-4 sm:px-12 md:px-8 w-full sm:w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
-      <h1 class="text-lg font-medium text-center mb-2 sm:mb-8">
-        {{ product ? 'Edit' : 'Add New' }} Product
-      </h1>
-      <div class="form">
+      <div class="heading">
+        <h1 class="text-lg font-medium text-center mb-2 sm:mb-8">
+          {{ product ? 'Edit' : 'Add New' }} Product
+        </h1>
+      </div>
+
+      <div class="form flex-grow overflow-y-scroll">
         <label for="name" class="text-sm font-normal text-gray-400"
           >item name</label
         >
@@ -114,13 +117,12 @@
         <label for="kkcTax" class="text-sm font-normal text-gray-400"
           >Krishi kalyan Cess</label
         >
-
-        <div class="mt-8 flex">
-          <MyButton class="mr-4" @click.native="submitProduct">Submit</MyButton>
-          <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
-            >Cancel</MyButton
-          >
-        </div>
+      </div>
+      <div class="mt-8 flex btn">
+        <MyButton class="mr-4" @click.native="submitProduct">Submit</MyButton>
+        <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
+          >Cancel</MyButton
+        >
       </div>
     </div>
   </div>
@@ -242,9 +244,23 @@ export default {
     color: #000;
   }
   .add-modal {
-    @include for-phone-only {
-      width: 80%;
-      padding: 15px;
+    height: 90vh;
+  }
+  .heading {
+    min-height: 30px;
+  }
+  .btn {
+    min-height: 30px;
+  }
+  .form {
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+    &::-webkit-scrollbar-track {
+      background: #f9f9f9;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #888;
     }
   }
 }

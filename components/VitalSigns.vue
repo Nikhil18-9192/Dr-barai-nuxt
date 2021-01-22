@@ -1,16 +1,17 @@
 <template>
   <div id="vital-signs">
     <VitalSignModal
-      v-if="modal"
-      @dismiss="modal = false"
-      @vitalSignData="submitVitalSignData"
+      v-if="vitalsModal"
+      :vitals-to-edit="vitalSigns"
+      @dismiss="vitalsModal = false"
+      @addVitals="submitVitalSignData"
     />
     <div class="title-container mb-6 flex">
       <h1 class="text-xl font-medium">Vital Signs</h1>
-      <AddButton @click.native="modal = true" />
+      <AddButton v-if="!vitalSigns" @click.native="vitalsModal = true" />
     </div>
 
-    <table v-if="vitalSigns" class="list w-full">
+    <table v-if="vitalSigns && $device.isDesktopOrTablet" class="list w-full">
       <tbody>
         <tr class="bg-gray-100 text-black-400 text-sm">
           <th
@@ -64,13 +65,26 @@
             {{ vitalSigns.pulse == null ? '---' : vitalSigns.pulse }}
           </td>
           <td class="p-3 flex justify-center">
-            <p>{{ vitals.respRate == null ? '---' : vitalSigns.respRate }}</p>
-            <img class="absolute ml-36 hidden" src="/edit_btn.svg" alt="" />
-            <img class="absolute ml-56 hidden" src="/delete_btn.svg" alt="" />
+            <p>
+              {{ vitalSigns.respRate == null ? '---' : vitalSigns.respRate }}
+            </p>
+            <img
+              class="absolute ml-36 hidden"
+              src="/edit_btn.svg"
+              alt=""
+              @click="editVitals"
+            />
+            <img
+              class="absolute ml-56 hidden"
+              src="/delete_btn.svg"
+              alt=""
+              @click="deleteVitals"
+            />
           </td>
         </tr>
       </tbody>
     </table>
+    <VitalSignCard v-if="$device.isMobile" :card-info="vitalSigns" />
   </div>
 </template>
 
@@ -84,15 +98,16 @@ export default {
   },
   data() {
     return {
-      modal: false,
+      vitalsModal: false,
       addVitals: false,
+      displayTable: false,
     }
   },
   computed: {
     vitalSigns() {
       if (this.$route.name === 'appointments-newAppointment') {
         return this.addVitals
-      } else if (Object.entries(this.vitals).length !== 0) {
+      } else if (Object.entries(this.clinicalNotes).length !== 0) {
         return this.vitals
       } else return false
     },
@@ -105,6 +120,13 @@ export default {
       if (val) {
         this.addVitals = val
       }
+      this.vitalsModal = false
+    },
+    editVitals() {
+      this.vitalsModal = true
+    },
+    deleteVitals() {
+      this.addVitals = false
     },
   },
 }

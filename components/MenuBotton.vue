@@ -1,5 +1,5 @@
 <template>
-  <div id="menubtn" @click="$store.commit('toggleMenuState')">
+  <div id="menubtn" class="z-40" @click="$store.commit('toggleMenuState')">
     <div class="hamburger-menu" :class="[{ animate: menuState }]"></div>
   </div>
 </template>
@@ -34,7 +34,6 @@ $bar-height: 2px;
 $bar-spacing: 8px;
 
 #menubtn {
-  z-index: 2000;
   width: 52px;
   height: 52px;
   position: fixed;

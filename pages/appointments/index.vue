@@ -71,9 +71,9 @@
           <td class="py-3 px-0">{{ appointment.patient.mobile }}</td>
           <td class="py-3 px-0">
             {{
-              formatter.formatDate(appointment.date) +
+              formatter.formatDate(appointment.startDateTime) +
               ' at ' +
-              formatter.formatTime(appointment.date)
+              formatter.formatTime(appointment.startDateTime)
             }}
           </td>
         </tr>
@@ -138,11 +138,11 @@ export default {
     return {
       addIcon: '/plus-circle.svg',
       totalItem: 0,
-      appointments: false,
-      perPage: 3,
+      appointments: [],
+      perPage: 10,
       totalPages: 0,
-      startDate: this.$dayjs().startOf('day').$d,
-      endDate: this.$dayjs().startOf('day').$d,
+      startDate: new Date(),
+      endDate: new Date(),
       currentPage: 1,
       maxPage: 5,
     }
@@ -156,6 +156,14 @@ export default {
         to: this.startDate,
       }
       return disabledDates
+    },
+
+    startDateISO() {
+      return this.$dayjs(this.startDate).format('YYYY-MM-DDT00:00:00.01[Z]')
+    },
+
+    endDateISO() {
+      return this.$dayjs(this.endDate).format('YYYY-MM-DDT24:00:00.00[Z]')
     },
   },
   mounted() {
@@ -177,7 +185,7 @@ export default {
       if (data.appointments.length !== 0) {
         this.appointments = data.appointments
       } else {
-        this.appointments = false
+        this.appointments = []
       }
       this.$store.commit('UNSET_LOADING')
     },
@@ -204,20 +212,20 @@ export default {
         variables: {
           limit: this.perPage,
           start: this.currentPage * this.perPage - this.perPage,
-          startDate: this.startDate,
-          endDate: this.modifyEndDate(this.endDate),
+          startDate: this.startDateISO,
+          endDate: this.endDateISO,
         },
       })
       if (data.appointments.length !== 0) {
         this.appointments = data.appointments
       } else {
-        this.appointments = false
+        this.appointments = []
       }
       this.$store.commit('UNSET_LOADING')
     },
     async fetchTotalappointmentsCount() {
       this.totalItem = await this.$axios.$get(
-        `/appointments/count?date_gte=${this.startDate.toISOString()}&date_lte=${this.endDate.toISOString()}`
+        `/appointments/count?startDateTime_gte=${this.startDateISO}&startDateTime_lte=${this.endDateISO}`
       )
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
     },

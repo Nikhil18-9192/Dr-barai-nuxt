@@ -5,13 +5,16 @@
     @click="$emit('dismiss')"
   >
     <div
-      class="add-modal bg-white relative rounded-md mx-auto mt-12 py-4 sm:py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
+      class="add-modal flex flex-col bg-white relative rounded-md mx-auto sm:mt-12 py-4 sm:py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-full sm:w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
-      <h1 class="text-lg font-medium text-center mb-4 sm:mb-8">
-        Add Prescription
-      </h1>
-      <div class="form">
+      <div class="heading h-14">
+        <h1 class="text-lg font-medium text-center mb-4 sm:mb-8">
+          Add Prescription
+        </h1>
+      </div>
+
+      <div class="form flex-grow">
         <label for="gender" class="text-sm font-light text-gray-400"
           >Drug</label
         >
@@ -20,7 +23,7 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
         >
           <option disabled value="Select Drugs">Select Drugs</option>
-          <option v-for="item in drugs" :key="item.id" :value="item.id">
+          <option v-for="(item, i) in drugs" :key="i" :value="item">
             {{ item.name }}
           </option>
         </select>
@@ -76,14 +79,14 @@
         >
           {{ durationUnits[selectedDurationUnitIndex] }}
         </span>
-        <div class="mt-8 flex">
-          <MyButton class="mr-4" @click.native="submitPrescriptionData"
-            >Submit</MyButton
-          >
-          <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
-            >Cancel</MyButton
-          >
-        </div>
+      </div>
+      <div class="mt-8 flex btn">
+        <MyButton class="mr-4" @click.native="submitPrescriptionData"
+          >Submit</MyButton
+        >
+        <MyButton class="cancel-btn mr-4" @click.native="$emit('dismiss')"
+          >Cancel</MyButton
+        >
       </div>
     </div>
   </div>
@@ -93,11 +96,12 @@
 import { dosageFrequency, durationUnits } from '@/utils'
 import { AddPrescriptionValidation } from '@/utils/validation'
 import query from '@/apollo/queries/drug/drug.gql'
+
 export default {
   props: {
-    currentPrescription: {
-      type: Array,
-      default: () => [],
+    editPrescription: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
@@ -120,19 +124,22 @@ export default {
     },
   },
   mounted() {
-    this.drug()
+    this.fetchDrugs()
+    if (this.editPrescription) {
+      this.selectedDrug = this.editPrescription.drug
+      this.dosageFrequency = this.editPrescription.frequency.frequency
+      this.intake = this.editPrescription.frequency.intake
+      this.instructions = this.editPrescription.frequency.instructions
+      this.duration = this.editPrescription.frequency.drugDuration
+      this.selectedDurationUnitIndex = this.durationUnits.indexOf(
+        this.editPrescription.frequency.drugDurationFor
+      )
+    }
   },
   methods: {
-    async submitPrescriptionData() {
-      const {
-        selectedDrug,
-        dosageFrequency,
-        intake,
-        duration,
-        instructions,
-      } = this
+    submitPrescriptionData() {
+      const { dosageFrequency, intake, duration, instructions } = this
       const validation = AddPrescriptionValidation({
-        selectedDrug,
         dosageFrequency,
         intake,
         duration,
@@ -142,7 +149,8 @@ export default {
         this.$toast.error(validation.error.message)
         return
       }
-      const prescriptionData = {
+
+      const respData = {
         drug: this.selectedDrug,
         frequency: {
           frequency: this.dosageFrequency,
@@ -152,14 +160,13 @@ export default {
           instructions,
         },
       }
-
-      await this.$axios.$put(`/appointments/5ff01fbfb5c97c1e28afdfb3`, {
-        prescription: [...this.currentPrescription, prescriptionData],
-      })
-      this.$emit('prescriptionData', prescriptionData)
-      this.$emit('dismiss')
+      if (this.editPrescription) {
+        this.$emit('updatePrescription', respData)
+        return
+      }
+      this.$emit('addPrescription', respData)
     },
-    async drug() {
+    async fetchDrugs() {
       const { data } = await this.$apollo.query({
         query,
       })
@@ -182,6 +189,7 @@ export default {
     background: #f3f4f6;
     color: #000;
   }
+
   select {
     option {
       color: #000;
@@ -193,9 +201,10 @@ export default {
     }
   }
   .add-modal {
-    @include for-phone-only {
-      width: 85%;
-    }
+    height: 90vh;
+  }
+  .btn {
+    height: 37px;
   }
 }
 </style>

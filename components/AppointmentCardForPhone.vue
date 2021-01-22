@@ -1,5 +1,5 @@
 <template>
-  <div id="table-info">
+  <div id="appointment-info">
     <div
       v-for="(item, i) in cardInfo"
       :key="i"

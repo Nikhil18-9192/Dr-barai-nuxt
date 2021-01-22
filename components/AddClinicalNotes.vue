@@ -5,13 +5,16 @@
     @click="$emit('dismiss')"
   >
     <div
-      class="add-modal bg-white relative rounded-md mx-auto mt-12 py-4 sm:py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-2/6 md:w-3/5 xl:w-2/5"
+      class="add-modal flex flex-col bg-white relative rounded-md mx-auto sm:mt-12 py-4 sm:py-6 px-4 sm:px-12 md:px-8 sm:px-4 w-full sm:w-2/6 md:w-3/5 xl:w-2/5"
       @click.stop=""
     >
-      <h1 class="text-lg font-medium text-center mb-4 sm:mb-8">
-        Add Clinical Notes
-      </h1>
-      <div class="form">
+      <div class="heading h-14">
+        <h1 class="text-lg font-medium text-center mb-4 sm:mb-8">
+          Add Clinical Notes
+        </h1>
+      </div>
+
+      <div class="form flex-grow">
         <label for="complaints" class="text-sm font-light text-gray-400"
           >Complaints</label
         >
@@ -48,14 +51,17 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
           autocomplete="on"
         ></textarea>
-        <div class="mt-8 flex">
-          <MyButton class="mr-4" @click.native="submitClinicalNotes"
-            >Submit</MyButton
-          >
-          <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
-            >Cancel</MyButton
-          >
-        </div>
+      </div>
+      <div class="mt-8 btn flex items-end">
+        <MyButton
+          class="mr-4"
+          :loading="loading"
+          @click.native="submitClinicalNotes"
+          >Submit</MyButton
+        >
+        <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
+          >Cancel</MyButton
+        >
       </div>
     </div>
   </div>
@@ -64,15 +70,25 @@
 <script>
 import { ClinicalNotesValidation } from '@/utils/validation'
 export default {
+  // eslint-disable-next-line
+  props: ['notesToEdit'],
   data() {
     return {
       complaints: '',
       observations: '',
       diagnoses: '',
       notes: '',
+      loading: false,
     }
   },
-
+  mounted() {
+    if (this.notesToEdit) {
+      this.complaints = this.notesToEdit.complaints
+      this.observations = this.notesToEdit.observations
+      this.diagnoses = this.notesToEdit.diagnoses
+      this.notes = this.notesToEdit.notes
+    }
+  },
   methods: {
     submitClinicalNotes() {
       const { complaints, observations, diagnoses, notes } = this
@@ -93,7 +109,6 @@ export default {
         notes,
       }
       this.$emit('clinicalNotesData', clinicalNotesData)
-      this.$emit('dismiss')
     },
   },
 }
@@ -121,6 +136,12 @@ export default {
     &::placeholder {
       color: #a1a1a1;
     }
+  }
+  .add-modal {
+    height: 90vh;
+  }
+  .btn {
+    height: 37px;
   }
 }
 </style>
