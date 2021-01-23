@@ -53,7 +53,6 @@ export default {
         this.prescription = result.prescription
         this.vitalSigns = result.vitalSigns
         this.clinicalNotes = result.clinicalNotes
-        console.log('files', result.files)
         for (const i in result.files) {
           // eslint-disable-next-line
           this.currentFiles.push(result.files[i].id)
@@ -85,7 +84,8 @@ export default {
             refId: this.$route.params.id,
           }
           const fd = new FormData()
-          for (let i = 0; i < this.files.length; i++) {
+
+          for (let i = this.currentFiles.length; i < this.files.length; i++) {
             const file = this.files[i]
             fd.append(`files.files`, file.images, file.images.name)
           }
@@ -109,6 +109,7 @@ export default {
           clinicalNotes: this.clinicalNotes,
         })
         this.$toast.success('Appointment updated successfully')
+        this.$router.push('/appointments')
       } catch (error) {
         this.$toast.error(error.message)
       }
