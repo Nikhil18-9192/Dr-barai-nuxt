@@ -23,21 +23,25 @@ export default {
       files: [],
       loading: false,
       appointmentId: false,
+      sanitizedPrescription: [],
     }
   },
   methods: {
     async submitAppointment() {
       try {
         this.loading = true
+        this.sanitizedPrescription = this.prescriptionInfo.map((item) => ({
+          drug: item.drug.id,
+          frequency: item.frequency,
+        }))
         const response = await this.$axios.$post(`/appointments`, {
           patient: this.patientInfo.selectedPatientId,
           startDateTime: this.$dayjs(
             this.patientInfo.sessionDate + this.patientInfo.sessionTime
           ),
-          prescription: this.prescriptionInfo,
+          prescription: this.sanitizedPrescription,
           vitalSigns: this.vitalSignInfo,
           clinicalNotes: this.clinicalNoteInfo,
-          endDateTime: new Date(),
         })
         this.appointmentId = response.id
         if (this.files.length) {
@@ -49,7 +53,7 @@ export default {
           const fd = new FormData()
           for (let i = 0; i < this.files.length; i++) {
             const file = this.files[i]
-            fd.append(`files.files`, file, file.name)
+            fd.append(`files.files`, file.images, file.images.name)
           }
 
           fd.append('data', JSON.stringify(data))
@@ -61,6 +65,7 @@ export default {
         }
         this.loading = false
         this.$toast.success('Appointment add successfully')
+        this.$router.push('/appointments')
       } catch (error) {
         this.$toast.error(error.message)
       }

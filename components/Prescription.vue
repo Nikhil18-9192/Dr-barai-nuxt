@@ -165,31 +165,30 @@
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 export default {
-  props: {
-    prescription: {
-      type: Array,
-      default: () => [],
-    },
-  },
+  props: ['value'],
   data() {
     return {
       prescriptionModal: false,
-      addPrescription: false,
       prescriptionIndexToEdit: -1,
-      editedDrug: {},
+      sanitizedPrescription: [],
+      prescription: [],
     }
   },
-  computed: {
-    prescriptions() {
-      if (this.$route.name === 'appointments-new') {
-        return this.addprescription
-      } else if (Object.entries(this.prescription).length !== 0) {
-        return this.prescription
-      } else return false
+  watch: {
+    value: {
+      handler(val) {
+        if (val.length > 0) {
+          this.prescription = val
+        }
+      },
     },
   },
+
   mounted() {
     this.submitPrescriptionData()
+    if (this.value.length > 0) {
+      this.prescription.push(this.value)
+    }
   },
 
   methods: {
@@ -202,8 +201,8 @@ export default {
     },
     updatePrescription(val) {
       this.prescription[this.prescriptionIndexToEdit] = val
-      this.prescriptionIndexToEdit = -1
       this.prescriptionModal = false
+      this.prescriptionIndexToEdit = -1
       this.$emit('input', this.prescription)
     },
     download() {
@@ -238,8 +237,9 @@ export default {
       this.prescriptionModal = true
     },
     deletePrescription(index) {
+      this.sanitizedPrescription.splice(index, 1)
       this.prescription.splice(index, 1)
-      this.$emit('input', this.prescription)
+      this.$emit('input', this.sanitizedPrescription)
     },
     clearModal() {
       this.prescriptionModal = false
