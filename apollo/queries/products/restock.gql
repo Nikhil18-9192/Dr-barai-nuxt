@@ -1,5 +1,5 @@
-query products() {
-  products(limit:25, sort: "stock:asc") {
+query products($limit: Int) {
+  products(limit: $limit, sort: "stock:asc") {
     id
     stock
     name

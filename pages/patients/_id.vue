@@ -94,7 +94,7 @@
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
             >
               {{
-                appointment.clinicalNotes !== null
+                appointment.clinicalNotes.complaints !== null
                   ? appointment.clinicalNotes.complaints
                   : '---'
               }}
@@ -103,7 +103,7 @@
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
             >
               {{
-                appointment.clinicalNotes !== null
+                appointment.clinicalNotes.observations !== null
                   ? appointment.clinicalNotes.observations
                   : '---'
               }}
@@ -112,7 +112,7 @@
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
             >
               {{
-                appointment.clinicalNotes !== null
+                appointment.clinicalNotes.diagnoses !== null
                   ? appointment.clinicalNotes.diagnoses
                   : '---'
               }}

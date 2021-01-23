@@ -55,12 +55,15 @@ export default {
     position: relative;
 
     .my-app {
-      height: 91vh;
+      height: 88vh;
       position: relative;
       overflow-y: scroll;
       scrollbar-width: none;
       &::-webkit-scrollbar {
         display: none;
+      }
+      @include for-phone-only {
+        padding: 0 30px;
       }
     }
   }

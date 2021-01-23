@@ -24,7 +24,7 @@
         >
           <option disabled value="Select Drugs">Select Drugs</option>
           <option v-for="(item, i) in drugs" :key="i" :value="item">
-            {{ item.name ? item.name : item.drug.name }}
+            {{ item.name }}
           </option>
         </select>
         <label for="gender" class="text-sm font-light text-gray-400"
@@ -126,7 +126,10 @@ export default {
   mounted() {
     this.fetchDrugs()
     if (this.editPrescription) {
-      this.selectedDrug = this.editPrescription.drug
+      this.selectedDrug = {}
+      this.selectedDrug.__typename = 'Drug'
+      this.selectedDrug.id = this.editPrescription.drug.id
+      this.selectedDrug.name = this.editPrescription.drug.name
       this.dosageFrequency = this.editPrescription.frequency.frequency
       this.intake = this.editPrescription.frequency.intake
       this.instructions = this.editPrescription.frequency.instructions
@@ -150,8 +153,10 @@ export default {
         return
       }
       const respData = {
-        drug: this.selectedDrug.id,
-        name: this.selectedDrug.name,
+        drug: {
+          id: this.selectedDrug.id,
+          name: this.selectedDrug.name,
+        },
         frequency: {
           frequency: this.dosageFrequency,
           intake,

@@ -135,8 +135,8 @@ export default {
   },
   methods: {
     async addPatient() {
+      this.loading = true
       try {
-        this.loading = true
         const {
           name,
           mobile,
@@ -176,7 +176,6 @@ export default {
           })
           this.$emit('dismiss')
           this.$emit('PatientData', result)
-          this.$router.push('/patients')
           this.$toast.success('Add Patient Successfully')
         } else {
           const res = await this.$axios.$put(`/patients/${this.patient.id}`, {
@@ -189,16 +188,14 @@ export default {
             pincode,
             city,
           })
-          this.$emit('dismiss', res)
+          this.$emit('dismiss')
           this.$emit('patientData', res)
-          const path = this.$route.path
-          this.$router.push(`${path}`)
           this.$toast.success('Add Updated Successfully')
         }
-        this.loading = false
       } catch (error) {
         this.$toast.error(error.message)
       }
+      this.loading = false
     },
   },
 }

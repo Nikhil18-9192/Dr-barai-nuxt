@@ -211,6 +211,7 @@ export default {
       try {
         const { data } = await this.$apollo.query({
           query: appointments,
+          fetchPolicy: 'network-only',
           variables: {
             limit: this.perPage,
             start: this.currentPage * this.perPage - this.perPage,
@@ -225,7 +226,6 @@ export default {
         }
       } catch (error) {
         this.$toast.error(error.message)
-        console.log(error)
       }
       this.$store.commit('UNSET_LOADING')
     },

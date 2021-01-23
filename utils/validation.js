@@ -19,7 +19,7 @@ const AddPrescriptionValidation = (data) => {
     // selectedDrug: Joi.string().min(3).max(50).label('Drugs').required(),
     dosageFrequency: Joi.string().min(3).max(50).label('Dosage & Frequency'),
     intake: Joi.string().min(3).max(50).label('Intake'),
-    duration: Joi.number().label('Duration'),
+    duration: Joi.number().min(0).label('Duration'),
     instructions: Joi.string().min(3).max(250).label('Instruction'),
   }).required()
 
