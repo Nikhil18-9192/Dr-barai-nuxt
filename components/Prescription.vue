@@ -165,6 +165,7 @@
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 export default {
+  // eslint-disable-next-line vue/require-prop-types
   props: ['value'],
   data() {
     return {

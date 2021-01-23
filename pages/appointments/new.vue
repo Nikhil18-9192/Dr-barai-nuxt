@@ -5,7 +5,7 @@
     <VitalSigns v-model="vitalSignInfo" />
     <ClinicalNotes v-model="clinicalNoteInfo" class="new" />
     <Files v-model="files" class="new" />
-    <MyButton :loading="loading" @click.native="submitAppointment"
+    <MyButton :loading="loading" @click.native="submitAppointment" class="mb-4"
       >Submit</MyButton
     >
   </div>
@@ -63,12 +63,12 @@ export default {
             },
           })
         }
-        this.loading = false
         this.$toast.success('Appointment add successfully')
         this.$router.push('/appointments')
       } catch (error) {
         this.$toast.error(error.message)
       }
+      this.loading = false
     },
   },
 }

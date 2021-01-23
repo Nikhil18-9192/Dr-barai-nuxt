@@ -71,6 +71,7 @@ export default {
 
     @include for-phone-only {
       width: 300px;
+      margin-inline: auto;
     }
   }
   .container-2 {

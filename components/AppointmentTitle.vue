@@ -29,7 +29,7 @@
         {{ appointmentInfo.name }}
       </h1>
     </div>
-    <div class="actions flex sm:flex-col">
+    <div class="actions flex sm:flex-col justify-between">
       <MyButton
         class="edit-btn mb-2"
         :icon="editBtnIcon"
@@ -77,6 +77,9 @@ export default {
 <style lang="scss" scoped>
 #appointment-title {
   .actions {
+    @include for-phone-only {
+      margin-top: 15px;
+    }
     .action-button {
       &:hover {
         transform: scale(1.05);

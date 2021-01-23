@@ -9,7 +9,9 @@
     <VitalSigns v-model="vitalSigns" />
     <ClinicalNotes v-model="clinicalNotes" />
     <Files v-model="files" />
-    <MyButton :loading="loading" @click.native="submit">Submit</MyButton>
+    <MyButton :loading="loading" @click.native="submit" class="mb-4"
+      >Submit</MyButton
+    >
   </div>
 </template>
 
@@ -44,6 +46,7 @@ export default {
       try {
         const { data } = await this.$apollo.query({
           query,
+          fetchPolicy: 'network-only',
           variables: {
             id,
           },

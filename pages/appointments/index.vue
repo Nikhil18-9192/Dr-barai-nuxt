@@ -170,7 +170,6 @@ export default {
   mounted() {
     this.fetchappointments()
     this.fetchTotalappointmentsCount()
-    console.log('mounted')
   },
   methods: {
     async clickCallback(selectedPage) {
