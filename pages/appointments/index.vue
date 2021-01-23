@@ -225,7 +225,6 @@ export default {
         }
       } catch (error) {
         this.$toast.error(error.message)
-        console.log(error)
       }
       this.$store.commit('UNSET_LOADING')
     },

@@ -49,7 +49,6 @@ export default {
           },
         })
         const result = data.appointment
-        console.log(result)
         this.patient = result.patient
         this.prescription = result.prescription
         this.vitalSigns = result.vitalSigns
@@ -104,6 +103,7 @@ export default {
         this.$toast.success('Appointment updated successfully')
       } catch (error) {
         this.$toast.error(error.message)
+        this.loading = false
       }
     },
   },

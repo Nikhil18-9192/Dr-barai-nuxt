@@ -29,6 +29,11 @@ export default {
     async submitAppointment() {
       try {
         this.loading = true
+        if (!this.patientInfo.selectedPatientId) {
+          this.$toast.error('Select patient')
+          this.loading = false
+          return
+        }
         const response = await this.$axios.$post(`/appointments`, {
           patient: this.patientInfo.selectedPatientId,
           startDateTime: this.$dayjs(
@@ -63,6 +68,7 @@ export default {
         this.$toast.success('Appointment add successfully')
       } catch (error) {
         this.$toast.error(error.message)
+        this.loading = false
       }
     },
   },

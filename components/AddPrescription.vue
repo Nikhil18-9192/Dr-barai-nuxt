@@ -126,7 +126,7 @@ export default {
   mounted() {
     this.fetchDrugs()
     if (this.editPrescription) {
-      this.selectedDrug = this.editPrescription.drug
+      this.selectedDrug = this.editPrescription.drug.id
       this.dosageFrequency = this.editPrescription.frequency.frequency
       this.intake = this.editPrescription.frequency.intake
       this.instructions = this.editPrescription.frequency.instructions
