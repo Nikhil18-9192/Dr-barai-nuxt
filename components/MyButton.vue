@@ -1,7 +1,8 @@
 <template>
   <button
     type="button"
-    class="btn bg-blue-500 rounded-md text-white text-sm font-medium add-btn flex items-center justify-center shadow-2xl outline-none"
+    class="btn rounded-md text-white text-sm font-medium add-btn flex items-center justify-center shadow-2xl outline-none"
+    :class="secondary ? `bg-red-500` : 'bg-blue-500'"
   >
     <transition name="v-btn-label" mode="out-in">
       <div v-if="loading">
@@ -31,6 +32,14 @@ export default {
     icon: {
       type: String,
       default: '',
+    },
+    secondary: {
+      type: Boolean,
+      default: false,
+    },
+    primary: {
+      type: Boolean,
+      default: true,
     },
   },
   methods: {},

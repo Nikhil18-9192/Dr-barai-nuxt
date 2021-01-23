@@ -12,8 +12,8 @@
         </transition>
 
         <Nuxt class="px-10 my-app" />
+        <MenuFab @click-add-patient="patientDialog = true" />
       </div>
-      <MenuFab @click-add-patient="patientDialog = true" />
     </client-only>
   </div>
 </template>

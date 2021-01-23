@@ -111,13 +111,4 @@ export default {
     }
   }
 }
-
-.fab-enter-active,
-.fab-leave-active {
-  transition: all 0.3s;
-}
-.fab-enter, .fab-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-  transform: translateY(5px);
-}
 </style>

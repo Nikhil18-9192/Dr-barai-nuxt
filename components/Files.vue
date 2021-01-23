@@ -23,7 +23,7 @@
       <img
         v-for="(image, i) in previewImages"
         :key="i"
-        class="w-52 h-52 mr-8 mt-8 cursor-pointer"
+        class="w-52 h-52 mr-8 mt-8 cursor-pointer object-contain"
         :src="image"
         alt=""
         @click="previewModal = true"
@@ -69,7 +69,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 #files {
-  margin-bottom: 55px;
   input[type='file'] {
     display: none;
   }

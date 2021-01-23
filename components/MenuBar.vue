@@ -1,5 +1,5 @@
 <template>
-  <div id="menu-bar" class="border-b-2 py-3 z-40 text-center">
+  <div id="menu-bar" class="border-b-2 py-3 z-5 text-center">
     <p class="text-gray-800 font-medium text-lg uppercase">
       <span class="cursor-pointer" @click="goHome"> Dr. Barai’s Clinic</span>
     </p>

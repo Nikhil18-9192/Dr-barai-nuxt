@@ -20,7 +20,11 @@
         :key="i"
         class="w-full flex justify-center items-center object-contain"
       >
-        <img class="w-64 sm:w-96 h-64 sm:h-96" :src="image" alt="" />
+        <img
+          class="w-64 sm:w-96 h-64 sm:h-96 object-contain"
+          :src="image"
+          alt=""
+        />
       </div>
       <img class="nextprev" src="/next.svg" alt="" @click="next" />
     </div>

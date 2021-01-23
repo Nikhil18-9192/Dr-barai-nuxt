@@ -4,7 +4,8 @@
     <Prescription v-model="prescriptionInfo" />
     <VitalSigns v-model="vitalSignInfo" />
     <ClinicalNotes v-model="clinicalNoteInfo" class="new" />
-    <Files v-model="files" class="new" />
+    <Files v-model="files" class="new mb-4" />
+    <ConsentView class="mb-4" />
     <MyButton :loading="loading" @click.native="submitAppointment"
       >Submit</MyButton
     >
