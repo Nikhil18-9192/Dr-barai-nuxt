@@ -1,10 +1,15 @@
 <template>
   <div id="consent-view">
     <ConsentFormDialog v-if="consentDialog" @dismiss="formDismiss" />
-    <ConsentSignatureDialog v-if="signDialog" :consentData="consentData" />
+    <ConsentSignatureDialog
+      v-if="signDialog"
+      :patient-id="patientId"
+      :consent-data="consentData"
+      @dismiss="onDismissSignDialog"
+    />
     <div class="flex items-center">
       <h4 class="mr-3 text-black-600 text-lg font-medium">Patient Consent</h4>
-      <img src="/pencil-alt.svg" @click="consentDialog = true" />
+      <img src="/pencil-alt.svg" @click="showConsentForm" />
     </div>
     <div v-if="consentData" class="collapse-view relative">
       <span>
@@ -32,6 +37,8 @@
 <script>
 export default {
   name: 'ConsentView',
+  // eslint-disable-next-line vue/require-prop-types
+  props: ['patientId'],
   data() {
     return {
       consentDialog: false,
@@ -40,6 +47,19 @@ export default {
     }
   },
   methods: {
+    onDismissSignDialog(val) {
+      this.signDialog = false
+      if (val) {
+        this.$emit('onConsentSigned', val)
+      }
+    },
+    showConsentForm() {
+      if (this.patientId) {
+        this.consentDialog = true
+      } else {
+        this.$toast.warning('Patient not selected')
+      }
+    },
     formDismiss(consentData) {
       this.consentDialog = false
       if (consentData) {

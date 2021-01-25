@@ -10,6 +10,9 @@
         <h4 class="text-center">Consent Signature</h4>
       </div>
       <div class="content max-h-full overflow-y-scroll bg-white p-4">
+        <p class="text-sm">Patient Name: {{ patient.name }}</p>
+        <p class="text-sm">Phone: {{ patient.mobile }}</p>
+        <p class="text-sm">Address: {{ patient.address }}</p>
         <p class="text-sm">
           Date:
           {{ $dayjs(consentData.consentDate).format('DD-MM-YYYY hh:mm A') }}
@@ -33,12 +36,17 @@
               Clear
             </p>
           </div>
-          <canvas id="sign-canvas" class="w-full border min-h-400"></canvas>
+          <canvas id="sign-canvas" class="border"></canvas>
         </div>
       </div>
       <div class="action w-full bg-gray-100 flex items-center p-2">
         <MyButton @click.native="submitConsent">Submit</MyButton>
-        <MyButton class="ml-4" :secondary="true">Cancel</MyButton>
+        <MyButton
+          class="ml-4"
+          :secondary="true"
+          @click.native="$emit('dismiss')"
+          >Cancel</MyButton
+        >
       </div>
     </div>
   </div>
@@ -52,10 +60,12 @@ import pdfFonts from 'pdfmake/build/vfs_fonts'
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 export default {
   name: 'ConsentSignatureDialog',
-  props: ['consentData'],
+  // eslint-disable-next-line vue/require-prop-types
+  props: ['consentData', 'patientId'],
   data() {
     return {
       signaturePad: false,
+      patient: false,
     }
   },
   computed: {
@@ -64,10 +74,20 @@ export default {
     },
   },
   mounted() {
+    this.fetchPatient()
     const c = document.getElementById('sign-canvas')
     this.signaturePad = new SignaturePad(c)
   },
   methods: {
+    async fetchPatient() {
+      try {
+        this.patient = await this.$axios.$get(`/patients/${this.patientId}`)
+      } catch (error) {
+        if (error.response) {
+          this.$toast.error(error.response.data.message)
+        }
+      }
+    },
     doctorsSignature() {
       const imgToExport = document.getElementById('sign-img')
       const canvas = document.createElement('canvas')
@@ -77,6 +97,13 @@ export default {
       return canvas.toDataURL('image/png')
     },
     submitConsent() {
+      const patientInfo = [
+        `Patient Name: ${this.patient.name}`,
+        `Phone: ${this.patient.mobile}`,
+        `Address: ${this.patient.address}`,
+        `Date & Time: ${this.$dayjs().format('MM-DD-YYYY HH:MM A')}`,
+        `Place: Kolhapur`,
+      ]
       const parsedPolicies = this.consentPolicies.map((p) => ({
         text: p.replaceAll('<strong>', '').replaceAll('</strong>', ''),
         margin: 8,
@@ -84,22 +111,48 @@ export default {
 
       const data = this.signaturePad.toDataURL()
       const docDefinition = {
-        content: [
-          ...parsedPolicies,
-
+        header: [
           {
-            image: this.doctorsSignature(),
-            width: 150,
+            text: 'Consent Form',
+            alignment: 'center',
+            margin: [0, 12, 0, 32],
+            fontSize: 22,
+            bold: true,
           },
-
+        ],
+        content: [
           {
-            image: data,
-            width: 150,
+            margin: 16,
+            text: '',
+          },
+          ...patientInfo.map((info) => ({ text: info, margin: [8, 0, 0, 4] })),
+          {
+            margin: 16,
+            text: '',
+          },
+          ...parsedPolicies,
+          {
+            margin: [0, 32, 0, 0],
+            columns: [
+              {
+                image: this.doctorsSignature(),
+                width: 150,
+                height: 100,
+              },
+
+              {
+                image: data,
+                width: 150,
+                height: 100,
+              },
+            ],
           },
         ],
       }
 
-      pdfMake.createPdf(docDefinition).open()
+      pdfMake.createPdf(docDefinition).getBuffer((buffer) => {
+        this.$emit('dismiss', buffer)
+      })
     },
   },
 }

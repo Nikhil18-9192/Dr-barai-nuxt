@@ -5,7 +5,11 @@
     <VitalSigns v-model="vitalSignInfo" />
     <ClinicalNotes v-model="clinicalNoteInfo" class="new" />
     <Files v-model="files" class="new mb-4" />
-    <ConsentView class="mb-4" />
+    <ConsentView
+      :patient-id="patientInfo.selectedPatientId || 0"
+      class="mb-4"
+      @onConsentSigned="onConsentSigned"
+    />
     <MyButton :loading="loading" @click.native="submitAppointment"
       >Submit</MyButton
     >
@@ -25,9 +29,14 @@ export default {
       loading: false,
       appointmentId: false,
       sanitizedPrescription: [],
+      consentBuffer: false,
     }
   },
   methods: {
+    onConsentSigned(buffer) {
+      console.log(buffer)
+      this.consentBuffer = buffer
+    },
     async submitAppointment() {
       try {
         this.loading = true
