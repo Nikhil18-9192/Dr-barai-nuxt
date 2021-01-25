@@ -9,7 +9,7 @@
     <VitalSigns v-model="vitalSigns" />
     <ClinicalNotes v-model="clinicalNotes" />
 
-    <Files class="my-6" v-model="files" @deleteFile="initImageDelete" />
+    <Files v-model="files" class="my-6" @deleteFile="initImageDelete" />
     <ProductSelector v-model="nativeProducts" />
     <div v-if="consentDoc" class="consent my-8">
       <h4 class="text-lg text-black font-500">
@@ -191,7 +191,7 @@ export default {
         }
       })
     },
-    async initImageDelete(val) {
+    async initImageDelete(imageId) {
       try {
         this.$store.commit('SET_LOADING')
         if (confirm('Are you sure? you want to delete this file.')) {
