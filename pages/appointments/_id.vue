@@ -8,7 +8,7 @@
     <Prescription v-model="prescription" />
     <VitalSigns v-model="vitalSigns" />
     <ClinicalNotes v-model="clinicalNotes" />
-    <Files v-model="files" />
+    <Files v-model="files" @deleteFile="initImageDelete" />
     <MyButton :loading="loading" class="mb-4" @click.native="submit"
       >Submit</MyButton
     >
@@ -58,7 +58,7 @@ export default {
         this.clinicalNotes = result.clinicalNotes
         for (const i in result.files) {
           // eslint-disable-next-line
-          this.currentFiles.push(result.files[i].id)
+          this.currentFiles.push(result.files[i])
           this.files.push(result.files[i].url)
         }
         this.appointmentInfo.date = formatDateTime.formatDate(
@@ -118,6 +118,22 @@ export default {
         this.loading = false
       }
       this.loading = false
+    },
+    async initImageDelete(val) {
+      try {
+        this.$store.commit('SET_LOADING')
+        if (confirm('Are you sure? you want to delete this file.')) {
+          const file = this.currentFiles.filter((file) => file.url === val)
+          await this.$axios.$delete(`/upload/files/${file[0].id}`)
+          const index = this.files.findIndex((obj) => obj.url === file[0].url)
+          this.files.splice(index, 1)
+        } else {
+          return this.$store.commit('UNSET_LOADING')
+        }
+        this.$store.commit('UNSET_LOADING')
+      } catch (error) {
+        this.$toast.error(error.message)
+      }
     },
   },
 }
