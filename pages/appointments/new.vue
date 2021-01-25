@@ -4,10 +4,12 @@
     <Prescription v-model="prescriptionInfo" />
     <VitalSigns v-model="vitalSignInfo" />
     <ClinicalNotes v-model="clinicalNoteInfo" class="new" />
-    <Files v-model="files" class="new mb-4" />
+    <Files v-model="files" class="new mb-4 mt-4" />
+    <ProductSelector v-model="nativeProducts" />
+
     <ConsentView
       :patient-id="patientInfo.selectedPatientId || 0"
-      class="mb-4"
+      class="my-4"
       @onConsentSigned="onConsentSigned"
     />
     <MyButton :loading="loading" @click.native="submitAppointment"
@@ -21,6 +23,7 @@ export default {
   name: 'CreateAppointmentPage',
   data() {
     return {
+      nativeProducts: [],
       prescriptionInfo: [],
       vitalSignInfo: {},
       clinicalNoteInfo: {},
@@ -51,6 +54,10 @@ export default {
           prescription: this.sanitizedPrescription,
           vitalSigns: this.vitalSignInfo,
           clinicalNotes: this.clinicalNoteInfo,
+          nativeProducts: this.nativeProducts.map((p) => ({
+            product: p.product.id,
+            quantity: p.quantity,
+          })),
         })
         this.appointmentId = response.id
         if (this.files.length) {

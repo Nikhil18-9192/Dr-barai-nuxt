@@ -1,12 +1,12 @@
 <template>
-  <div id="clinical-notes">
+  <div id="clinical-notes py-6">
     <AddClinicalNotes
       v-if="notesModal"
       :notes-to-edit="currentNotes"
       @dismiss="notesModal = false"
       @clinicalNotesData="submitClinicalNotes"
     />
-    <div class="title-container mb-6 flex">
+    <div class="title-container flex mb-1">
       <h1 class="text-xl font-medium">Clinical Notes</h1>
       <AddButton @click.native="notesModal = true" />
     </div>
@@ -86,7 +86,6 @@ export default {
 
 <style lang="scss" scoped>
 #clinical-notes {
-  margin-bottom: 55px;
   .line {
     border-bottom: 1px solid #c4c4c4;
   }

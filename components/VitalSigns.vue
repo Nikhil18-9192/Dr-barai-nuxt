@@ -1,12 +1,12 @@
 <template>
-  <div id="vital-signs">
+  <div id="vital-signs" class="py-6">
     <VitalSignModal
       v-if="vitalsModal"
       :vitals-to-edit="currentVitals"
       @dismiss="vitalsModal = false"
       @addVitals="submitVitalSignData"
     />
-    <div class="title-container mb-6 flex">
+    <div class="title-container flex mb-1">
       <h1 class="text-xl font-medium">Vital Signs</h1>
       <AddButton @click.native="vitalsModal = true" />
     </div>
@@ -142,7 +142,6 @@ export default {
 
 <style lang="scss" scoped>
 #vital-signs {
-  margin-bottom: 55px;
   .list {
     border-bottom: 1px solid #c4c4c4;
   }

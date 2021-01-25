@@ -5,7 +5,7 @@
       :images="images"
       @dismiss="previewModal = false"
     />
-    <div class="title-container mb-6 flex">
+    <div class="title-container flex">
       <h1 class="text-xl font-medium">Files</h1>
       <label for="add-image" class="add-images cursor-pointer">
         <AddButton />
@@ -19,11 +19,11 @@
         @change="onImageAdded"
       />
     </div>
-    <div class="preview flex flex-wrap object-contain">
+    <div class="preview flex flex-wrap object-contain mb-4">
       <img
         v-for="(image, i) in images"
         :key="i"
-        class="w-52 h-52 mr-8 mt-8 cursor-pointer"
+        class="w-32 h-32 mr-8 mt-2 cursor-pointer object-contain border"
         :src="image.url ? image.url : image"
         alt=""
         @click="previewModal = true"

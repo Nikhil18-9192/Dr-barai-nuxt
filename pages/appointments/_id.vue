@@ -8,7 +8,9 @@
     <Prescription v-model="prescription" />
     <VitalSigns v-model="vitalSigns" />
     <ClinicalNotes v-model="clinicalNotes" />
-    <Files v-model="files" />
+
+    <Files class="mt-6" v-model="files" />
+    <ProductSelector v-model="nativeProducts" />
     <div v-if="consentDoc" class="consent mb-8">
       <h4 class="text-lg text-black font-500">
         Consent
@@ -21,6 +23,12 @@
       </h4>
       <iframe :src="consentDoc.url" frameborder="0"></iframe>
     </div>
+    <ConsentView
+      v-else
+      :patient-id="patient.id"
+      class="my-4"
+      @onConsentSigned="onConsentSigned"
+    />
     <MyButton :loading="loading" @click.native="submit" class="mb-4 mt-8"
       >Submit</MyButton
     >
@@ -47,12 +55,17 @@ export default {
       patient: {},
       loading: false,
       consentDoc: false,
+      nativeProducts: [],
+      consentBlob: false,
     }
   },
   mounted() {
     this.fetchAppointment()
   },
   methods: {
+    onConsentSigned(blob) {
+      this.consentBlob = blob
+    },
     async fetchAppointment() {
       const id = this.$route.params.id
       this.$store.commit('SET_LOADING')
@@ -74,6 +87,7 @@ export default {
           this.currentFiles.push(result.files[i].id)
           this.files.push(result.files[i].url)
         }
+        this.nativeProducts = result.nativeProducts ? result.nativeProducts : []
         this.consentDoc = result.consent ? result.consent : false
         this.appointmentInfo.date = formatDateTime.formatDate(
           result.startDateTime
@@ -124,13 +138,57 @@ export default {
           prescription: this.sanitizedPrescription,
           vitalSigns: this.vitalSigns,
           clinicalNotes: this.clinicalNotes,
+          nativeProducts: this.nativeProducts.map((p) => ({
+            product: p.product.id,
+            quantity: p.quantity,
+          })),
         })
+
+        if (this.consentBlob) {
+          await this.uploadConsentFileAsync()
+        }
         this.$toast.success('Appointment updated successfully')
         this.$router.push('/appointments')
       } catch (error) {
         this.$toast.error(error.message)
       }
       this.loading = false
+    },
+
+    uploadConsentFileAsync() {
+      // eslint-disable-next-line no-async-promise-executor
+      return new Promise(async (resolve, reject) => {
+        const data = {
+          ref: 'appointments',
+          field: 'consent',
+          refId: this.$route.params.id,
+        }
+        const fd = new FormData()
+        fd.append(
+          'files.consent',
+          this.consentBlob,
+          `${this.$route.params.id}.pdf`
+        )
+
+        fd.append('data', JSON.stringify(data))
+        try {
+          const res = await this.$axios.$put(
+            `/appointments/${this.$route.params.id}`,
+            fd,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            }
+          )
+          resolve(res)
+        } catch (error) {
+          if (error.response) {
+            this.$toast.error(error.response.data.message)
+          }
+          reject(error)
+        }
+      })
     },
   },
 }
