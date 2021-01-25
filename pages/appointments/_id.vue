@@ -21,7 +21,7 @@
       </h4>
       <iframe :src="consentDoc.url" frameborder="0"></iframe>
     </div>
-    <MyButton :loading="loading" @click.native="submit" class="mb-4"
+    <MyButton :loading="loading" @click.native="submit" class="mb-4 mt-8"
       >Submit</MyButton
     >
   </div>
