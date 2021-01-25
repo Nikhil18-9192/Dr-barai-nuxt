@@ -1,0 +1,7 @@
+query notifications($name: String!) {
+  notifications(where: { patients: { name_contains: $name } }) {
+    id
+    message
+    createdAt
+  }
+}

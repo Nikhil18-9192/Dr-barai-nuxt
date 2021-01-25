@@ -110,7 +110,6 @@ export default {
               },
             }
           )
-          console.log(res)
           resolve(res)
         } catch (error) {
           if (error.response) {

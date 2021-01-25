@@ -23,6 +23,7 @@
           :key="`policy-${i}`"
           class="pol"
         >
+          <!-- eslint-disable-next-line -->
           <p v-html="policy"></p>
           <br />
         </div>
