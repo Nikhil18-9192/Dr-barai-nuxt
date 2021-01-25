@@ -37,6 +37,10 @@ export default {
       this.consentBlob = blob
     },
     async submitAppointment() {
+      if (!this.patientInfo.selectedPatientId) {
+        this.$toast.error('Select Patient')
+        return
+      }
       try {
         this.loading = true
         this.sanitizedPrescription = this.prescriptionInfo.map((item) => ({

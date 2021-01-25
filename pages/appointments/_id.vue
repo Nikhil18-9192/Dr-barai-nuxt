@@ -8,7 +8,7 @@
     <Prescription v-model="prescription" />
     <VitalSigns v-model="vitalSigns" />
     <ClinicalNotes v-model="clinicalNotes" />
-    <Files v-model="files" />
+    <Files v-model="files" @deleteFile="initImageDelete" />
     <div v-if="consentDoc" class="consent mb-8">
       <h4 class="text-lg text-black font-500">
         Consent
@@ -30,6 +30,7 @@
 <script>
 import query from '@/apollo/queries/appointment/appointment.gql'
 import formatDateTime from '@/utils/formatDateTime'
+
 export default {
   data() {
     return {
@@ -72,7 +73,7 @@ export default {
         for (const i in result.files) {
           // eslint-disable-next-line
           this.currentFiles.push(result.files[i])
-          this.files.push(result.files[i].url)
+          this.files.push(result.files[i])
         }
         this.consentDoc = result.consent ? result.consent : false
         this.appointmentInfo.date = formatDateTime.formatDate(
@@ -94,7 +95,7 @@ export default {
     async submit() {
       try {
         this.loading = true
-        if (this.files.length) {
+        if (this.files.length > this.currentFiles.length) {
           const data = {
             ref: 'appointments',
             field: 'files',
@@ -108,7 +109,6 @@ export default {
           }
 
           fd.append('data', JSON.stringify(data))
-
           await this.$axios.$put(`/appointments/${this.$route.params.id}`, fd, {
             headers: {
               'Content-Type': 'multipart/form-data',
@@ -133,14 +133,15 @@ export default {
       }
       this.loading = false
     },
-    async initImageDelete(val) {
+    async initImageDelete(imageId) {
       try {
         this.$store.commit('SET_LOADING')
         if (confirm('Are you sure? you want to delete this file.')) {
-          const file = this.currentFiles.filter((file) => file.url === val)
-          await this.$axios.$delete(`/upload/files/${file[0].id}`)
-          const index = this.files.findIndex((obj) => obj.url === file[0].url)
-          this.files.splice(index, 1)
+          await this.$axios.$delete(`/upload/files/${imageId}`)
+          this.files = this.files.filter((obj) => obj.id !== imageId)
+          this.currentFiles = this.currentFiles.filter(
+            (obj) => obj.id !== imageId
+          )
         } else {
           return this.$store.commit('UNSET_LOADING')
         }

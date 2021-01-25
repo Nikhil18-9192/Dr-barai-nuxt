@@ -2,7 +2,7 @@
   <div id="files">
     <ImageViewModal
       v-if="previewModal"
-      :images="images"
+      :images="value"
       @dismiss="previewModal = false"
     />
     <div class="title-container mb-6 flex">
@@ -19,11 +19,11 @@
         @change="onImageAdded"
       />
     </div>
-    <div class="flex flex-wrap object-contain">
-      <div v-for="(image, i) in images" :key="i" class="preview relative">
+    <div class="flex flex-wrap">
+      <div v-for="(image, i) in value" :key="i" class="preview relative">
         <img
-          class="w-52 h-52 mr-8 mt-8 cursor-pointer"
-          :src="image.url ? image.url : image"
+          class="w-52 h-52 mr-8 mt-8 cursor-pointer object-contain"
+          :src="image.url"
           alt=""
           @click="previewModal = true"
         />
@@ -44,38 +44,29 @@ export default {
   props: ['value'],
   data() {
     return {
-      images: [],
       previewModal: false,
     }
   },
-  watch: {
-    value: {
-      handler(val) {
-        if (val.length > 0) {
-          this.images = val
-        }
-      },
-    },
-  },
+
   methods: {
     onImageAdded(event) {
       const images = this.$refs.fileInput.files
+      const imgArray = []
       for (let i = 0; i < images.length; i++) {
         const obj = {}
         obj.images = images[i]
         obj.url = URL.createObjectURL(images[i])
-        this.images.push(obj)
+        imgArray.push(obj)
       }
-      this.$emit('input', this.images)
+      this.$emit('input', [...this.value, ...imgArray])
     },
     deleteFile(file) {
       if (file.images) {
-        const index = this.images.findIndex((image) => image.url === file.url)
-        this.images.splice(index, 1)
+        const payload = this.value.filter((v) => v.url !== file.url)
+        this.$emit('input', payload)
         return
       }
-
-      this.$emit('deleteFile', file)
+      this.$emit('deleteFile', file.id)
     },
   },
 }
