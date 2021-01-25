@@ -19,15 +19,21 @@
         @change="onImageAdded"
       />
     </div>
-    <div class="preview flex flex-wrap object-contain mb-4">
-      <img
-        v-for="(image, i) in images"
-        :key="i"
-        class="w-32 h-32 mr-8 mt-2 cursor-pointer object-contain border"
-        :src="image.url ? image.url : image"
-        alt=""
-        @click="previewModal = true"
-      />
+    <div class="flex flex-wrap object-contain">
+      <div v-for="(image, i) in images" :key="i" class="preview relative">
+        <img
+          class="w-52 h-52 mr-8 mt-8 cursor-pointer"
+          :src="image.url ? image.url : image"
+          alt=""
+          @click="previewModal = true"
+        />
+        <img
+          class="delete-icon absolute top-8 right-8 hidden cursor-pointer"
+          src="/delete_btn.svg"
+          alt=""
+          @click="deleteFile(image)"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -62,6 +68,15 @@ export default {
       }
       this.$emit('input', this.images)
     },
+    deleteFile(file) {
+      if (file.images) {
+        const index = this.images.findIndex((image) => image.url === file.url)
+        this.images.splice(index, 1)
+        return
+      }
+
+      this.$emit('deleteFile', file)
+    },
   },
 }
 </script>
@@ -69,6 +84,11 @@ export default {
 #files {
   input[type='file'] {
     display: none;
+  }
+  .preview {
+    &:hover .delete-icon {
+      display: block;
+    }
   }
 }
 </style>

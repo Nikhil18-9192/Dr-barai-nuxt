@@ -86,6 +86,7 @@ export default {
         this.$router.push('/appointments')
       } catch (error) {
         this.$toast.error(error.message)
+        this.loading = false
       }
       this.loading = false
     },

@@ -9,7 +9,7 @@
     <VitalSigns v-model="vitalSigns" />
     <ClinicalNotes v-model="clinicalNotes" />
 
-    <Files class="mt-6" v-model="files" />
+    <Files class="mt-6" v-model="files" @deleteFile="initImageDelete" />
     <ProductSelector v-model="nativeProducts" />
     <div v-if="consentDoc" class="consent mb-8">
       <h4 class="text-lg text-black font-500">
@@ -29,7 +29,7 @@
       class="my-4"
       @onConsentSigned="onConsentSigned"
     />
-    <MyButton :loading="loading" @click.native="submit" class="mb-4 mt-8"
+    <MyButton :loading="loading" class="mb-4" @click.native="submit"
       >Submit</MyButton
     >
   </div>
@@ -84,7 +84,7 @@ export default {
         this.clinicalNotes = result.clinicalNotes
         for (const i in result.files) {
           // eslint-disable-next-line
-          this.currentFiles.push(result.files[i].id)
+          this.currentFiles.push(result.files[i])
           this.files.push(result.files[i].url)
         }
         this.nativeProducts = result.nativeProducts ? result.nativeProducts : []
@@ -151,6 +151,7 @@ export default {
         this.$router.push('/appointments')
       } catch (error) {
         this.$toast.error(error.message)
+        this.loading = false
       }
       this.loading = false
     },
@@ -189,6 +190,22 @@ export default {
           reject(error)
         }
       })
+    },
+    async initImageDelete(val) {
+      try {
+        this.$store.commit('SET_LOADING')
+        if (confirm('Are you sure? you want to delete this file.')) {
+          const file = this.currentFiles.filter((file) => file.url === val)
+          await this.$axios.$delete(`/upload/files/${file[0].id}`)
+          const index = this.files.findIndex((obj) => obj.url === file[0].url)
+          this.files.splice(index, 1)
+        } else {
+          return this.$store.commit('UNSET_LOADING')
+        }
+        this.$store.commit('UNSET_LOADING')
+      } catch (error) {
+        this.$toast.error(error.message)
+      }
     },
   },
 }
