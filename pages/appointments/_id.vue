@@ -9,7 +9,7 @@
     <VitalSigns v-model="vitalSigns" />
     <ClinicalNotes v-model="clinicalNotes" />
     <Files v-model="files" />
-    <div class="consent mb-8">
+    <div v-if="consentDoc" class="consent mb-8">
       <h4 class="text-lg text-black font-500">
         Consent
         <a
@@ -19,7 +19,7 @@
           >Download</a
         >
       </h4>
-      <iframe v-if="consentDoc" :src="consentDoc.url" frameborder="0"></iframe>
+      <iframe :src="consentDoc.url" frameborder="0"></iframe>
     </div>
     <MyButton :loading="loading" @click.native="submit" class="mb-4"
       >Submit</MyButton
