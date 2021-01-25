@@ -5,7 +5,7 @@
     <VitalSigns v-model="vitalSignInfo" />
     <ClinicalNotes v-model="clinicalNoteInfo" class="new" />
     <Files v-model="files" class="new" />
-    <MyButton :loading="loading" @click.native="submitAppointment" class="mb-4"
+    <MyButton :loading="loading" class="mb-4" @click.native="submitAppointment"
       >Submit</MyButton
     >
   </div>

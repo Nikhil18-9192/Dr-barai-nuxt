@@ -9,7 +9,7 @@
     <VitalSigns v-model="vitalSigns" />
     <ClinicalNotes v-model="clinicalNotes" />
     <Files v-model="files" />
-    <MyButton :loading="loading" @click.native="submit" class="mb-4"
+    <MyButton :loading="loading" class="mb-4" @click.native="submit"
       >Submit</MyButton
     >
   </div>
