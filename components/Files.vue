@@ -82,7 +82,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 #files {
-  margin-bottom: 55px;
   input[type='file'] {
     display: none;
   }

@@ -55,10 +55,19 @@ const SendSmsModal = (data) => {
   return formSchema.validate(data)
 }
 
+const consentFormValidation = (data) => {
+  return Joi.object({
+    drName: Joi.string().required().min(1).max(80).label('Doctor Name'),
+    consentDate: Joi.date().required().label('Consent Date'),
+    disease: Joi.string().min(1).max(80).required().label('Disease'),
+  }).validate(data)
+}
+
 export {
   AddPatientValidation,
   AddPrescriptionValidation,
   AddVitalSignValidation,
   ClinicalNotesValidation,
   SendSmsModal,
+  consentFormValidation,
 }
