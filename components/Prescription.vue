@@ -1,5 +1,5 @@
 <template>
-  <div id="prescription">
+  <div id="prescription py-6">
     <AddPrescription
       v-if="prescriptionModal"
       :edit-prescription="prescription[prescriptionIndexToEdit]"
@@ -7,7 +7,7 @@
       @updatePrescription="updatePrescription"
       @dismiss="clearModal"
     />
-    <div class="title-container mb-6 flex">
+    <div class="title-container flex mb-1">
       <h1 class="text-xl font-medium">Prescriptions</h1>
       <AddButton @click.native="prescriptionModal = true" />
     </div>
@@ -145,19 +145,6 @@
         </div>
       </div>
     </div>
-
-    <MyButton
-      v-if="prescription.length > 0 && $device.isDesktopOrTablet"
-      class="download-btn mt-6"
-      @click.native="download"
-      >Download PDF</MyButton
-    >
-    <MyButton
-      v-if="prescription.length > 0 && $device.isMobile"
-      class="download-btn mt-6"
-      @click.native="downloadPhone"
-      >Download PDF</MyButton
-    >
   </div>
 </template>
 
@@ -252,7 +239,6 @@ export default {
 
 <style lang="scss" scoped>
 #prescription {
-  margin-bottom: 55px;
   .drugs-list {
     border-bottom: 1px solid #c4c4c4;
   }

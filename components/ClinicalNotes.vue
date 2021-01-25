@@ -1,26 +1,31 @@
 <template>
-  <div id="clinical-notes">
+  <div id="clinical-notes py-6">
     <AddClinicalNotes
       v-if="notesModal"
       :notes-to-edit="currentNotes"
       @dismiss="notesModal = false"
       @clinicalNotesData="submitClinicalNotes"
     />
-    <div class="title-container mb-6 flex">
+    <div class="title-container flex mb-1">
       <h1 class="text-xl font-medium">Clinical Notes</h1>
       <AddButton @click.native="notesModal = true" />
     </div>
-    <div v-if="currentNotes.observations" class="container relative">
-      <p class="my-5 text-base font-normal">
-        Complaints: {{ currentNotes.complaints }}
+    <div v-if="currentNotes.observations" class="container relative text-sm">
+      <p class="my-3 font-normal">
+        <span class="text-blue-600">Complaints</span>:
+        {{ currentNotes.complaints }}
       </p>
-      <p class="my-5 text-base font-normal">
-        Observations: {{ currentNotes.observations }}
+      <p class="my-3 font-normal">
+        <span class="text-blue-600">Observations</span>:
+        {{ currentNotes.observations }}
       </p>
-      <p class="my-5 text-base font-normal">
-        Diagnosis: {{ currentNotes.diagnoses }}
+      <p class="my-3 font-normal">
+        <span class="text-blue-600">Diagnosis</span>:
+        {{ currentNotes.diagnoses }}
       </p>
-      <p class="my-5 text-base font-normal">Notes: {{ currentNotes.notes }}</p>
+      <p class="my-3 font-normal">
+        <span class="text-blue-600">Notes</span>: {{ currentNotes.notes }}
+      </p>
       <div class="line"></div>
       <div class="edit-btns absolute flex bottom-4 right-0 hidden">
         <img
@@ -86,7 +91,6 @@ export default {
 
 <style lang="scss" scoped>
 #clinical-notes {
-  margin-bottom: 55px;
   .line {
     border-bottom: 1px solid #c4c4c4;
   }

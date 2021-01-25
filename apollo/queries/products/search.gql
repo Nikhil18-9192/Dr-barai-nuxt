@@ -1,0 +1,11 @@
+query($search: String!) {
+  products(where: { _q: $search }) {
+    id
+    name
+    retailPrice
+    sbcTax
+    kkcTax
+    serviceTax
+    stockingUnit
+  }
+}

@@ -55,7 +55,7 @@ export default {
     position: relative;
 
     .my-app {
-      height: 88vh;
+      height: 92vh;
       position: relative;
       overflow-y: scroll;
       scrollbar-width: none;

@@ -5,7 +5,7 @@
       :images="value"
       @dismiss="previewModal = false"
     />
-    <div class="title-container mb-6 flex">
+    <div class="title-container flex">
       <h1 class="text-xl font-medium">Files</h1>
       <label for="add-image" class="add-images cursor-pointer">
         <AddButton />
