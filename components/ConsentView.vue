@@ -25,10 +25,11 @@
         <p class="text-blue-600">{{ consentData.disease }}</p>
       </span>
       <div
-        class="consent-action text-sm text-blue-600 absolute top-1 right-2 cursor-pointer"
+        class="consent-action absolute top-1 right-2 cursor-pointer"
         @click="signDialog = true"
       >
-        Take Signature
+        <p v-if="blob" class="text-sm text-green-500">Consent Signed</p>
+        <p v-else class="text-sm text-blue-600">Take Signature</p>
       </div>
     </div>
   </div>
@@ -44,11 +45,13 @@ export default {
       consentDialog: false,
       consentData: false,
       signDialog: false,
+      blob: false,
     }
   },
   methods: {
     onDismissSignDialog(val) {
       this.signDialog = false
+      this.blob = val
       if (val) {
         this.$emit('onConsentSigned', val)
       }
@@ -64,6 +67,7 @@ export default {
       this.consentDialog = false
       if (consentData) {
         this.consentData = consentData
+        this.signDialog = true
       }
     },
   },

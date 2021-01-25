@@ -9,9 +9,9 @@
     <VitalSigns v-model="vitalSigns" />
     <ClinicalNotes v-model="clinicalNotes" />
 
-    <Files class="mt-6" v-model="files" @deleteFile="initImageDelete" />
+    <Files class="my-6" v-model="files" @deleteFile="initImageDelete" />
     <ProductSelector v-model="nativeProducts" />
-    <div v-if="consentDoc" class="consent mb-8">
+    <div v-if="consentDoc" class="consent my-8">
       <h4 class="text-lg text-black font-500">
         Consent
         <a

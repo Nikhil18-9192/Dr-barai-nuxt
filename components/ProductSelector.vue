@@ -32,7 +32,7 @@
           class="machine mb-2"
         >
           <div class="dot mr-2"></div>
-          <h4>{{ item.product.name }}</h4>
+          <h4>{{ item.product ? item.product.name : '' }}</h4>
           <input
             v-model="item.quantity"
             suffix-label="Quantity"
@@ -133,6 +133,7 @@ export default {
         position: absolute;
         width: 100%;
         background: #fff;
+        z-index: 5;
       }
 
       .item {
