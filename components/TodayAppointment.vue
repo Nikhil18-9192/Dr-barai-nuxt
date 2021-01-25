@@ -1,6 +1,8 @@
 <template>
   <div id="today-appointment" class="relative">
-    <h1 class="text-2xl font-bold text-gray-500 pb-6">Today's Appointment</h1>
+    <h1 class="title text-2xl font-bold text-gray-500 pb-6">
+      Today's Appointment
+    </h1>
     <div class="list bg-gray-50 border border-gray-300 rounded-xl">
       <p
         v-if="appointments.length == 0"
@@ -73,12 +75,18 @@ export default {
 
 <style lang="scss" scoped>
 #today-appointment {
+  .title {
+    @include for-phone-only {
+      text-align: center;
+    }
+  }
   .list {
     width: 350px;
     min-height: 65vh;
 
     @include for-phone-only {
       width: 300px;
+      margin-inline: auto;
     }
   }
   .container {

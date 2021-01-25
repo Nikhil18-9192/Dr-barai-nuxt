@@ -73,11 +73,11 @@ export default {
     })
   },
   created() {
-    this.fetchPaitents()
+    this.fetchPatients()
   },
 
   methods: {
-    async fetchPaitents() {
+    async fetchPatients() {
       this.patients = []
       try {
         const { data } = await this.$apollo.query({

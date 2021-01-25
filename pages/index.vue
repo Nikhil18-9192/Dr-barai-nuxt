@@ -22,8 +22,10 @@ export default {
 #home-page {
   width: 100%;
   position: relative;
+  flex-wrap: wrap;
   @include for-phone-only {
     flex-direction: column;
+    flex-wrap: nowrap;
   }
 }
 </style>

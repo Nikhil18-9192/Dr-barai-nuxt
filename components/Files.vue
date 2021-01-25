@@ -2,7 +2,7 @@
   <div id="files">
     <ImageViewModal
       v-if="previewModal"
-      :images="previewImages"
+      :images="images"
       @dismiss="previewModal = false"
     />
     <div class="title-container mb-6 flex">
@@ -21,10 +21,10 @@
     </div>
     <div class="preview flex flex-wrap object-contain">
       <img
-        v-for="(image, i) in previewImages"
+        v-for="(image, i) in images"
         :key="i"
         class="w-52 h-52 mr-8 mt-8 cursor-pointer"
-        :src="image"
+        :src="image.url ? image.url : image"
         alt=""
         @click="previewModal = true"
       />
@@ -34,35 +34,33 @@
 
 <script>
 export default {
-  props: {
-    images: {
-      type: Array,
-      default: () => [],
-    },
-  },
+  // eslint-disable-next-line vue/require-prop-types
+  props: ['value'],
   data() {
     return {
-      selectedImages: [],
+      images: [],
       previewModal: false,
-      imagesToView: [],
     }
   },
-  computed: {
-    previewImages() {
-      if (this.images.length !== 0) {
-        return this.images
-      }
-      return this.selectedImages
+  watch: {
+    value: {
+      handler(val) {
+        if (val.length > 0) {
+          this.images = val
+        }
+      },
     },
   },
   methods: {
     onImageAdded(event) {
       const images = this.$refs.fileInput.files
       for (let i = 0; i < images.length; i++) {
-        this.selectedImages.push(URL.createObjectURL(images[i]))
+        const obj = {}
+        obj.images = images[i]
+        obj.url = URL.createObjectURL(images[i])
+        this.images.push(obj)
       }
-      this.$emit('input', images)
-      this.$emit('uploadImages', { images, urls: this.selectedImages })
+      this.$emit('input', this.images)
     },
   },
 }

@@ -5,11 +5,13 @@
       :patient="patient"
       @updatedPatient="updatedData"
     />
-    <Prescription :prescription="prescription" />
+    <Prescription v-model="prescription" />
     <VitalSigns v-model="vitalSigns" />
     <ClinicalNotes v-model="clinicalNotes" />
-    <Files :images="files" @uploadImages="newImages" />
-    <MyButton :loading="loading" @click.native="submit">Submit</MyButton>
+    <Files v-model="files" />
+    <MyButton :loading="loading" @click.native="submit" class="mb-4"
+      >Submit</MyButton
+    >
   </div>
 </template>
 
@@ -25,12 +27,12 @@ export default {
         name: '',
       },
       prescription: [],
+      sanitizedPrescription: [],
       vitalSigns: {},
       clinicalNotes: {},
       files: [],
-      patient: {},
-      newFiles: [],
       currentFiles: [],
+      patient: {},
       loading: false,
     }
   },
@@ -44,6 +46,7 @@ export default {
       try {
         const { data } = await this.$apollo.query({
           query,
+          fetchPolicy: 'network-only',
           variables: {
             id,
           },
@@ -58,53 +61,63 @@ export default {
           this.currentFiles.push(result.files[i].id)
           this.files.push(result.files[i].url)
         }
-        this.appointmentInfo.date = formatDateTime.formatDate(result.date)
-        this.appointmentInfo.time = formatDateTime.formatTime(result.date)
+        this.appointmentInfo.date = formatDateTime.formatDate(
+          result.startDateTime
+        )
+        this.appointmentInfo.time = formatDateTime.formatTime(
+          result.startDateTime
+        )
         this.appointmentInfo.name = result.patient.name
-        this.$store.commit('UNSET_LOADING')
       } catch (e) {
         this.$toast.error(e.message)
       }
+      this.$store.commit('UNSET_LOADING')
     },
     updatedData(val) {
       this.patient = val
       this.appointmentInfo.name = val.name
     },
-    newImages(val) {
-      this.newFiles = val.images
-      this.files = [...this.files, ...val.urls]
-    },
     async submit() {
       try {
         this.loading = true
-        if (this.newFiles.length) {
-          const data = new FormData()
-          for (let i = 0; i < this.newFiles.length; i++) {
-            data.append(`files`, this.newFiles[i])
+        if (this.files.length) {
+          const data = {
+            ref: 'appointments',
+            field: 'files',
+            refId: this.$route.params.id,
           }
-          data.append('ref', 'appointments')
-          data.append('refId', this.$route.params.id)
-          const res = await this.$axios.$post(`/upload`, data, {
+          const fd = new FormData()
+
+          for (let i = this.currentFiles.length; i < this.files.length; i++) {
+            const file = this.files[i]
+            fd.append(`files.files`, file.images, file.images.name)
+          }
+
+          fd.append('data', JSON.stringify(data))
+
+          await this.$axios.$put(`/appointments/${this.$route.params.id}`, fd, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
           })
-          for (const i in res) {
-            this.currentFiles.push(res[i].id)
-          }
         }
+        this.sanitizedPrescription = this.prescription.map((item) => ({
+          drug: item.drug.id,
+          frequency: item.frequency,
+        }))
+
         await this.$axios.$put(`/appointments/${this.$route.params.id}`, {
-          prescription: this.prescription,
+          prescription: this.sanitizedPrescription,
           vitalSigns: this.vitalSigns,
           clinicalNotes: this.clinicalNotes,
-          files: this.currentFiles,
         })
-        this.loading = false
         this.$toast.success('Appointment updated successfully')
+        this.$router.push('/appointments')
       } catch (error) {
         this.$toast.error(error.message)
         this.loading = false
       }
+      this.loading = false
     },
   },
 }
