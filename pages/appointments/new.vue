@@ -29,13 +29,12 @@ export default {
       loading: false,
       appointmentId: false,
       sanitizedPrescription: [],
-      consentBuffer: false,
+      consentBlob: false,
     }
   },
   methods: {
-    onConsentSigned(buffer) {
-      console.log(buffer)
-      this.consentBuffer = buffer
+    onConsentSigned(blob) {
+      this.consentBlob = blob
     },
     async submitAppointment() {
       try {
@@ -73,12 +72,52 @@ export default {
             },
           })
         }
+        if (this.consentBlob) {
+          await this.uploadConsentFileAsync()
+        }
         this.$toast.success('Appointment add successfully')
         this.$router.push('/appointments')
       } catch (error) {
         this.$toast.error(error.message)
       }
       this.loading = false
+    },
+
+    uploadConsentFileAsync() {
+      // eslint-disable-next-line no-async-promise-executor
+      return new Promise(async (resolve, reject) => {
+        const data = {
+          ref: 'appointments',
+          field: 'consent',
+          refId: this.appointmentId,
+        }
+        const fd = new FormData()
+        fd.append(
+          'files.consent',
+          this.consentBlob,
+          `${this.appointmentId}.pdf`
+        )
+
+        fd.append('data', JSON.stringify(data))
+        try {
+          const res = await this.$axios.$put(
+            `/appointments/${this.appointmentId}`,
+            fd,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            }
+          )
+          console.log(res)
+          resolve(res)
+        } catch (error) {
+          if (error.response) {
+            this.$toast.error(error.response.data.message)
+          }
+          reject(error)
+        }
+      })
     },
   },
 }

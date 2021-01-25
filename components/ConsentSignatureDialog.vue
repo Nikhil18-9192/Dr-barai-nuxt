@@ -150,8 +150,8 @@ export default {
         ],
       }
 
-      pdfMake.createPdf(docDefinition).getBuffer((buffer) => {
-        this.$emit('dismiss', buffer)
+      pdfMake.createPdf(docDefinition).getBlob((blob) => {
+        this.$emit('dismiss', blob)
       })
     },
   },

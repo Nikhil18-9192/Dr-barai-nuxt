@@ -9,6 +9,18 @@
     <VitalSigns v-model="vitalSigns" />
     <ClinicalNotes v-model="clinicalNotes" />
     <Files v-model="files" />
+    <div class="consent mb-8">
+      <h4 class="text-lg text-black font-500">
+        Consent
+        <a
+          :href="consentDoc.url"
+          class="ml-4 text-sm text-blue-600"
+          target="_blank"
+          >Download</a
+        >
+      </h4>
+      <iframe v-if="consentDoc" :src="consentDoc.url" frameborder="0"></iframe>
+    </div>
     <MyButton :loading="loading" @click.native="submit" class="mb-4"
       >Submit</MyButton
     >
@@ -34,6 +46,7 @@ export default {
       currentFiles: [],
       patient: {},
       loading: false,
+      consentDoc: false,
     }
   },
   mounted() {
@@ -61,6 +74,7 @@ export default {
           this.currentFiles.push(result.files[i].id)
           this.files.push(result.files[i].url)
         }
+        this.consentDoc = result.consent ? result.consent : false
         this.appointmentInfo.date = formatDateTime.formatDate(
           result.startDateTime
         )
