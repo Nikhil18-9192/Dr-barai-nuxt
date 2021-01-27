@@ -14,7 +14,7 @@
     <div ref="content">
       <table
         v-if="prescription.length > 0 && $device.isDesktopOrTablet"
-        class="drugs-list w-full"
+        class="drugs-list w-full table-fixed"
       >
         <tbody>
           <tr class="bg-gray-100 text-black-400 text-sm">
@@ -34,7 +34,7 @@
               DURATION
             </th>
             <th
-              class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200 font-normal"
+              class="py-3 pr-8 border border-t-0 border-l-0 border-r-0 border-gray-200 font-normal"
             >
               INSTRUCTIONS
             </th>
@@ -63,7 +63,7 @@
                     item.frequency.drugDurationFor
               }}
             </td>
-            <td class="p-3 flex justify-center">
+            <td class="p-3 flex mr-20">
               <p>
                 {{
                   item.frequency == null || item.frequency.instructions == null
@@ -72,13 +72,13 @@
                 }}
               </p>
               <img
-                class="absolute ml-36 hidden"
+                class="absolute right-20 hidden"
                 src="/edit_btn.svg"
                 alt=""
                 @click="editPrescription(i)"
               />
               <img
-                class="absolute ml-56 hidden"
+                class="absolute right-12 hidden"
                 src="/delete_btn.svg"
                 alt=""
                 @click="deletePrescription(i)"
@@ -98,12 +98,25 @@
           :key="i"
           class="card relative p-4 mb-4 border cursor-pointer"
         >
+          <img
+            class="absolute right-10"
+            src="/edit_btn.svg"
+            alt=""
+            @click="editPrescription(i)"
+          />
+          <img
+            class="absolute right-2"
+            src="/delete_btn.svg"
+            alt=""
+            @click="deletePrescription(i)"
+          />
           <p class="text-gray-600 text-xs font-normal border-b mb-3">
             DRUG:
             <span class="text-blue-600 text-base">
               {{ item.name ? item.name : item.drug.name }}</span
             >
           </p>
+
           <p class="text-gray-600 text-xs font-normal">
             DOSAGE & FREQUENCY :
             {{
@@ -122,7 +135,7 @@
                   item.frequency.drugDurationFor
             }}
           </p>
-          <p class="text-gray-600 text-xs font-normal">
+          <p class="instructions text-gray-600 text-xs font-normal">
             INSTRUCTIONS :
             {{
               item.frequency == null || item.frequency.instructions == null
@@ -130,18 +143,6 @@
                 : item.frequency.instructions
             }}
           </p>
-          <img
-            class="absolute right-10 bottom-2"
-            src="/edit_btn.svg"
-            alt=""
-            @click="editPrescription(i)"
-          />
-          <img
-            class="absolute right-2 bottom-2"
-            src="/delete_btn.svg"
-            alt=""
-            @click="deletePrescription(i)"
-          />
         </div>
       </div>
     </div>
@@ -244,6 +245,11 @@ export default {
   }
 }
 
+td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .row {
   &:hover {
     background: #c4c4c411;
@@ -260,7 +266,11 @@ export default {
     }
   }
 }
-
+.instructions {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .card {
   &:hover img {
     display: block;
