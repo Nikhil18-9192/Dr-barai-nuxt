@@ -3,14 +3,16 @@
     <h1 class="title text-2xl font-bold text-gray-500 pb-6">
       Today's Appointment
     </h1>
-    <div class="list bg-gray-50 border border-gray-300 rounded-xl">
+    <div
+      class="list bg-gray-50 border border-gray-300 rounded-xl overflow-hidden"
+    >
       <p
         v-if="appointments.length == 0"
         class="text-gray-400 absolute top-1/2 left-1/4"
       >
         No Appointments Today..
       </p>
-      <div v-else class="container mt-4">
+      <div v-else class="container">
         <div
           v-for="(appointment, i) in appointments"
           :key="i"
