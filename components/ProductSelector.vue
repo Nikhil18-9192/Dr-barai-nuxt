@@ -2,7 +2,7 @@
   <div id="machine-selector" class="border p-4">
     <div class="search-select">
       <div class="search-input">
-        <img class="w-6 h-6" src="/search.svg" />
+        <img class="w-6 h-6 icon" src="/search.svg" />
 
         <div class="collapse">
           <input
@@ -123,6 +123,10 @@ export default {
       position: absolute;
       left: 48px;
       background: #fff;
+
+      @include for-phone-only {
+        left: 0;
+      }
 
       .results {
         border-top: 0.5px solid rgba(0, 0, 0, 0.089);

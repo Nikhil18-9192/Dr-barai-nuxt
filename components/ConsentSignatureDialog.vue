@@ -98,6 +98,10 @@ export default {
       return canvas.toDataURL('image/png')
     },
     submitConsent() {
+      if (!this.patient) {
+        this.$toast.warning('Patient not found, Please try again.')
+        return
+      }
       const patientInfo = [
         `Patient Name: ${this.patient.name}`,
         `Phone: ${this.patient.mobile}`,

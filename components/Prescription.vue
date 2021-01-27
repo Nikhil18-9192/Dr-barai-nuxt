@@ -7,14 +7,19 @@
       @updatePrescription="updatePrescription"
       @dismiss="clearModal"
     />
-    <div class="title-container flex mb-1">
+    <div class="title-container flex mb-1 items-center">
       <h1 class="text-xl font-medium">Prescriptions</h1>
       <AddButton @click.native="prescriptionModal = true" />
+      <img
+        @click="generatePDF"
+        src="/doc-download.svg"
+        class="w-5 absolute right-12"
+      />
     </div>
     <div ref="content">
       <table
         v-if="prescription.length > 0 && $device.isDesktopOrTablet"
-        class="drugs-list w-full"
+        class="drugs-list w-full table-fixed"
       >
         <tbody>
           <tr class="bg-gray-100 text-black-400 text-sm">
@@ -34,7 +39,7 @@
               DURATION
             </th>
             <th
-              class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200 font-normal"
+              class="py-3 pr-8 border border-t-0 border-l-0 border-r-0 border-gray-200 font-normal"
             >
               INSTRUCTIONS
             </th>
@@ -63,7 +68,7 @@
                     item.frequency.drugDurationFor
               }}
             </td>
-            <td class="p-3 flex justify-center">
+            <td class="p-3 flex mr-20">
               <p>
                 {{
                   item.frequency == null || item.frequency.instructions == null
@@ -72,13 +77,13 @@
                 }}
               </p>
               <img
-                class="absolute ml-36 hidden"
+                class="absolute right-20 hidden"
                 src="/edit_btn.svg"
                 alt=""
                 @click="editPrescription(i)"
               />
               <img
-                class="absolute ml-56 hidden"
+                class="absolute right-12 hidden"
                 src="/delete_btn.svg"
                 alt=""
                 @click="deletePrescription(i)"
@@ -98,12 +103,25 @@
           :key="i"
           class="card relative p-4 mb-4 border cursor-pointer"
         >
+          <img
+            class="absolute right-10"
+            src="/edit_btn.svg"
+            alt=""
+            @click="editPrescription(i)"
+          />
+          <img
+            class="absolute right-2"
+            src="/delete_btn.svg"
+            alt=""
+            @click="deletePrescription(i)"
+          />
           <p class="text-gray-600 text-xs font-normal border-b mb-3">
             DRUG:
             <span class="text-blue-600 text-base">
               {{ item.name ? item.name : item.drug.name }}</span
             >
           </p>
+
           <p class="text-gray-600 text-xs font-normal">
             DOSAGE & FREQUENCY :
             {{
@@ -122,7 +140,7 @@
                   item.frequency.drugDurationFor
             }}
           </p>
-          <p class="text-gray-600 text-xs font-normal">
+          <p class="instructions text-gray-600 text-xs font-normal">
             INSTRUCTIONS :
             {{
               item.frequency == null || item.frequency.instructions == null
@@ -130,18 +148,6 @@
                 : item.frequency.instructions
             }}
           </p>
-          <img
-            class="absolute right-10 bottom-2"
-            src="/edit_btn.svg"
-            alt=""
-            @click="editPrescription(i)"
-          />
-          <img
-            class="absolute right-2 bottom-2"
-            src="/delete_btn.svg"
-            alt=""
-            @click="deletePrescription(i)"
-          />
         </div>
       </div>
     </div>
@@ -149,8 +155,9 @@
 </template>
 
 <script>
-import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
+import pdfMake from 'pdfmake/build/pdfmake'
+import pdfFonts from 'pdfmake/build/vfs_fonts'
+pdfMake.vfs = pdfFonts.pdfMake.vfs
 export default {
   // eslint-disable-next-line vue/require-prop-types
   props: ['value'],
@@ -173,13 +180,33 @@ export default {
   },
 
   mounted() {
-    this.submitPrescriptionData()
+    // this.submitPrescriptionData()
     if (this.value.length > 0) {
       this.prescription.push(this.value)
     }
   },
 
   methods: {
+    generatePDF() {
+      if (!this.value.length) return
+      const docDefinition = {
+        content: [
+          {
+            layout: 'lightHorizontalLines',
+            table: {
+              headerRows: 1,
+              widths: ['*', 'auto', '*', 'auto'],
+
+              body: [
+                ['Drug', 'Frequency', 'Duration', 'Instructions'],
+                ...this.value.map((v) => this.parsePrescriptionIntoRow(v)),
+              ],
+            },
+          },
+        ],
+      }
+      pdfMake.createPdf(docDefinition).open()
+    },
     submitPrescriptionData(val) {
       if (val) {
         this.prescription.push(val)
@@ -193,33 +220,7 @@ export default {
       this.prescriptionIndexToEdit = -1
       this.$emit('input', this.prescription)
     },
-    download() {
-      // eslint-disable-next-line
-      const doc = new jsPDF({ orientation: 'landscape' })
-      html2canvas(this.$refs.content, {
-        scrollY: -window.scrollY,
-      }).then(function (canvas) {
-        const img = canvas.toDataURL('image/jpeg', 0.8)
-        const imgProps = doc.getImageProperties(img)
-        const pdfWidth = doc.internal.pageSize.getWidth()
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
-        doc.addImage(img, 'JPEG', 0, 0, pdfWidth, pdfHeight)
-        doc.save('prescriptions.pdf')
-      })
-    },
-    downloadPhone() {
-      // eslint-disable-next-line
-      const doc = new jsPDF('p', 'mm', 'a4')
-      html2canvas(this.$refs.phone, {
-        scrollY: -window.scrollY,
-      }).then(function (canvas) {
-        const img = canvas.toDataURL('image/jpeg', 0.8)
-        const pdfWidth = doc.internal.pageSize.getWidth()
-        const pdfHeight = doc.internal.pageSize.getWidth()
-        doc.addImage(img, 'JPEG', 0, 0, pdfWidth, pdfHeight)
-        doc.save('prescriptions.pdf')
-      })
-    },
+
     editPrescription(index) {
       this.prescriptionIndexToEdit = index
       this.prescriptionModal = true
@@ -233,6 +234,14 @@ export default {
       this.prescriptionModal = false
       this.prescriptionIndexToEdit = -1
     },
+    parsePrescriptionIntoRow(item) {
+      return [
+        item.drug.name,
+        `${item.frequency.frequency.replaceAll('_', ' ')}`,
+        `${item.frequency.drugDuration} ${item.frequency.drugDurationFor}`,
+        item.frequency.instructions,
+      ]
+    },
   },
 }
 </script>
@@ -244,6 +253,11 @@ export default {
   }
 }
 
+td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .row {
   &:hover {
     background: #c4c4c411;
@@ -260,7 +274,11 @@ export default {
     }
   }
 }
-
+.instructions {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .card {
   &:hover img {
     display: block;

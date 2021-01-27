@@ -3,25 +3,29 @@
     <h1 class="title text-2xl font-bold text-gray-500 pb-6">
       Today's Appointment
     </h1>
-    <div class="list bg-gray-50 border border-gray-300 rounded-xl">
+    <div
+      class="list bg-gray-50 border border-gray-300 rounded-xl overflow-hidden"
+    >
       <p
         v-if="appointments.length == 0"
         class="text-gray-400 absolute top-1/2 left-1/4"
       >
         No Appointments Today..
       </p>
-      <div v-else class="container mt-4">
+      <div v-else class="container">
         <div
           v-for="(appointment, i) in appointments"
           :key="i"
           class="py-3 px-6"
         >
-          <p class="text-gray-500 text-sm mb-1">
-            {{ formatter(appointment.startDateTime) }}
-          </p>
-          <h2 class="name text-xl capitalize font-normal">
-            {{ appointment.patient.name }}
-          </h2>
+          <nuxt-link :to="`/appointments/${appointment.id}`">
+            <p class="text-gray-500 text-sm mb-1">
+              {{ formatter(appointment.startDateTime) }}
+            </p>
+            <h2 class="name text-xl capitalize font-normal">
+              {{ appointment.patient.name }}
+            </h2>
+          </nuxt-link>
         </div>
       </div>
     </div>

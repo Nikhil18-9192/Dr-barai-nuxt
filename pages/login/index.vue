@@ -4,7 +4,7 @@
       <h1 class="tracking-widest font-medium text-center">
         Dr. Barai’s Clinic
       </h1>
-      <form @action.prevent="login">
+      <form class="login" @action="login">
         <div class="login-form p-10 bg-white rounded">
           <label for="email" class="text-sm mb-1 font-bold text-gray-800"
             >Email</label
@@ -30,9 +30,6 @@
             <MyButton :loading="loading" @click.native="login"
               >Sign In</MyButton
             >
-            <p class="text-right text-blue-500 font-bold text-sm">
-              Forgot Password?
-            </p>
           </div>
         </div>
       </form>
