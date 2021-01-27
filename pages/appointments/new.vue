@@ -2,10 +2,14 @@
   <div id="new-appointment">
     <AddAppointment v-model="patientInfo" class="new" />
     <Prescription v-model="prescriptionInfo" />
+    <div class="title-container flex mt-6">
+      <h1 class="text-xl font-medium">Products</h1>
+      <AddButton @click.native="showProductSelector = !showProductSelector" />
+    </div>
+    <ProductSelector v-if="showProductSelector" v-model="nativeProducts" />
     <VitalSigns v-model="vitalSignInfo" />
     <ClinicalNotes v-model="clinicalNoteInfo" class="new" />
     <Files v-model="files" class="new mb-4 mt-4" />
-    <ProductSelector v-model="nativeProducts" />
 
     <ConsentView
       :patient-id="patientInfo.selectedPatientId || 0"
@@ -33,6 +37,7 @@ export default {
       appointmentId: false,
       sanitizedPrescription: [],
       consentBlob: false,
+      showProductSelector: false,
     }
   },
   methods: {
