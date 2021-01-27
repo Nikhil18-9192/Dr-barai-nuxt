@@ -104,4 +104,9 @@ export default {
     display: flex;
   }
 }
+.edit-btns {
+  @include for-phone-only {
+    display: flex;
+  }
+}
 </style>

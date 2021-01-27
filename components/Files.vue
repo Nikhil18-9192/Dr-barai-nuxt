@@ -81,5 +81,10 @@ export default {
       display: block;
     }
   }
+  .delete-icon {
+    @include for-phone-only {
+      display: block;
+    }
+  }
 }
 </style>
