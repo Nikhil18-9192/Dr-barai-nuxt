@@ -8,7 +8,10 @@
     />
     <div class="title-container flex mb-1">
       <h1 class="text-xl font-medium">Vital Signs</h1>
-      <AddButton @click.native="vitalsModal = true" />
+      <AddButton
+        v-if="!currentVitals.weight"
+        @click.native="vitalsModal = true"
+      />
     </div>
 
     <table

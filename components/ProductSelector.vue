@@ -7,7 +7,7 @@
         <div class="collapse">
           <input
             v-model="search"
-            class="border p-2 rounded-lg"
+            class="border p-2 rounded-lg cursor-pointer"
             placeholder="Search product"
             @input="onSearch"
           />
@@ -15,7 +15,7 @@
             <div
               v-for="product in products"
               :key="product.id"
-              class="item"
+              class="item cursor-pointer"
               @click="onSelect(product)"
             >
               <h4>{{ product.name }}</h4>
@@ -37,7 +37,7 @@
             v-model="item.quantity"
             suffix-label="Quantity"
             size="small"
-            class="border w-14 text-center rounded-lg"
+            class="border w-14 text-center rounded-lg cursor-pointer"
             _type="number"
             @input="parseInt(item.quantity) <= 0 ? (item.quantity = 1) : ''"
           />

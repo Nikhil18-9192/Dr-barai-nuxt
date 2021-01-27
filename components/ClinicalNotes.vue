@@ -8,7 +8,10 @@
     />
     <div class="title-container flex mb-1">
       <h1 class="text-xl font-medium">Clinical Notes</h1>
-      <AddButton @click.native="notesModal = true" />
+      <AddButton
+        v-if="!currentNotes.complaints"
+        @click.native="notesModal = true"
+      />
     </div>
     <div v-if="currentNotes.observations" class="container relative text-sm">
       <p class="my-3 font-normal">
@@ -94,11 +97,11 @@ export default {
   .line {
     border-bottom: 1px solid #c4c4c4;
   }
-  .container {
-    &:hover .edit-btns {
-      display: block;
-      display: flex;
-    }
+}
+.container {
+  &:hover .edit-btns {
+    display: block;
+    display: flex;
   }
 }
 </style>

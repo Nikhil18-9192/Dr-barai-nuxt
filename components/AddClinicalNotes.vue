@@ -44,7 +44,7 @@
           <div
             v-for="item in observationList"
             :key="item.id"
-            class="cursor-pointer"
+            class="cursor-pointer border-b py-2"
             @click="setObservationValue(item.value)"
           >
             {{ item.value }}
@@ -67,7 +67,7 @@
           <div
             v-for="item in diagnoseList"
             :key="item.id"
-            class="cursor-pointer"
+            class="cursor-pointer border-b py-2"
             @click="setDiagnoseValue(item.value)"
           >
             {{ item.value }}
