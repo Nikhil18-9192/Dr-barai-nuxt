@@ -154,7 +154,7 @@ export default {
           await this.uploadConsentFileAsync()
         }
         this.$toast.success('Appointment updated successfully')
-        this.$router.push('/appointments')
+        this.$router.go(-1)
       } catch (error) {
         this.$toast.error(error.message)
         this.loading = false
