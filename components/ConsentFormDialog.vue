@@ -1,7 +1,7 @@
 <template>
   <div
     id="consent-dialog"
-    class="fiexd top-0 left-0 z-6 w-full h-screen bg-white fixed bg-opacity-70"
+    class="fiexd top-0 left-0 z-6 w-full h-screen bg-white fixed bg-opacity-70 z-10"
   >
     <div class="dialog flex flex-col">
       <div class="tlbr flex bg-gray-100 w-full">
