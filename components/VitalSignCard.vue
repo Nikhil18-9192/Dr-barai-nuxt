@@ -33,13 +33,13 @@
         {{ cardInfo.respRate }}
       </p>
       <img
-        class="absolute right-10 bottom-2 hidden"
+        class="absolute right-10 bottom-2"
         src="/edit_btn.svg"
         alt=""
         @click="$emit('edit')"
       />
       <img
-        class="absolute right-2 bottom-2 hidden"
+        class="absolute right-2 bottom-2"
         src="/delete_btn.svg"
         alt=""
         @click="$emit('delete')"
@@ -54,10 +54,4 @@ export default {
   props: ['cardInfo'],
 }
 </script>
-<style lang="scss" scopped>
-.card {
-  &:hover img {
-    display: block;
-  }
-}
-</style>
+<style lang="scss" scopped></style>

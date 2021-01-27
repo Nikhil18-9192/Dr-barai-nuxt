@@ -129,18 +129,18 @@
           </tr>
         </tbody>
       </table>
-      <!-- <PatientAppointmentCard
-        v-if="$device.isMobile"
-        class="mt-4"
-        :card-info="patient"
-      /> -->
       <div v-if="$device.isMobile" id="patient-info" class="mt-4">
-        <div v-if="!patient.appointments">No Appointment Yet</div>
+        <div
+          v-if="patient && !patient.appointments.length"
+          class="text-gray-200"
+        >
+          No Appointments Yet
+        </div>
         <div
           v-for="appointment in patient.appointments"
           :key="appointment.id"
           class="card p-4 mb-4 border cursor-pointer"
-          @click="routeToInfo(appointment.id)"
+          @click="routeToAppointment(appointment.id)"
         >
           <p class="text-gray-600 text-xs font-normal border-b mb-3">
             Date:
