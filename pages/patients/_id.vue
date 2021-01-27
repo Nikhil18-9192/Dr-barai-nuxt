@@ -129,11 +129,54 @@
           </tr>
         </tbody>
       </table>
-      <PatientAppointmentCard
+      <!-- <PatientAppointmentCard
         v-if="$device.isMobile"
         class="mt-4"
         :card-info="patient"
-      />
+      /> -->
+      <div v-if="$device.isMobile" id="patient-info" class="mt-4">
+        <div v-if="!patient.appointments">No Appointment Yet</div>
+        <div
+          v-for="appointment in patient.appointments"
+          :key="appointment.id"
+          class="card p-4 mb-4 border cursor-pointer"
+          @click="routeToInfo(appointment.id)"
+        >
+          <p class="text-gray-600 text-xs font-normal border-b mb-3">
+            Date:
+            <span class="text-blue-600 text-base">{{
+              formatter.formatDate(appointment.date)
+            }}</span>
+          </p>
+          <p class="text-gray-600 text-xs font-normal">
+            Time : {{ formatter.formatTime(appointment.date) }}
+          </p>
+          <p class="text-gray-600 text-xs font-normal">
+            Reason :
+            {{
+              appointment.clinicalNotes !== null
+                ? appointment.clinicalNotes.complaints
+                : ''
+            }}
+          </p>
+          <p class="text-gray-600 text-xs font-normal">
+            Observation :
+            {{
+              appointment.clinicalNotes !== null
+                ? appointment.clinicalNotes.observation
+                : ''
+            }}
+          </p>
+          <p class="text-gray-600 text-xs font-normal">
+            Diagnoses :
+            {{
+              appointment.clinicalNotes !== null
+                ? appointment.clinicalNotes.diagnoses
+                : ''
+            }}
+          </p>
+        </div>
+      </div>
     </div>
     <div class="notifications mt-10">
       <h4>notifications History</h4>
@@ -189,6 +232,9 @@
         </tbody>
       </table>
       <div v-if="$device.isMobile" class="notify-phone mt-4">
+        <div v-if="!notifications.length" class="text-gray-200">
+          No Notifications Yet
+        </div>
         <div
           v-for="(item, i) in notifications"
           :key="i"

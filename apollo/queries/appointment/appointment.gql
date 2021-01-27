@@ -45,6 +45,7 @@ query appointments($id: ID!) {
       address
       pincode
       city
+      bloodGroup
     }
     files {
       id

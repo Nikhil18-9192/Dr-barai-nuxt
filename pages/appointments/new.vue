@@ -16,7 +16,7 @@
       class="my-4"
       @onConsentSigned="onConsentSigned"
     />
-    <MyButton :loading="loading" @click.native="submitAppointment"
+    <MyButton class="mb-6" :loading="loading" @click.native="submitAppointment"
       >Submit</MyButton
     >
   </div>
