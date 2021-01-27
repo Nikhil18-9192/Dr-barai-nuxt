@@ -22,7 +22,7 @@
       >
         <img
           class="w-64 sm:w-96 h-64 sm:h-96 object-contain"
-          :src="image"
+          :src="image.url"
           alt=""
         />
       </div>
@@ -38,11 +38,8 @@ export default {
       type: Array,
       default: () => [],
     },
-    selectedimgs: {
-      type: Array,
-      default: () => [],
-    },
   },
+
   data() {
     return {
       currentSlide: 0,

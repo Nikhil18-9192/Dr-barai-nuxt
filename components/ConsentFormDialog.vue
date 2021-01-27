@@ -25,13 +25,13 @@
           type="datetime-local"
           placeholder="select date"
         />
+        <div class="py-4 action-v w-full flex">
+          <MyButton class="mr-8" @click.native="submitForm">Submit</MyButton>
+          <MyButton :secondary="true" @click.native="$emit('dismiss')"
+            >Cancel</MyButton
+          >
+        </div>
       </form>
-      <div class="p-4 action-v w-full flex bg-gray-100">
-        <MyButton class="mr-8" @click.native="submitForm">Submit</MyButton>
-        <MyButton :secondary="true" @click.native="$emit('dismiss')"
-          >Cancel</MyButton
-        >
-      </div>
     </div>
   </div>
 </template>

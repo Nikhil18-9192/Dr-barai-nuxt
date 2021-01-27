@@ -53,6 +53,25 @@
           <option value="Male">Male</option>
           <option value="Female">Female</option>
         </select>
+        <label for="gender" class="text-sm font-normal text-gray-400"
+          >Blood Group</label
+        >
+        <select
+          v-model="bloodGroup"
+          class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
+        >
+          <option disabled value="Select Blood Group">
+            Select Blood Group
+          </option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+        </select>
         <label for="bday" class="text-sm font-normal text-gray-400"
           >Birth Date</label
         >
@@ -119,6 +138,7 @@ export default {
       address: '',
       pincode: '',
       city: '',
+      bloodGroup: 'Select Blood Group',
     }
   },
   mounted() {
@@ -131,6 +151,7 @@ export default {
       this.address = this.patient.address
       this.pincode = this.patient.pincode
       this.city = this.patient.city
+      this.bloodGroup = this.patient.bloodGroup
     }
   },
   methods: {
@@ -146,6 +167,7 @@ export default {
           address,
           pincode,
           city,
+          bloodGroup,
         } = this
         const validation = AddPatientValidation({
           name,
@@ -156,6 +178,7 @@ export default {
           address,
           pincode,
           city,
+          bloodGroup,
         })
         if (validation.error) {
           this.loading = false
@@ -173,9 +196,10 @@ export default {
             address,
             pincode,
             city,
+            bloodGroup,
           })
           this.$emit('dismiss')
-          this.$emit('PatientData', result)
+          this.$emit('patientData', result)
           this.$toast.success('Add Patient Successfully')
         } else {
           const res = await this.$axios.$put(`/patients/${this.patient.id}`, {
@@ -187,6 +211,7 @@ export default {
             address,
             pincode,
             city,
+            bloodGroup,
           })
           this.$emit('dismiss')
           this.$emit('patientData', res)

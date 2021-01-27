@@ -20,7 +20,7 @@
           <p class="text-gray-400 text-sm font-normal">
             <span>{{ patient.gender }}</span
             ><span class="mx-1">{{ age }} Years</span
-            ><span>{{ patient.bloodGroup }}ve</span>
+            ><span>{{ patient.bloodGroup }}</span>
           </p>
         </div>
         <div class="contact text-gray-400 text-sm font-normal mt-3">
@@ -129,11 +129,54 @@
           </tr>
         </tbody>
       </table>
-      <PatientAppointmentCard
+      <!-- <PatientAppointmentCard
         v-if="$device.isMobile"
         class="mt-4"
         :card-info="patient"
-      />
+      /> -->
+      <div v-if="$device.isMobile" id="patient-info" class="mt-4">
+        <div v-if="!patient.appointments">No Appointment Yet</div>
+        <div
+          v-for="appointment in patient.appointments"
+          :key="appointment.id"
+          class="card p-4 mb-4 border cursor-pointer"
+          @click="routeToInfo(appointment.id)"
+        >
+          <p class="text-gray-600 text-xs font-normal border-b mb-3">
+            Date:
+            <span class="text-blue-600 text-base">{{
+              formatter.formatDate(appointment.date)
+            }}</span>
+          </p>
+          <p class="text-gray-600 text-xs font-normal">
+            Time : {{ formatter.formatTime(appointment.date) }}
+          </p>
+          <p class="text-gray-600 text-xs font-normal">
+            Reason :
+            {{
+              appointment.clinicalNotes !== null
+                ? appointment.clinicalNotes.complaints
+                : ''
+            }}
+          </p>
+          <p class="text-gray-600 text-xs font-normal">
+            Observation :
+            {{
+              appointment.clinicalNotes !== null
+                ? appointment.clinicalNotes.observation
+                : ''
+            }}
+          </p>
+          <p class="text-gray-600 text-xs font-normal">
+            Diagnoses :
+            {{
+              appointment.clinicalNotes !== null
+                ? appointment.clinicalNotes.diagnoses
+                : ''
+            }}
+          </p>
+        </div>
+      </div>
     </div>
     <div class="notifications mt-10">
       <h4>notifications History</h4>
@@ -182,16 +225,16 @@
             </td>
           </tr>
           <tr>
-            <td
-              v-if="patient && !patient.appointments.length"
-              class="text-gray-200"
-            >
+            <td v-if="patient && !notifications.length" class="text-gray-200">
               No Notifications Yet
             </td>
           </tr>
         </tbody>
       </table>
       <div v-if="$device.isMobile" class="notify-phone mt-4">
+        <div v-if="!notifications.length" class="text-gray-200">
+          No Notifications Yet
+        </div>
         <div
           v-for="(item, i) in notifications"
           :key="i"

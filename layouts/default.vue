@@ -4,7 +4,7 @@
       <AddPatientDialog v-if="patientDialog" @dismiss="patientDialog = false" />
       <Drawer v-if="$device.isDesktopOrTablet" />
       <div class="nuxt-view">
-        <MenuBar />
+        <MenuBar class="z-5" />
         <MenuBotton v-if="$device.isMobile" />
 
         <transition name="phone-menu">

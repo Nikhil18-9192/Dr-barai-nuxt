@@ -7,7 +7,7 @@
         <div class="collapse">
           <input
             v-model="search"
-            class="border p-2 rounded-lg cursor-pointer"
+            class="border p-2 rounded-lg cursor-pointer w-full"
             placeholder="Search product"
             @input="onSearch"
           />
