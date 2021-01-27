@@ -115,9 +115,5 @@ export default {
     right: 0;
     top: 0;
   }
-  .session-btn {
-    left: 50%;
-    bottom: 0;
-  }
 }
 </style>
