@@ -10,11 +10,6 @@
 export default {
   name: 'HomePage',
   layout: 'default',
-  beforeCreate() {
-    if (!this.$store.getters.getJwt) {
-      this.$router.push('/login')
-    }
-  },
 }
 </script>
 
