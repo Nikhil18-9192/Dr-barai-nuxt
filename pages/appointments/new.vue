@@ -1,5 +1,5 @@
 <template>
-  <div id="new-appointment">
+  <div id="new-appointment pb-8">
     <AddAppointment v-model="patientInfo" class="new" />
     <Prescription v-model="prescriptionInfo" />
     <div class="title-container flex mt-6">

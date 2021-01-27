@@ -44,7 +44,7 @@ export default {
     return {
       drName: 'Amit Barai',
       disease: '',
-      consentDate: this.$dayjs().format('YYYY-MM-DDThh:mm'),
+      consentDate: this.$dayjs().format('YYYY-MM-DDThh:mm A'),
     }
   },
   methods: {
