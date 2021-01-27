@@ -20,7 +20,7 @@
           <p class="text-gray-400 text-sm font-normal">
             <span>{{ patient.gender }}</span
             ><span class="mx-1">{{ age }} Years</span
-            ><span>{{ patient.bloodGroup }}ve</span>
+            ><span>{{ patient.bloodGroup }}</span>
           </p>
         </div>
         <div class="contact text-gray-400 text-sm font-normal mt-3">
@@ -182,10 +182,7 @@
             </td>
           </tr>
           <tr>
-            <td
-              v-if="patient && !patient.appointments.length"
-              class="text-gray-200"
-            >
+            <td v-if="patient && !notifications.length" class="text-gray-200">
               No Notifications Yet
             </td>
           </tr>

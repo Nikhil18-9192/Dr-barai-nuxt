@@ -19,7 +19,7 @@
     </div>
     <img
       src="/plus-solid-circle.svg"
-      class="controller w-16 h-16 rounded-full"
+      class="controller w-16 h-16 rounded-full cursor-pointer"
       :style="{ transform: `rotate(${active ? '135deg' : '0deg'})` }"
       @click="active = !active"
     />
