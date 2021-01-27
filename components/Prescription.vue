@@ -11,9 +11,9 @@
       <h1 class="text-xl font-medium">Prescriptions</h1>
       <AddButton @click.native="prescriptionModal = true" />
       <img
-        @click="generatePDF"
         src="/doc-download.svg"
         class="w-5 absolute right-12"
+        @click="generatePDF"
       />
     </div>
     <div ref="content">
