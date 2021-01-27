@@ -6,11 +6,16 @@
       @updatedPatient="updatedData"
     />
     <Prescription v-model="prescription" />
+    <div class="title-container flex mt-6">
+      <h1 class="text-xl font-medium">Products</h1>
+      <AddButton @click.native="showProductSelector = !showProductSelector" />
+    </div>
+    <ProductSelector v-if="showProductSelector" v-model="nativeProducts" />
     <VitalSigns v-model="vitalSigns" />
     <ClinicalNotes v-model="clinicalNotes" />
 
     <Files v-model="files" class="my-6" @deleteFile="initImageDelete" />
-    <ProductSelector v-model="nativeProducts" />
+
     <div v-if="consentDoc" class="consent my-8">
       <h4 class="text-lg text-black font-500">
         Consent
@@ -58,6 +63,7 @@ export default {
       consentDoc: false,
       nativeProducts: [],
       consentBlob: false,
+      showProductSelector: true,
     }
   },
   mounted() {
@@ -148,7 +154,7 @@ export default {
           await this.uploadConsentFileAsync()
         }
         this.$toast.success('Appointment updated successfully')
-        this.$router.push('/appointments')
+        this.$router.go(-1)
       } catch (error) {
         this.$toast.error(error.message)
         this.loading = false

@@ -18,12 +18,14 @@
           :key="i"
           class="py-3 px-6"
         >
-          <p class="text-gray-500 text-sm mb-1">
-            {{ formatter(appointment.startDateTime) }}
-          </p>
-          <h2 class="name text-xl capitalize font-normal">
-            {{ appointment.patient.name }}
-          </h2>
+          <nuxt-link :to="`/appointments/${appointment.id}`">
+            <p class="text-gray-500 text-sm mb-1">
+              {{ formatter(appointment.startDateTime) }}
+            </p>
+            <h2 class="name text-xl capitalize font-normal">
+              {{ appointment.patient.name }}
+            </h2>
+          </nuxt-link>
         </div>
       </div>
     </div>

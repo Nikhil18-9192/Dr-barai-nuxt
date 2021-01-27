@@ -14,21 +14,23 @@
           </p>
           <div v-else class="header flex py-3 justify-between">
             <p class="pl-6">Product</p>
-            <p class="pr-3">Quantity</p>
+            <p class="pr-4">Quantity</p>
           </div>
         </div>
-        <div class="container-2">
-          <div
-            v-for="(item, i) in itemsToBeStocked"
-            :key="i"
-            class="items py-5 mx-6 flex justify-between"
-          >
-            <p class="text-lg mb-1">{{ item.name }}</p>
-            <h2 class="qty text-lg capitalize font-normal pr-3">
-              {{ item.stock }}
-            </h2>
+        <nuxt-link to="/products">
+          <div class="container-2">
+            <div
+              v-for="(item, i) in itemsToBeStocked"
+              :key="i"
+              class="items py-5 mx-6 flex justify-between"
+            >
+              <p class="text-lg mb-1">{{ item.name }}</p>
+              <h2 class="qty text-lg capitalize font-normal pr-3">
+                {{ item.stock }}
+              </h2>
+            </div>
           </div>
-        </div>
+        </nuxt-link>
       </div>
     </div>
   </div>
@@ -77,9 +79,9 @@ export default {
   .container-2 {
     max-height: 47vh;
     overflow-y: scroll;
-    scrollbar-width: 1px;
+    scrollbar-width: 0;
     &::-webkit-scrollbar {
-      // display: block;
+      display: none;
     }
   }
   .title {
