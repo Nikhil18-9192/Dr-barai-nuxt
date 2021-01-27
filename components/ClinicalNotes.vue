@@ -30,7 +30,7 @@
         <span class="text-blue-600">Notes</span>: {{ currentNotes.notes }}
       </p>
       <div class="line"></div>
-      <div class="edit-btns absolute flex bottom-4 right-0 hidden">
+      <div class="edit-btns absolute flex bottom-0 right-0 hidden">
         <img
           class="mr-6 cursor-pointer"
           src="/edit_btn.svg"
