@@ -1,15 +1,15 @@
 <template>
   <div
     id="consent-signature"
-    class="w-screen h-screen fixed top-0 left-0 z-10 bg-white bg-opacity-70"
+    class="w-screen fixed top-0 left-0 z-10 bg-white bg-opacity-70"
   >
     <img id="sign-img" src="/signature.png" style="display: none" />
 
     <div class="w-full h-full dlg relative flex flex-col">
-      <div class="tlbr w-full bg-gray-100 p-3">
+      <div class="tlbr w-full h-15 bg-gray-100 p-3">
         <h4 class="text-center">Consent Signature</h4>
       </div>
-      <div class="content max-h-full overflow-y-scroll bg-white p-6">
+      <div class="content flex-grow overflow-y-scroll bg-white p-6">
         <p class="text-sm">Patient Name: {{ patient.name }}</p>
         <p class="text-sm">Phone: {{ patient.mobile }}</p>
         <p class="text-sm">Address: {{ patient.address }}</p>
@@ -39,15 +39,15 @@
           </div>
           <canvas id="sign-canvas" class="border"></canvas>
         </div>
-        <div class="action w-full flex items-center mt-8 sm:mt-6">
-          <MyButton @click.native="submitConsent">Submit</MyButton>
-          <MyButton
-            class="ml-4"
-            :secondary="true"
-            @click.native="$emit('dismiss')"
-            >Cancel</MyButton
-          >
-        </div>
+      </div>
+      <div class="action w-full h-20 bg-white pb-4 flex items-center">
+        <MyButton @click.native="submitConsent">Submit</MyButton>
+        <MyButton
+          class="ml-4"
+          :secondary="true"
+          @click.native="$emit('dismiss')"
+          >Cancel</MyButton
+        >
       </div>
     </div>
   </div>
@@ -160,6 +160,9 @@ export default {
 </script>
 
 <style lang="scss" scopped>
+#consent-signature {
+  height: 90%;
+}
 .content {
   flex-grow: 1;
 }
