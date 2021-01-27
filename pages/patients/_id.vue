@@ -130,7 +130,10 @@
         </tbody>
       </table>
       <div v-if="$device.isMobile" id="patient-info" class="mt-4">
-        <div v-if="appointmentLength <= 0" class="text-gray-200">
+        <div
+          v-if="patient && !patient.appointments.length"
+          class="text-gray-200"
+        >
           No Appointments Yet
         </div>
         <div
@@ -266,7 +269,6 @@ export default {
       age: false,
       patient: false,
       notifications: false,
-      appointmentLength: 0,
     }
   },
   computed: {
@@ -293,7 +295,6 @@ export default {
         },
       })
       this.patient = data.patient
-      this.appointmentLength = this.patient.appointments.length
       const birthday = +new Date(this.patient.birthDate)
       this.age = ~~((Date.now() - birthday) / 31557600000)
       this.fetchNotifications()
