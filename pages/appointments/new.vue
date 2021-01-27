@@ -2,10 +2,14 @@
   <div id="new-appointment">
     <AddAppointment v-model="patientInfo" class="new" />
     <Prescription v-model="prescriptionInfo" />
+    <div class="title-container flex mt-6">
+      <h1 class="text-xl font-medium">Products</h1>
+      <AddButton @click.native="showProductSelector = !showProductSelector" />
+    </div>
+    <ProductSelector v-if="showProductSelector" v-model="nativeProducts" />
     <VitalSigns v-model="vitalSignInfo" />
     <ClinicalNotes v-model="clinicalNoteInfo" class="new" />
     <Files v-model="files" class="new mb-4 mt-4" />
-    <ProductSelector v-model="nativeProducts" />
 
     <ConsentView
       :patient-id="patientInfo.selectedPatientId || 0"
@@ -33,6 +37,7 @@ export default {
       appointmentId: false,
       sanitizedPrescription: [],
       consentBlob: false,
+      showProductSelector: false,
     }
   },
   methods: {
@@ -87,7 +92,7 @@ export default {
           await this.uploadConsentFileAsync()
         }
         this.$toast.success('Appointment add successfully')
-        this.$router.push('/appointments')
+        this.$router.go(-1)
       } catch (error) {
         this.$toast.error(error.message)
         this.loading = false
