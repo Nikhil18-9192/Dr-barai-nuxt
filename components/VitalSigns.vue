@@ -1,5 +1,5 @@
 <template>
-  <div id="vital-signs" class="py-6">
+  <div id="vital-signs">
     <VitalSignModal
       v-if="vitalsModal"
       :vitals-to-edit="currentVitals"

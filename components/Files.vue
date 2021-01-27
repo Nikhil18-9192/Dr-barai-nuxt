@@ -28,7 +28,8 @@
           @click="previewModal = true"
         />
         <img
-          class="delete-icon absolute top-8 right-8 hidden cursor-pointer"
+          :class="$device.isDesktopOrTablet ? 'hidden' : ''"
+          class="delete-icon absolute top-8 right-8 cursor-pointer"
           src="/delete_btn.svg"
           alt=""
           @click="deleteFile(image)"
@@ -77,8 +78,10 @@ export default {
     display: none;
   }
   .preview {
-    &:hover .delete-icon {
-      display: block;
+    @include for-desktop-up {
+      &:hover .delete-icon {
+        display: block;
+      }
     }
   }
   .delete-icon {

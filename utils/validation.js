@@ -10,6 +10,7 @@ const AddPatientValidation = (data) => {
     address: Joi.string().max(120).label('Address').required(),
     pincode: Joi.string().max(6).label('Pincode').required(),
     city: Joi.string().label('City').required(),
+    bloodGroup: Joi.string().label('Blood Group').required(),
   }).required()
 
   return formSchema.validate(data)

@@ -7,9 +7,14 @@
       @updatePrescription="updatePrescription"
       @dismiss="clearModal"
     />
-    <div class="title-container flex mb-1">
+    <div class="title-container flex mb-1 items-center">
       <h1 class="text-xl font-medium">Prescriptions</h1>
       <AddButton @click.native="prescriptionModal = true" />
+      <img
+        @click="generatePDF"
+        src="/doc-download.svg"
+        class="w-5 absolute right-12"
+      />
     </div>
     <div ref="content">
       <table
@@ -150,8 +155,9 @@
 </template>
 
 <script>
-import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
+import pdfMake from 'pdfmake/build/pdfmake'
+import pdfFonts from 'pdfmake/build/vfs_fonts'
+pdfMake.vfs = pdfFonts.pdfMake.vfs
 export default {
   // eslint-disable-next-line vue/require-prop-types
   props: ['value'],
@@ -174,13 +180,33 @@ export default {
   },
 
   mounted() {
-    this.submitPrescriptionData()
+    // this.submitPrescriptionData()
     if (this.value.length > 0) {
       this.prescription.push(this.value)
     }
   },
 
   methods: {
+    generatePDF() {
+      if (!this.value.length) return
+      const docDefinition = {
+        content: [
+          {
+            layout: 'lightHorizontalLines',
+            table: {
+              headerRows: 1,
+              widths: ['*', 'auto', '*', 'auto'],
+
+              body: [
+                ['Drug', 'Frequency', 'Duration', 'Instructions'],
+                ...this.value.map((v) => this.parsePrescriptionIntoRow(v)),
+              ],
+            },
+          },
+        ],
+      }
+      pdfMake.createPdf(docDefinition).open()
+    },
     submitPrescriptionData(val) {
       if (val) {
         this.prescription.push(val)
@@ -194,33 +220,7 @@ export default {
       this.prescriptionIndexToEdit = -1
       this.$emit('input', this.prescription)
     },
-    download() {
-      // eslint-disable-next-line
-      const doc = new jsPDF({ orientation: 'landscape' })
-      html2canvas(this.$refs.content, {
-        scrollY: -window.scrollY,
-      }).then(function (canvas) {
-        const img = canvas.toDataURL('image/jpeg', 0.8)
-        const imgProps = doc.getImageProperties(img)
-        const pdfWidth = doc.internal.pageSize.getWidth()
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
-        doc.addImage(img, 'JPEG', 0, 0, pdfWidth, pdfHeight)
-        doc.save('prescriptions.pdf')
-      })
-    },
-    downloadPhone() {
-      // eslint-disable-next-line
-      const doc = new jsPDF('p', 'mm', 'a4')
-      html2canvas(this.$refs.phone, {
-        scrollY: -window.scrollY,
-      }).then(function (canvas) {
-        const img = canvas.toDataURL('image/jpeg', 0.8)
-        const pdfWidth = doc.internal.pageSize.getWidth()
-        const pdfHeight = doc.internal.pageSize.getWidth()
-        doc.addImage(img, 'JPEG', 0, 0, pdfWidth, pdfHeight)
-        doc.save('prescriptions.pdf')
-      })
-    },
+
     editPrescription(index) {
       this.prescriptionIndexToEdit = index
       this.prescriptionModal = true
@@ -233,6 +233,14 @@ export default {
     clearModal() {
       this.prescriptionModal = false
       this.prescriptionIndexToEdit = -1
+    },
+    parsePrescriptionIntoRow(item) {
+      return [
+        item.drug.name,
+        `${item.frequency.frequency.replaceAll('_', ' ')}`,
+        `${item.frequency.drugDuration} ${item.frequency.drugDurationFor}`,
+        item.frequency.instructions,
+      ]
     },
   },
 }

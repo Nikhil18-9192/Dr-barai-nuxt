@@ -4,6 +4,7 @@
       v-for="appointment in cardInfo.appointments"
       :key="appointment.id"
       class="card p-4 mb-4 border cursor-pointer"
+      @click="routeToInfo(appointment.id)"
     >
       <p class="text-gray-600 text-xs font-normal border-b mb-3">
         Date:
@@ -54,7 +55,7 @@ export default {
   },
   methods: {
     routeToInfo(id) {
-      this.$router.push(`/patients/${id}`)
+      this.$router.push(`/appointments/${id}`)
     },
   },
 }

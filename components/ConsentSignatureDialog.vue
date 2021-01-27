@@ -9,7 +9,7 @@
       <div class="tlbr w-full bg-gray-100 p-3">
         <h4 class="text-center">Consent Signature</h4>
       </div>
-      <div class="content max-h-full overflow-y-scroll bg-white p-4">
+      <div class="content max-h-full overflow-y-scroll bg-white p-6">
         <p class="text-sm">Patient Name: {{ patient.name }}</p>
         <p class="text-sm">Phone: {{ patient.mobile }}</p>
         <p class="text-sm">Address: {{ patient.address }}</p>
@@ -39,15 +39,15 @@
           </div>
           <canvas id="sign-canvas" class="border"></canvas>
         </div>
-      </div>
-      <div class="action w-full bg-gray-100 flex items-center p-2">
-        <MyButton @click.native="submitConsent">Submit</MyButton>
-        <MyButton
-          class="ml-4"
-          :secondary="true"
-          @click.native="$emit('dismiss')"
-          >Cancel</MyButton
-        >
+        <div class="action w-full flex items-center mt-8 sm:mt-6">
+          <MyButton @click.native="submitConsent">Submit</MyButton>
+          <MyButton
+            class="ml-4"
+            :secondary="true"
+            @click.native="$emit('dismiss')"
+            >Cancel</MyButton
+          >
+        </div>
       </div>
     </div>
   </div>
@@ -98,6 +98,10 @@ export default {
       return canvas.toDataURL('image/png')
     },
     submitConsent() {
+      if (!this.patient) {
+        this.$toast.warning('Patient not found, Please try again.')
+        return
+      }
       const patientInfo = [
         `Patient Name: ${this.patient.name}`,
         `Phone: ${this.patient.mobile}`,

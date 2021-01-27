@@ -28,7 +28,7 @@
         class="consent-action absolute top-1 right-2 cursor-pointer"
         @click="signDialog = true"
       >
-        <p v-if="blob" class="text-sm text-green-500">Consent Signed</p>
+        <p v-if="blob" class="text-sm text-green-500 m-w-10">Consent Signed</p>
         <p v-else class="text-sm text-blue-600">Take Signature</p>
       </div>
     </div>
