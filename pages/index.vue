@@ -11,7 +11,7 @@ export default {
   name: 'HomePage',
   layout: 'default',
   beforeCreate() {
-    if (!this.$store.state.user) {
+    if (!this.$store.getters.getJwt) {
       this.$router.push('/login')
     }
   },

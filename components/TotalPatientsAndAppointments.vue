@@ -36,8 +36,10 @@ export default {
     }
   },
   mounted() {
-    this.fetchTotalPatientsCount()
-    this.fetchTotalAppointmentsCount()
+    if (this.$store.getters.getJwt) {
+      this.fetchTotalPatientsCount()
+      this.fetchTotalAppointmentsCount()
+    }
   },
   methods: {
     async fetchTotalPatientsCount() {
