@@ -1,21 +1,28 @@
 <template>
-  <div id="new-appointment pb-8">
+  <div id="new-appointment">
     <AddAppointment v-model="patientInfo" class="new" />
+    <hr />
     <Prescription v-model="prescriptionInfo" />
+    <hr />
     <div class="title-container flex mt-6">
       <h1 class="text-xl font-medium">Products</h1>
       <AddButton @click.native="showProductSelector = !showProductSelector" />
     </div>
     <ProductSelector v-if="showProductSelector" v-model="nativeProducts" />
+    <hr />
     <VitalSigns v-model="vitalSignInfo" />
+    <hr />
     <ClinicalNotes v-model="clinicalNoteInfo" class="new" />
+    <hr />
     <Files v-model="files" class="new mb-4 mt-4" />
+    <hr />
 
     <ConsentView
       :patient-id="patientInfo.selectedPatientId || 0"
       class="my-4"
       @onConsentSigned="onConsentSigned"
     />
+    <hr />
     <MyButton :loading="loading" @click.native="submitAppointment"
       >Submit</MyButton
     >
@@ -141,6 +148,11 @@ export default {
 
 <style lang="scss" scopped>
 #new-appointment {
+  hr {
+    height: 0.5px;
+    background: rgb(223, 223, 223);
+    margin: 16px 0;
+  }
   .add-btn {
     width: 187px;
     height: 37px;
