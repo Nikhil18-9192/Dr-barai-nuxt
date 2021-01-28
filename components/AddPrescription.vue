@@ -111,7 +111,7 @@ export default {
       dosageFrequency: 'Select Dosage',
       intake: '',
       duration: '',
-      drugs: [],
+      drugs: false,
       instructions: '',
     }
   },
