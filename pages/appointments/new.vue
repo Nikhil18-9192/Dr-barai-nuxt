@@ -56,6 +56,7 @@ export default {
         this.$toast.error('Select Patient')
         return
       }
+      this.$store.commit('SET_LOADING')
       try {
         this.loading = true
         this.sanitizedPrescription = this.prescriptionInfo.map((item) => ({
@@ -105,6 +106,7 @@ export default {
         this.loading = false
       }
       this.loading = false
+      this.$store.commit('UNSET_LOADING')
     },
 
     uploadConsentFileAsync() {
