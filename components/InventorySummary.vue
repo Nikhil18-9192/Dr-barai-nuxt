@@ -45,7 +45,9 @@ export default {
     }
   },
   mounted() {
-    this.fetchLowQtyProducts()
+    if (this.$store.getters.getJwt) {
+      this.fetchLowQtyProducts()
+    }
   },
   methods: {
     async fetchLowQtyProducts() {
