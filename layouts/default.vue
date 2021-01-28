@@ -38,7 +38,6 @@ export default {
     },
   },
   mounted() {
-    console.log('default mounted')
     const jwt = Cookies.get('jwt')
     if (!jwt) {
       this.$router.push('/login')

@@ -2,5 +2,8 @@ query drugs {
   drugs {
     id
     name
+    strength
+    drugType
+    dosageUnit
   }
 }
