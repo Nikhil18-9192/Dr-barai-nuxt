@@ -19,7 +19,7 @@
     <div ref="content">
       <table
         v-if="prescription.length > 0 && $device.isDesktopOrTablet"
-        class="drugs-list w-full table-fixed"
+        class="drugs-list w-full table-fixed relative"
       >
         <tbody>
           <tr class="bg-gray-100 text-black-400 text-sm">

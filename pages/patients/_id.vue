@@ -163,7 +163,7 @@
             Observation :
             {{
               appointment.clinicalNotes !== null
-                ? appointment.clinicalNotes.observation
+                ? appointment.clinicalNotes.observations
                 : ''
             }}
           </p>
@@ -231,7 +231,7 @@
           </tr>
         </tbody>
       </table>
-      <div v-if="$device.isMobile" class="notify-phone mt-4">
+      <div v-if="$device.isMobile" class="notify-phone my-4">
         <div v-if="!notifications.length" class="text-gray-200">
           No Notifications Yet
         </div>
@@ -284,6 +284,8 @@ export default {
     patientUpdated(val) {
       if (val) {
         this.patient = val
+        const birthday = +new Date(this.patient.birthDate)
+        this.age = ~~((Date.now() - birthday) / 31557600000)
       }
       this.modal = false
     },

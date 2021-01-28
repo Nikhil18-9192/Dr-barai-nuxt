@@ -1,20 +1,24 @@
 <template>
-  <div id="new-appointment">
+  <div id="new-appointment my-4">
     <AddAppointment v-model="patientInfo" class="new" />
     <hr />
-    <Prescription v-model="prescriptionInfo" />
+    <Prescription v-model="prescriptionInfo" class="my-4" />
     <hr />
-    <div class="title-container flex mt-6">
+    <div class="title-container flex my-4 sm:mt-6">
       <h1 class="text-xl font-medium">Products</h1>
       <AddButton @click.native="showProductSelector = !showProductSelector" />
     </div>
-    <ProductSelector v-if="showProductSelector" v-model="nativeProducts" />
+    <ProductSelector
+      v-if="showProductSelector"
+      v-model="nativeProducts"
+      class="my-4"
+    />
     <hr />
-    <VitalSigns v-model="vitalSignInfo" />
+    <VitalSigns v-model="vitalSignInfo" class="my-4" />
     <hr />
-    <ClinicalNotes v-model="clinicalNoteInfo" class="new" />
+    <ClinicalNotes v-model="clinicalNoteInfo" class="new my-4" />
     <hr />
-    <Files v-model="files" class="new mb-4 mt-4" />
+    <Files v-model="files" class="new my-4" />
     <hr />
 
     <ConsentView
@@ -23,7 +27,7 @@
       @onConsentSigned="onConsentSigned"
     />
     <hr />
-    <MyButton :loading="loading" @click.native="submitAppointment"
+    <MyButton class="my-4" :loading="loading" @click.native="submitAppointment"
       >Submit</MyButton
     >
   </div>
@@ -155,9 +159,9 @@ export default {
     background: rgb(223, 223, 223);
     margin: 16px 0;
   }
-  .add-btn {
-    width: 187px;
-    height: 37px;
-  }
+}
+.add-btn {
+  width: 187px;
+  height: 37px;
 }
 </style>

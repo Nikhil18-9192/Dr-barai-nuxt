@@ -68,10 +68,32 @@
         </tr>
       </tbody>
     </table>
-    <NotificationCardForPhone
-      v-if="$device.isMobile"
-      :card-info="notifications"
-    />
+    <div v-if="$device.isMobile" id="notification-info">
+      <div
+        v-for="(item, i) in notifications"
+        :key="i"
+        class="card p-4 mb-4 border cursor-pointer"
+        @click="viewNotification(item.id)"
+      >
+        <p class="text-gray-600 text-xs font-normal border-b mb-3">
+          Sent To:
+          <span class="text-blue-600 text-base">
+            {{ getName(item.patients) }}</span
+          >
+        </p>
+        <p class="text-gray-600 text-xs font-normal">
+          Message : {{ text_truncate(item.message) }}
+        </p>
+        <p class="text-gray-600 text-xs font-normal">
+          Sent At :
+          {{
+            formatter.formatDate(item.createdAt) +
+            ' at ' +
+            formatter.formatTime(item.createdAt)
+          }}
+        </p>
+      </div>
+    </div>
     <div
       v-if="notifications.length"
       class="pagination-section flex justify-between"

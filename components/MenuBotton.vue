@@ -1,5 +1,5 @@
 <template>
-  <div id="menubtn" class="z-7" @click="$store.commit('toggleMenuState')">
+  <div id="menubtn" class="z-30" @click="$store.commit('toggleMenuState')">
     <div class="hamburger-menu" :class="[{ animate: menuState }]"></div>
   </div>
 </template>

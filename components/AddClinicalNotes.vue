@@ -10,7 +10,7 @@
     >
       <div class="heading h-14">
         <h1 class="text-lg font-medium text-center mb-4 sm:mb-8">
-          Add Clinical Notes
+          {{ notesToEdit ? 'Edit Clinical Notes' : 'Add Clinical Notes' }}
         </h1>
       </div>
 
@@ -83,7 +83,7 @@
           autocomplete="on"
         ></textarea>
       </div>
-      <div class="mt-8 btn flex items-end">
+      <div class="sm:mt-8 btn flex items-end">
         <MyButton
           class="mr-4"
           :loading="loading"
