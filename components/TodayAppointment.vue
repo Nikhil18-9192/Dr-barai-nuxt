@@ -42,7 +42,9 @@ export default {
     }
   },
   mounted() {
-    this.fetchAppointments()
+    if (this.$store.getters.getJwt) {
+      this.fetchAppointments()
+    }
   },
   methods: {
     async fetchAppointments() {

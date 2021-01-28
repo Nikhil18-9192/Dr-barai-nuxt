@@ -13,6 +13,7 @@ const dosageFrequency = [
   'once_a_week',
   'twice_a_week',
 ]
+
 const durationUnits = ['day', 'week', 'month', 'year', 'sos']
 const bpMeasurementPositions = ['standing', 'seating']
 const tempMeasurementPositions = [

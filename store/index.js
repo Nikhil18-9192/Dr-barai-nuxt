@@ -15,6 +15,7 @@ export const getters = {
   getMenuState: (state) => {
     return state.menuState
   },
+  getJwt: (state) => state.jwt,
 }
 
 export const mutations = {
@@ -44,6 +45,8 @@ export const mutations = {
 export const actions = {
   async nuxtClientInit({ commit }, { redirect }) {
     const jwt = await Cookies.get('jwt')
+    commit('SET_JWT', jwt)
+
     if (!jwt) {
       return
     }
@@ -51,7 +54,6 @@ export const actions = {
     try {
       const user = await this.$axios.$get('/users/me')
       commit('SET_USER', { email: user.email })
-      commit('SET_JWT', jwt)
     } catch (error) {
       this.$toast.error('nuxtClient', error.message)
     }

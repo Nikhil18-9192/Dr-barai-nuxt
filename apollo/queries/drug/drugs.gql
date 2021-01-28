@@ -1,0 +1,9 @@
+query drugs($limit: Int, $start: Int) {
+  drugs(start: $start, limit: $limit, sort: "createdAt:desc") {
+    id
+    name
+    strength
+    drugType
+    dosageUnit
+  }
+}

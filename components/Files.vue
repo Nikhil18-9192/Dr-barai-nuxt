@@ -28,7 +28,7 @@
           @click="previewModal = true"
         />
         <img
-          :class="$device.isDesktopOrTablet ? 'hidden' : ''"
+          :class="$device.isDesktop ? 'hidden' : ''"
           class="delete-icon absolute top-8 right-8 cursor-pointer"
           src="/delete_btn.svg"
           alt=""
