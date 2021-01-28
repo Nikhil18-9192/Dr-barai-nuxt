@@ -69,6 +69,7 @@ export default {
           password: this.password,
         })
         this.$store.commit('SET_USER', res)
+        this.$store.commit('SET_JWT', res.jwt)
         Cookies.set('jwt', res.jwt, { expires: 365 })
         this.$axios.setToken(res.jwt, 'bearer')
         this.$router.push('/')
