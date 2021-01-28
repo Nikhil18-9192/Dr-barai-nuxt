@@ -6,14 +6,17 @@
       @updatedPatient="updatedData"
     />
     <Prescription v-model="prescription" />
+    <br />
     <div class="title-container flex mt-6">
       <h1 class="text-xl font-medium">Products</h1>
       <AddButton @click.native="showProductSelector = !showProductSelector" />
     </div>
     <ProductSelector v-if="showProductSelector" v-model="nativeProducts" />
+    <br />
     <VitalSigns v-model="vitalSigns" />
+    <br />
     <ClinicalNotes v-model="clinicalNotes" />
-
+    <br />
     <Files v-model="files" class="my-6" @deleteFile="initImageDelete" />
 
     <div v-if="consentDoc" class="consent my-8">
