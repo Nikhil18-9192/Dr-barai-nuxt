@@ -12,7 +12,7 @@
         <h1 class="text-xl font-medium">Prescriptions</h1>
         <AddButton @click.native="prescriptionModal = true" />
       </div>
-      <div class="flex">
+      <div class="flex selection">
         <div class="template-selector">
           <div class="search-select">
             <div class="search-input">
@@ -43,7 +43,7 @@
         </div>
         <img
           src="/doc-download.svg"
-          class="w-5 absolute right-12"
+          class="w-5 absolute right-12 generatePdf"
           @click="generatePDF"
         />
       </div>
@@ -81,7 +81,7 @@
             :key="i"
             class="row my-6 text-sm font-normal text-center"
           >
-            <td class="p-3">
+            <td v-if="item" class="p-3">
               {{ item.name ? item.name : item.drug.name }}
             </td>
             <td class="p-3">
@@ -100,7 +100,7 @@
                     item.frequency.drugDurationFor
               }}
             </td>
-            <td class="p-3 flex mr-20">
+            <td class="p-3 flex mr-20 instructions-container">
               <p>
                 {{
                   item.frequency == null || item.frequency.instructions == null
@@ -311,6 +311,24 @@ export default {
 .title-container {
   @include for-phone-only {
     display: block;
+  }
+}
+.selection {
+  margin: 15px 0;
+  align-items: center;
+}
+.generatePdf {
+  @include for-phone-only {
+    width: 8%;
+  }
+}
+.instructions-container {
+  justify-content: space-evenly;
+  margin-left: 25px;
+  p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 td {
