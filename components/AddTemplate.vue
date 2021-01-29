@@ -30,7 +30,7 @@
       </div>
       <input
         v-model="drugTemplate.name"
-        class="border border-black border-solid my-4"
+        class="border border-black border-solid my-4 outline-none"
         type="text"
         placeholder="Enter name for Template"
       />

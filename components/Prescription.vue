@@ -247,7 +247,6 @@ export default {
         this.prescription.push(val)
       }
       this.prescriptionModal = false
-      console.log('sub', this.prescription)
       this.$emit('input', this.prescription)
     },
     updatePrescription(val) {
