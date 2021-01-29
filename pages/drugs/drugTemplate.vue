@@ -3,7 +3,7 @@
     <div class="title flex justify-between my-8">
       <h1 class="text-xl sm:text-2xl font-medium mb-4">Drugs Template</h1>
     </div>
-    <AddTemplate v-if="modal" v-model="template" @dismiss="modal = false" />
+    <AddTemplate v-if="modal" v-model="template" @dismiss="clearModal" />
     <MyButton @click.native="modal = !modal">Create new Template</MyButton>
     <div class="flex flex-wrap">
       <div
@@ -12,7 +12,7 @@
         class="card relative p-4 my-6 border cursor-pointer"
         @click="editTemplate(item)"
       >
-        <h1>{{ item.name }}</h1>
+        <h1 class="text-blue-600 text-base border-b mb-3">{{ item.name }}</h1>
         <p v-for="(temp, j) in item.template" :key="j">{{ temp.drug.name }}</p>
       </div>
     </div>
@@ -51,9 +51,12 @@ export default {
       }
     },
     editTemplate(item) {
-      console.log(item)
       this.template = item
       this.modal = true
+    },
+    clearModal() {
+      this.template = {}
+      this.modal = false
     },
   },
 }
@@ -71,5 +74,8 @@ export default {
 .card {
   width: 45%;
   margin-right: 25px;
+  @include for-phone-only {
+    width: 100%;
+  }
 }
 </style>

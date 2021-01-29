@@ -16,11 +16,13 @@
         @dismiss="clearModal"
       />
       <div class="title-container flex mb-1 items-center">
-        <h1 class="text-xl font-medium">Create Template</h1>
-        <AddButton @click.native="modal = true" />
+        <div class="flex">
+          <h1 class="text-xl font-medium">Create Template</h1>
+          <AddButton @click.native="modal = true" />
+        </div>
 
         <MyButton
-          class="absolute right-4"
+          class="save-btn absolute right-4"
           :loading="loading"
           @click.native="saveTemplateData"
           >Save</MyButton
@@ -109,7 +111,9 @@ export default {
     }
   },
   mounted() {
-    this.drugTemplate = this.value
+    if (Object.keys(this.value).length) {
+      this.drugTemplate = this.value
+    }
   },
   methods: {
     submitTemplateData(val) {
@@ -120,6 +124,7 @@ export default {
     },
     async saveTemplateData() {
       this.loading = true
+
       if (this.drugTemplate.name == null || this.drugTemplate.name === '') {
         this.$toast.error('Please enter a name for template')
       } else if (
@@ -133,10 +138,21 @@ export default {
             drug: item.drug.id,
             frequency: item.frequency,
           }))
-          const response = await this.$axios.$post(`/drugs-templates`, {
-            template: sanitizedTemplate,
-            name: this.drugTemplate.name,
-          })
+          let response = ''
+          if (this.drugTemplate.id) {
+            response = await this.$axios.$put(
+              `/drugs-templates/${this.drugTemplate.id}`,
+              {
+                template: sanitizedTemplate,
+                name: this.drugTemplate.name,
+              }
+            )
+          } else {
+            response = await this.$axios.$post(`/drugs-templates`, {
+              template: sanitizedTemplate,
+              name: this.drugTemplate.name,
+            })
+          }
           this.$emit('dismiss')
           this.$emit('input', response)
         } catch (error) {
@@ -167,12 +183,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#add-template {
+  @include for-phone-only {
+    padding-inline: 15px;
+  }
+}
 .add-btn {
   width: 180px;
   height: 37px;
   img {
     width: 20px;
     height: 20px;
+  }
+}
+.title-container {
+  @include for-phone-only {
+    display: block;
+    .save-btn {
+      position: relative;
+      margin-top: 15px;
+      margin-left: 15px;
+    }
   }
 }
 </style>
