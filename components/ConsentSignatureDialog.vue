@@ -40,7 +40,9 @@
           <canvas id="sign-canvas" class="border"></canvas>
         </div>
       </div>
-      <div class="action w-full h-20 bg-white pb-4 flex items-center">
+      <div
+        class="action w-full h-20 bg-white pb-4 flex items-center justify-center"
+      >
         <MyButton @click.native="submitConsent">Submit</MyButton>
         <MyButton
           class="ml-4"
@@ -169,5 +171,9 @@ export default {
 }
 .content {
   flex-grow: 1;
+}
+.add-btn {
+  width: 137px;
+  height: 37px;
 }
 </style>
