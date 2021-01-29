@@ -34,7 +34,7 @@ export default {
 
         { icon: '/beaker.svg', name: 'Drugs', route: '/drugs' },
         {
-          icon: '/beaker.svg',
+          icon: '/template.svg',
           name: 'Drugs Template',
           route: '/drugs/drugTemplate',
         },

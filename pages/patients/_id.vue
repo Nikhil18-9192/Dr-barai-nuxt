@@ -19,8 +19,8 @@
             {{ patient.name }}
           </h1>
           <p class="text-gray-400 text-sm font-normal">
-            <span>{{ patient.gender }}</span
-            ><span class="mx-1">{{ age }} Years</span
+            <span>{{ patient.gender }},</span
+            ><span class="mx-1">{{ age }} Years,</span
             ><span>{{ patient.bloodGroup }}</span>
           </p>
         </div>
@@ -140,7 +140,7 @@
         <div
           v-for="appointment in patient.appointments"
           :key="appointment.id"
-          class="card p-4 mb-4 border cursor-pointer"
+          class="card p-4 mb-4 border cursor-pointer rounded-lg shadow-lg"
           @click="routeToAppointment(appointment.id)"
         >
           <p class="text-gray-600 text-xs font-normal border-b mb-3">
@@ -180,7 +180,7 @@
       </div>
     </div>
     <div class="notifications mt-10">
-      <h4>notifications History</h4>
+      <h4>Notifications History</h4>
       <table v-if="$device.isDesktopOrTablet" class="patient-list">
         <tbody>
           <tr class="text-gray-400 text-sm font-normal">
@@ -239,7 +239,7 @@
         <div
           v-for="(item, i) in notifications"
           :key="i"
-          class="card p-4 mb-4 border cursor-pointer"
+          class="card p-4 mb-4 border cursor-pointer rounded-lg shadow-lg"
         >
           <p class="text-gray-600 text-xs font-normal border-b mb-3">
             Date:
@@ -255,6 +255,7 @@
         </div>
       </div>
     </div>
+    <h1 v-if="notifications.length" class="text-gray-400 text-center mt-6">----- FIN -----</h1>
   </div>
 </template>
 
