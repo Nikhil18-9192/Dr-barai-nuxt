@@ -64,6 +64,14 @@ const consentFormValidation = (data) => {
   }).validate(data)
 }
 
+const addDrugsValidation = (data) => {
+  return Joi.object({
+    name: Joi.string().required().min(3).max(25).label('Drug Name'),
+    drugType: Joi.string().required().label('Drug Type'),
+    strength: Joi.number().required().label('Drug Strength'),
+  }).validate(data)
+}
+
 export {
   AddPatientValidation,
   AddPrescriptionValidation,
@@ -71,4 +79,5 @@ export {
   ClinicalNotesValidation,
   SendSmsModal,
   consentFormValidation,
+  addDrugsValidation,
 }

@@ -57,7 +57,24 @@
         </tr>
       </tbody>
     </table>
-    <PatientsCardForPhone v-if="$device.isMobile" :card-info="patients" />
+    <div v-if="$device.isMobile" id="info">
+      <div
+        v-for="(item, i) in patients"
+        :key="i"
+        class="card p-4 mb-4 border cursor-pointer"
+        @click="patientInfo(item.id)"
+      >
+        <p class="text-gray-600 text-xs font-normal border-b mb-3">
+          Name: <span class="text-blue-600 text-base">{{ item.name }}</span>
+        </p>
+        <p class="text-gray-600 text-xs font-normal">
+          Mobile : {{ item.mobile }}
+        </p>
+        <p class="text-gray-600 text-xs font-normal">
+          Session Count : {{ item.appointments.length }}
+        </p>
+      </div>
+    </div>
     <div v-if="patients.length" class="pagination flex justify-between">
       <client-only>
         <paginate

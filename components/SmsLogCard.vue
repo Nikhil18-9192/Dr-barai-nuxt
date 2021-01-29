@@ -1,6 +1,5 @@
 <template>
   <div id="table-info">
-    <h1 class="text-2xl font-medium">{{ title }}</h1>
     <div
       v-for="(item, i) in cardInfo"
       :key="i"

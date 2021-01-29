@@ -1,9 +1,15 @@
 <template>
   <div id="drugs">
-    <AddDrugsModal v-if="modal" @dismiss="modal = false" />
+    <AddDrugsModal
+      v-if="modal"
+      :drug="drugToEdit"
+      @dismiss="modal = false"
+      @submitedDrug="getData"
+      @editedDrug="getEditedDrug"
+    />
     <div class="title flex justify-between my-8">
       <h1 class="text-xl sm:text-2xl font-medium mb-4">Drugs List</h1>
-      <MyButton :icon="addBtnIcon" @click.native="modal = true"
+      <MyButton :icon="addBtnIcon" @click.native="addDrug"
         >Add New Drug</MyButton
       >
     </div>
@@ -37,16 +43,17 @@
           </tr>
 
           <tr
-            v-for="drug in currentDrugs"
-            :key="drug.id"
+            v-for="(drug, i) in currentDrugs"
+            :key="i"
             class="bg-gray-100 my-6 text-sm font-normal cursor-pointer"
+            @click="editDrug(drug)"
           >
             <td class="p-3">{{ drug.id }}</td>
             <td class="p-3">
               {{ drug.name }}
             </td>
             <td class="p-3">{{ drug.drugType }}</td>
-            <td class="p-3">{{ drug.strength }}{{ drug.dosageUnit }}</td>
+            <td class="p-3">{{ drug.strength }} {{ drug.dosageUnit }}</td>
           </tr>
 
           <tr>
@@ -59,6 +66,7 @@
           v-for="(item, i) in currentDrugs"
           :key="i"
           class="card p-4 mb-4 border cursor-pointer"
+          @click="editDrug(item)"
         >
           <p class="text-gray-600 text-xs font-normal border-b mb-3">
             Name: <span class="text-blue-600 text-base">{{ item.name }}</span>
@@ -67,7 +75,7 @@
             type : {{ item.drugType }}
           </p>
           <p class="text-gray-600 text-xs font-normal">
-            Strength : {{ item.strength }}{{ item.dosageUnit }}
+            Strength : {{ item.strength }} {{ item.dosageUnit }}
           </p>
         </div>
       </div>
@@ -128,6 +136,7 @@ export default {
       currentPage: 1,
       maxPage: 5,
       modal: false,
+      drugToEdit: {},
     }
   },
   mounted() {
@@ -177,6 +186,21 @@ export default {
     async fetchTotalProductsCount() {
       this.totalItem = await this.$axios.$get('/drugs/count')
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
+    },
+    getData(drug) {
+      this.currentDrugs.unshift(drug)
+    },
+    getEditedDrug(drug) {
+      const index = this.currentDrugs.findIndex((d) => d.id === drug.id)
+      this.currentDrugs[index] = drug
+    },
+    editDrug(drug) {
+      this.drugToEdit = drug
+      this.modal = true
+    },
+    addDrug() {
+      this.drugToEdit = false
+      this.modal = true
     },
   },
 }

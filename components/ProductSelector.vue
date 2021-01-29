@@ -25,7 +25,7 @@
         </div>
       </div>
       <p class="pl-3 text-sm mt-4 text-blue-500">Selected Products</p>
-      <ul class="selected-machines pl-4">
+      <ul class="selected-machines sm:pl-4">
         <li
           v-for="(item, i) in value"
           :key="`product-${i}`"
@@ -41,7 +41,12 @@
             _type="number"
             @input="parseInt(item.quantity) <= 0 ? (item.quantity = 1) : ''"
           />
-          <p class="cross text-red-600 ml-8" @click="removeSelection(i)">X</p>
+          <p
+            class="cross text-red-600 ml-3 sm:ml-8"
+            @click="removeSelection(i)"
+          >
+            X
+          </p>
         </li>
       </ul>
     </div>

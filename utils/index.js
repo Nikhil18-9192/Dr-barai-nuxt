@@ -13,7 +13,43 @@ const dosageFrequency = [
   'once_a_week',
   'twice_a_week',
 ]
-
+const drugType = [
+  'capsule',
+  'cream',
+  'drops',
+  'foam',
+  'gel',
+  'inhaler',
+  'injection',
+  'lotion',
+  'mouthwash',
+  'ointment',
+  'powder',
+  'shampoo',
+  'spray',
+  'syringe',
+  'syrup',
+  'tablet',
+  'toothpaste',
+  'austone',
+  'suspension',
+  'serum',
+  'globules',
+  'solution',
+]
+const dosageUnit = [
+  'gm',
+  'mcg',
+  'mg',
+  'mgsR',
+  'million spres',
+  'ml',
+  'IU',
+  'units',
+  '%',
+  '/',
+  'U/V',
+]
 const durationUnits = ['day', 'week', 'month', 'year', 'sos']
 const bpMeasurementPositions = ['standing', 'seating']
 const tempMeasurementPositions = [
@@ -46,4 +82,6 @@ export {
   tempMeasurementPositions,
   StockUnits,
   generateConsentText,
+  drugType,
+  dosageUnit,
 }

@@ -10,7 +10,7 @@
     >
       <div class="heading h-14">
         <h1 class="text-lg font-medium text-center mb-4 sm:mb-8">
-          Add Prescription
+          {{ editPrescription ? 'Edit Prescription' : 'Add Prescription' }}
         </h1>
       </div>
 
@@ -80,7 +80,7 @@
           {{ durationUnits[selectedDurationUnitIndex] }}
         </span>
       </div>
-      <div class="mt-8 flex btn">
+      <div class="sm:mt-8 flex btn">
         <MyButton class="mr-4" @click.native="submitPrescriptionData"
           >Submit</MyButton
         >
@@ -111,7 +111,7 @@ export default {
       dosageFrequency: 'Select Dosage',
       intake: '',
       duration: '',
-      drugs: [],
+      drugs: false,
       instructions: '',
     }
   },
@@ -206,7 +206,7 @@ export default {
     }
   }
   .add-modal {
-    height: 90vh;
+    height: 95vh;
   }
   .btn {
     height: 37px;

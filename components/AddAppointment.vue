@@ -111,6 +111,9 @@ export default {
 #new-appointment {
   position: relative;
   margin-bottom: 55px;
+  @include for-phone-only {
+    margin-bottom: 20px;
+  }
   .timer {
     right: 0;
     top: 0;

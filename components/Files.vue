@@ -3,6 +3,7 @@
     <ImageViewModal
       v-if="previewModal"
       :images="value"
+      :index="imageIndex"
       @dismiss="previewModal = false"
     />
     <div class="title-container flex">
@@ -25,7 +26,7 @@
           class="w-52 h-52 mr-8 mt-8 cursor-pointer object-contain"
           :src="image.url"
           alt=""
-          @click="previewModal = true"
+          @click="viewImage(i)"
         />
         <img
           :class="$device.isDesktop ? 'hidden' : ''"
@@ -46,6 +47,7 @@ export default {
   data() {
     return {
       previewModal: false,
+      imageIndex: 0,
     }
   },
 
@@ -68,6 +70,10 @@ export default {
         return
       }
       this.$emit('deleteFile', file.id)
+    },
+    viewImage(index) {
+      this.imageIndex = index
+      this.previewModal = true
     },
   },
 }
