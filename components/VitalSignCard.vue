@@ -54,15 +54,4 @@ export default {
   props: ['cardInfo'],
 }
 </script>
-<style lang="scss" scopped>
-.card {
-  &:hover img {
-    display: block;
-  }
-}
-.btn {
-  @include for-phone-only {
-    display: block;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

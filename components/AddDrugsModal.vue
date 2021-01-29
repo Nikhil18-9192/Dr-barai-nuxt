@@ -141,7 +141,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scopped>
+<style lang="scss" scoped>
 .cancel-btn {
   background: #f3f4f6;
   color: #000;

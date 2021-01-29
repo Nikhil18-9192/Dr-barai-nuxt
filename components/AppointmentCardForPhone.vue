@@ -46,4 +46,4 @@ export default {
   },
 }
 </script>
-<style lang="scss" scopped></style>
+<style lang="scss" scoped></style>

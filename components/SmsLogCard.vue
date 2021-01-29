@@ -29,4 +29,4 @@ export default {
   methods: {},
 }
 </script>
-<style lang="scss" scopped></style>
+<style lang="scss" scoped></style>
