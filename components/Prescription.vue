@@ -133,7 +133,7 @@
         <div
           v-for="(item, i) in prescription"
           :key="i"
-          class="card relative p-4 mb-4 border cursor-pointer"
+          class="card relative p-4 mb-4 border cursor-pointer rounded-lg shadow-lg"
         >
           <img
             class="absolute right-10"
@@ -247,7 +247,6 @@ export default {
         this.prescription.push(val)
       }
       this.prescriptionModal = false
-      console.log('sub', this.prescription)
       this.$emit('input', this.prescription)
     },
     updatePrescription(val) {

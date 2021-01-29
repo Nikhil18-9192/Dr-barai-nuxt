@@ -3,7 +3,7 @@
     <div
       v-for="(item, i) in cardInfo"
       :key="i"
-      class="card p-4 mb-4 border cursor-pointer"
+      class="card p-4 mb-4 border cursor-pointer rounded-lg shadow-lg"
     >
       <p class="text-gray-600 text-xs font-normal border-b mb-3">
         Name: <span class="text-blue-600 text-base">{{ item.name }}</span>
