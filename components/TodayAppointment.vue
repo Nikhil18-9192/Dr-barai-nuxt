@@ -1,11 +1,13 @@
 <template>
   <div id="today-appointment" class="relative">
-    <h1 class="title text-2xl font-bold text-gray-500 pb-6">
-      Today's Appointment
-    </h1>
     <div
-      class="list bg-gray-50 border border-gray-300 rounded-xl overflow-hidden"
+      class="list bg-gray-50 border border-gray-300 rounded-xl overflow-hidden mt-14"
     >
+      <h1
+        class="title text-xl text-center py-4 border-b border-gray-300 font-bold text-gray-500"
+      >
+        Today's Appointment
+      </h1>
       <p
         v-if="appointments.length == 0"
         class="text-gray-400 absolute top-1/2 left-1/4"
@@ -98,6 +100,15 @@ export default {
   .container {
     max-height: 65vh;
     overflow-y: scroll;
+    &::-webkit-scrollbar {
+      width: 3px;
+    }
+    &::-webkit-scrollbar-track {
+      background: rgb(249, 250, 251);
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+    }
   }
   .name {
     padding-bottom: 10px;

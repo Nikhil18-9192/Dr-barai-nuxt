@@ -66,6 +66,7 @@
 
 <script>
 import { drugType, dosageUnit } from '@/utils'
+import { addDrugsValidation } from '@/utils/validation'
 export default {
   name: 'AddDrugsModal',
   // eslint-disable-next-line
@@ -101,6 +102,16 @@ export default {
     async addDrugs() {
       this.loading = true
       const { name, drugType, strength } = this
+      const validation = addDrugsValidation({
+        name,
+        drugType,
+        strength,
+      })
+      if (validation.error) {
+        this.loading = false
+        this.$toast.error(validation.error.message)
+        return
+      }
       try {
         if (!this.drug) {
           const res = await this.$axios.$post(`/drugs`, {

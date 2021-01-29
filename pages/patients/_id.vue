@@ -10,6 +10,7 @@
       v-if="$store.state.notifyModal"
       :patient="patient"
       @dismiss="$store.commit('toggleNotifyModal')"
+      @addNotify="newNotify"
     />
     <div v-if="patient" class="patient-profile flex my-8">
       <div class="patient-info w-2/4">
@@ -312,6 +313,9 @@ export default {
     },
     routeToAppointment(id) {
       this.$router.push(`/appointments/${id}`)
+    },
+    newNotify(val) {
+      this.notifications.unshift(val)
     },
   },
 }

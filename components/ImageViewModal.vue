@@ -38,11 +38,20 @@ export default {
       type: Array,
       default: () => [],
     },
+    index: {
+      type: Number,
+      default: 0,
+    },
   },
 
   data() {
     return {
       currentSlide: 0,
+    }
+  },
+  mounted() {
+    if (this.index > 0) {
+      this.currentSlide = this.index
     }
   },
   methods: {
