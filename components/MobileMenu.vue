@@ -26,6 +26,11 @@ export default {
         { icon: '/collection.svg', name: 'Products', route: '/products' },
         { icon: '/chat.svg', name: 'Notifications', route: '/notifications' },
         { icon: '/beaker.svg', name: 'Drugs', route: '/drugs' },
+        {
+          icon: '/beaker.svg',
+          name: 'Drugs Template',
+          route: '/drugs/drugTemplate',
+        },
       ],
     }
   },
