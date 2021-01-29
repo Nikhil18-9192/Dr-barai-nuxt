@@ -199,7 +199,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scopped>
+<style lang="scss" scoped>
 td {
   text-align: left;
   overflow: hidden;

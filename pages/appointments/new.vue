@@ -63,6 +63,7 @@ export default {
           drug: item.drug.id,
           frequency: item.frequency,
         }))
+        console.log('saniPres', this.sanitizedPrescription)
         const response = await this.$axios.$post(`/appointments`, {
           patient: this.patientInfo.selectedPatientId,
           startDateTime: this.$dayjs(
@@ -148,7 +149,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scopped>
+<style lang="scss" scoped>
 #new-appointment {
   hr {
     height: 0.5px;

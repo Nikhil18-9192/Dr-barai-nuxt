@@ -70,7 +70,7 @@ export default {
   },
   computed: {},
   watch: {},
-  async mounted() {},
+  mounted() {},
   methods: {
     removeSelection(i) {
       const val = this.value
@@ -107,7 +107,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scopped>
+<style lang="scss" scoped>
 #machine-selector {
   width: 100%;
   position: relative;
@@ -205,6 +205,16 @@ export default {
           font-size: 12px;
           margin-right: 32px;
         }
+      }
+    }
+  }
+}
+.prescription {
+  width: 40%;
+  .search-select {
+    .search-input {
+      .icon {
+        display: none;
       }
     }
   }

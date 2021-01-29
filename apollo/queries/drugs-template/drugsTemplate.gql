@@ -1,0 +1,19 @@
+query drugsTemplates($search: String!) {
+  drugsTemplates(where: { _q: $search }) {
+    id
+    name
+    template {
+      drug {
+        id
+        name
+      }
+      frequency {
+        frequency
+        drugDuration
+        drugDurationFor
+        instructions
+        intake
+      }
+    }
+  }
+}

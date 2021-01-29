@@ -181,7 +181,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scopped>
+<style lang="scss" scoped>
 #add-prescription {
   .add-btn {
     width: 180px;

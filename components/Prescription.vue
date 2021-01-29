@@ -8,17 +8,49 @@
       @dismiss="clearModal"
     />
     <div class="title-container flex mb-1 items-center">
-      <h1 class="text-xl font-medium">Prescriptions</h1>
-      <AddButton @click.native="prescriptionModal = true" />
-      <img
-        src="/doc-download.svg"
-        class="w-5 absolute right-12"
-        @click="generatePDF"
-      />
+      <div class="flex">
+        <h1 class="text-xl font-medium">Prescriptions</h1>
+        <AddButton @click.native="prescriptionModal = true" />
+      </div>
+      <div class="flex">
+        <div class="template-selector">
+          <div class="search-select">
+            <div class="search-input">
+              <div class="collapse">
+                <input
+                  v-model="search"
+                  class="border p-2 rounded-lg cursor-pointer"
+                  placeholder="Search template"
+                  @input="onSearch"
+                />
+                <div
+                  v-if="search.length > 0 && templates.length > 0"
+                  class="results"
+                >
+                  <div
+                    v-for="template in templates"
+                    :key="template.id"
+                    class="item cursor-pointer"
+                    @click="onSelect(template)"
+                  >
+                    <h4>{{ template.name }}</h4>
+                  </div>
+                </div>
+                <div v-if="loading" class="text-sm spinner">Loading ...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <img
+          src="/doc-download.svg"
+          class="w-5 absolute right-12"
+          @click="generatePDF"
+        />
+      </div>
     </div>
     <div ref="content">
       <table
-        v-if="prescription.length > 0 && $device.isDesktopOrTablet"
+        v-if="prescription.length && $device.isDesktopOrTablet"
         class="drugs-list w-full table-fixed"
       >
         <tbody>
@@ -155,6 +187,7 @@
 </template>
 
 <script>
+import query from '@/apollo/queries/drugs-template/drugsTemplate.gql'
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
 pdfMake.vfs = pdfFonts.pdfMake.vfs
@@ -165,8 +198,10 @@ export default {
     return {
       prescriptionModal: false,
       prescriptionIndexToEdit: -1,
-      sanitizedPrescription: [],
       prescription: [],
+      templates: [],
+      search: '',
+      loading: false,
     }
   },
   watch: {
@@ -212,6 +247,7 @@ export default {
         this.prescription.push(val)
       }
       this.prescriptionModal = false
+      console.log('sub', this.prescription)
       this.$emit('input', this.prescription)
     },
     updatePrescription(val) {
@@ -226,9 +262,8 @@ export default {
       this.prescriptionModal = true
     },
     deletePrescription(index) {
-      this.sanitizedPrescription.splice(index, 1)
       this.prescription.splice(index, 1)
-      this.$emit('input', this.sanitizedPrescription)
+      this.$emit('input', this.prescription)
     },
     clearModal() {
       this.prescriptionModal = false
@@ -242,6 +277,27 @@ export default {
         item.frequency.instructions,
       ]
     },
+    onSelect(template) {
+      for (let i = 0; i < template.template.length; i++) {
+        this.prescription.push(template.template[i])
+      }
+      this.search = ''
+      this.$emit('input', this.prescription)
+    },
+    onSearch() {
+      this.search.length > 0 ? this.fetchTemplate() : (this.templates = [])
+    },
+    async fetchTemplate() {
+      this.loading = true
+      this.templates = []
+      const { data } = await this.$apollo.query({
+        query,
+        variables: { search: `${this.search}` },
+      })
+      const template = data.drugsTemplates || []
+      this.templates = template
+      this.loading = false
+    },
   },
 }
 </script>
@@ -249,10 +305,15 @@ export default {
 <style lang="scss" scoped>
 #prescription {
   .drugs-list {
+    width: 100%;
     border-bottom: 1px solid #c4c4c4;
   }
 }
-
+.title-container {
+  @include for-phone-only {
+    display: block;
+  }
+}
 td {
   overflow: hidden;
   text-overflow: ellipsis;
