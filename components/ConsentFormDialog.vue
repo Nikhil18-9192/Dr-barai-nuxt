@@ -9,7 +9,12 @@
       </div>
       <form class="w-full p-4 flex flex-col" @submit.prevent="submitForm">
         <label>Dr. Name</label>
-        <input v-model="drName" type="text" placeholder="enter doctor's name" />
+        <input
+          v-model="drName"
+          class="outline-none"
+          type="text"
+          placeholder="enter doctor's name"
+        />
         <label>Disease</label>
         <textarea
           v-model="disease"
@@ -18,6 +23,7 @@
           rows="6"
           type="text"
           placeholder="enter name of disease"
+          class="outline-none"
         ></textarea>
         <label>Date & Time</label>
         <input
@@ -62,8 +68,12 @@ export default {
 }
 </script>
 
-<style lang="scss" scpped>
+<style lang="scss" scoped>
 #consent-dialog {
+  .add-btn {
+    width: 137px;
+    height: 37px;
+  }
   .dialog {
     position: relative;
     width: 100%;

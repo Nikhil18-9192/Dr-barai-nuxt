@@ -83,11 +83,6 @@ export default {
 
 <style lang="scss" scoped>
 #today-appointment {
-  .title {
-    @include for-phone-only {
-      text-align: center;
-    }
-  }
   .list {
     width: 350px;
     min-height: 65vh;
