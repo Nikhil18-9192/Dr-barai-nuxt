@@ -1,19 +1,17 @@
 <template>
   <div id="notification-page">
-    <div class="sms-info flex-col flex">
-      <SendSmsModal
-        v-if="$store.state.notifyModal"
-        @dismiss="$store.commit('toggleNotifyModal')"
-        @addNotify="addNotify"
-      />
-      <div class="title flex justify-between my-8">
-        <h1 class="text-xl sm:text-2xl font-medium mb-4">SMS Logs</h1>
-        <MyButton
-          :icon="addBtnIcon"
-          @click.native="$store.commit('toggleNotifyModal')"
-          >Create New SMS</MyButton
-        >
-      </div>
+    <SendSmsModal
+      v-if="$store.state.notifyModal"
+      @dismiss="$store.commit('toggleNotifyModal')"
+      @addNotify="addNotify"
+    />
+    <div class="title flex justify-between my-8">
+      <h1 class="text-xl sm:text-2xl font-medium mb-4">SMS Logs</h1>
+      <MyButton
+        :icon="addBtnIcon"
+        @click.native="$store.commit('toggleNotifyModal')"
+        >Create New SMS</MyButton
+      >
     </div>
     <table
       v-if="$device.isDesktopOrTablet"
