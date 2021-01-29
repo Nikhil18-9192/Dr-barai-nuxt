@@ -221,7 +221,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scopped>
+<style lang="scss" scoped>
 .add-btn {
   width: 185px;
   height: 37px;

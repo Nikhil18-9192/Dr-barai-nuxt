@@ -71,7 +71,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scopped>
+<style lang="scss" scoped>
 #preview {
   z-index: 999;
   .nextprev {

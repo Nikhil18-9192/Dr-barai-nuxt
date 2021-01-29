@@ -112,7 +112,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scopped>
+<style lang="scss" scoped>
 #machine-selector {
   width: 100%;
   position: relative;

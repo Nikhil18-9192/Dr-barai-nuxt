@@ -152,7 +152,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scopped>
+<style lang="scss" scoped>
 #new-appointment {
   hr {
     height: 0.5px;

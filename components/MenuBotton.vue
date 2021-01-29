@@ -28,7 +28,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scopped>
+<style lang="scss" scoped>
 $bar-width: 25px;
 $bar-height: 2px;
 $bar-spacing: 8px;

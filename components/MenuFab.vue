@@ -53,7 +53,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scopped>
+<style lang="scss" scoped>
 #menu-fab {
   position: fixed;
   right: 32px;

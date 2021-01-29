@@ -49,7 +49,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scopped>
+<style lang="scss" scoped>
 #signature {
   .add-btn {
     width: 180px;

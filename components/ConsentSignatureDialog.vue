@@ -163,7 +163,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scopped>
+<style lang="scss" scoped>
 #consent-signature {
   height: 90%;
 }
