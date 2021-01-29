@@ -52,7 +52,7 @@
           {{ dosageUnits[selectedDosageUnitIndex] }}
         </span>
       </div>
-      <div class="mt-8 flex btn px-4 sm:px-12 md:px-8">
+      <div class="flex mt-8 w-full">
         <MyButton class="mr-4" :loading="loading" @click.native="addDrugs"
           >Submit</MyButton
         >
@@ -142,6 +142,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.add-btn {
+  width: 137px;
+  height: 37px;
+}
 .cancel-btn {
   background: #f3f4f6;
   color: #000;

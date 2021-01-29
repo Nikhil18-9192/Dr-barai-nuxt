@@ -65,7 +65,7 @@
         <div
           v-for="(item, i) in currentDrugs"
           :key="i"
-          class="card p-4 mb-4 border cursor-pointer"
+          class="card p-4 mb-4 border cursor-pointer rounded-lg shadow-lg"
           @click="editDrug(item)"
         >
           <p class="text-gray-600 text-xs font-normal border-b mb-3">

@@ -41,7 +41,7 @@
         <div
           v-for="(item, i) in drugTemplate.template"
           :key="i"
-          class="card relative p-4 mb-4 border cursor-pointer"
+          class="card relative p-4 mb-4 border cursor-pointer rounded-lg shadow-lg"
         >
           <img
             class="absolute right-10"
@@ -186,6 +186,7 @@ export default {
 #add-template {
   @include for-phone-only {
     padding-inline: 15px;
+    padding-top: 15px;
   }
 }
 .add-btn {

@@ -133,7 +133,7 @@
         <div
           v-for="(item, i) in prescription"
           :key="i"
-          class="card relative p-4 mb-4 border cursor-pointer"
+          class="card relative p-4 mb-4 border cursor-pointer rounded-lg shadow-lg"
         >
           <img
             class="absolute right-10"

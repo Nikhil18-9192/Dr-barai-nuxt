@@ -48,7 +48,7 @@
           <tr
             v-for="item in paginateItem"
             :key="item.id"
-            class="text-sm font-normal"
+            class="text-sm font-normal "
           >
             <td
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
