@@ -30,6 +30,13 @@
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm h-40"
           autocomplete="on"
         ></textarea>
+        <label class="text-sm mr-2">SMS Type</label>
+        <select v-model="type">
+          <option value="transaction">transaction</option>
+          <option value="promotion">promotion</option>
+        </select>
+        <br />
+        <br />
         <input
           id="sendAll"
           v-model="sendToAll"
@@ -78,6 +85,7 @@ export default {
       message: '',
       sendToAll: false,
       disabled: false,
+      type: 'transaction',
       patients: [
         {
           value: false,
@@ -176,6 +184,7 @@ export default {
           patients,
           message: this.message,
           sendToAll: this.sendToAll,
+          type: this.type,
         })
         this.$emit('dismiss')
         this.$toast.success('SMS Sent')
