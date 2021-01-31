@@ -178,7 +178,7 @@ export default {
           sendToAll: this.sendToAll,
         })
         this.$emit('dismiss')
-        this.$toast.success('Notify successfully')
+        this.$toast.success('SMS Sent')
         this.$emit('addNotify', res)
       } catch (error) {
         this.$toast.error(error.message)
