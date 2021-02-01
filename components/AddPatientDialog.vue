@@ -200,7 +200,7 @@ export default {
           })
           this.$emit('dismiss')
           this.$emit('patientData', result)
-          this.$toast.success('Add Patient Successfully')
+          this.$toast.success('Patient Added.')
         } else {
           const res = await this.$axios.$put(`/patients/${this.patient.id}`, {
             name,
@@ -215,7 +215,7 @@ export default {
           })
           this.$emit('dismiss')
           this.$emit('patientData', res)
-          this.$toast.success('Add Updated Successfully')
+          this.$toast.success('Done.')
         }
       } catch (error) {
         this.$toast.error(error.message)

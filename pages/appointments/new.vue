@@ -103,7 +103,7 @@ export default {
         if (this.consentBlob) {
           await this.uploadConsentFileAsync()
         }
-        this.$toast.success('Appointment add successfully')
+        this.$toast.success('Done.')
         this.$router.go(-1)
       } catch (error) {
         this.$toast.error(error.message)

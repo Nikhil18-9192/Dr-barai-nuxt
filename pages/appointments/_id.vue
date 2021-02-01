@@ -160,7 +160,7 @@ export default {
         if (this.consentBlob) {
           await this.uploadConsentFileAsync()
         }
-        this.$toast.success('Appointment updated successfully')
+        this.$toast.success('Appointment updated.')
         this.$router.go(-1)
       } catch (error) {
         this.$toast.error(error.message)
