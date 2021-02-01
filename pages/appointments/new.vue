@@ -2,8 +2,7 @@
   <div id="new-appointment my-4">
     <AddAppointment v-model="patientInfo" class="new" />
     <hr />
-    <Prescription v-model="prescriptionInfo" class="my-4" />
-    <hr />
+
     <div class="title-container flex my-4 sm:mt-6">
       <h1 class="text-xl font-medium">Products</h1>
       <AddButton @click.native="showProductSelector = !showProductSelector" />
@@ -26,6 +25,8 @@
       class="my-4"
       @onConsentSigned="onConsentSigned"
     />
+    <hr />
+    <Prescription v-model="prescriptionInfo" class="my-4" />
     <hr />
     <MyButton class="my-4" :loading="loading" @click.native="submitAppointment"
       >Submit</MyButton

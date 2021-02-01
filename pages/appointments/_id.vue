@@ -5,8 +5,7 @@
       :patient="patient"
       @updatedPatient="updatedData"
     />
-    <Prescription v-model="prescription" />
-    <br />
+
     <div class="title-container flex mt-6">
       <h1 class="text-xl font-medium">Products</h1>
       <AddButton @click.native="showProductSelector = !showProductSelector" />
@@ -41,6 +40,8 @@
       class="my-4"
       @onConsentSigned="onConsentSigned"
     />
+    <Prescription v-model="prescription" />
+    <br />
     <MyButton :loading="loading" class="mb-4" @click.native="submit"
       >Submit</MyButton
     >
