@@ -21,7 +21,7 @@ export default {
     return {
       menuItem: [
         { icon: '/dashboard.svg', name: 'Dashboard', route: '/' },
-        { icon: '/calender.svg', name: 'Appointment', route: '/appointments' },
+        { icon: '/calender.svg', name: 'Appointments', route: '/appointments' },
         { icon: '/users.svg', name: 'Patients', route: '/patients' },
         { icon: '/collection.svg', name: 'Products', route: '/products' },
         { icon: '/chat.svg', name: 'Notifications', route: '/notifications' },

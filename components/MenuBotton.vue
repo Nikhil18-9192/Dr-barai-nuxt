@@ -87,18 +87,15 @@ $bar-spacing: 8px;
   }
 
   .hamburger-menu.animate:after {
-    top: -7px;
-    transform: rotate(-40deg);
+    transform: rotate(32deg) translateY(-2px);
     background: rgb(0, 0, 0);
     transition: top 300ms cubic-bezier(0.23, 1, 0.32, 1),
       transform 300ms 300ms cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   .hamburger-menu.animate:before {
-    bottom: -9px;
-
     background: rgb(0, 0, 0);
-    transform: rotate(40deg);
+    transform: rotate(-32deg) translateY(2px);
     transition: bottom 300ms cubic-bezier(0.23, 1, 0.32, 1),
       transform 300ms 300ms cubic-bezier(0.23, 1, 0.32, 1);
   }

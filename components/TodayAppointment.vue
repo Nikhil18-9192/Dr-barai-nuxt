@@ -6,7 +6,7 @@
       <h1
         class="title text-xl text-center py-4 border-b border-gray-300 font-bold text-gray-500"
       >
-        Today's Appointment
+        Today's Appointments
       </h1>
       <p
         v-if="appointments.length == 0"

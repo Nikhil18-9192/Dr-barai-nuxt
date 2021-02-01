@@ -30,12 +30,12 @@
         <div class="signature w-full">
           <div class="btns">
             <span class="text-sm">Signature Box-</span>
-            <p
+            <button
               class="text-red-400 text-sm float-right cursor-pointer"
               @click="signaturePad.clear()"
             >
               Clear
-            </p>
+            </button>
           </div>
           <canvas id="sign-canvas" class="border"></canvas>
         </div>
