@@ -48,7 +48,11 @@
           >Send To All</label
         >
         <div class="mt-8 flex">
-          <MyButton class="mr-4" :icon="icon" @click.native="submitNotification"
+          <MyButton
+            class="mr-4"
+            :loading="loading"
+            :icon="icon"
+            @click.native="submitNotification"
             >Send Now</MyButton
           >
           <MyButton class="cancel-btn" @click.native="$emit('dismiss')"
@@ -86,6 +90,7 @@ export default {
       sendToAll: false,
       disabled: false,
       type: 'transaction',
+      loading: false,
       patients: [
         {
           value: false,
@@ -180,16 +185,20 @@ export default {
           return
         }
 
+        this.loading = true
+
         const res = await this.$axios.$post(`/notifications`, {
           patients,
           message: this.message,
           sendToAll: this.sendToAll,
           type: this.type,
         })
+        this.loading = false
         this.$emit('dismiss')
         this.$toast.success('SMS Sent')
         this.$emit('addNotify', res)
       } catch (error) {
+        this.loading = false
         this.$toast.error(error.message)
       }
     },
