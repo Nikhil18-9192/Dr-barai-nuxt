@@ -16,9 +16,9 @@
       <p class="text-gray-600 text-xs font-normal">
         Date and Time :
         {{
-          formatter.formatDate(item.date) +
+          formatter.formatDate(item.startDateTime) +
           ' at ' +
-          formatter.formatTime(item.date)
+          formatter.formatTime(item.startDateTime)
         }}
       </p>
     </div>

@@ -30,14 +30,28 @@
         <div class="signature w-full">
           <div class="btns">
             <span class="text-sm">Signature Box-</span>
-            <button
-              class="text-red-400 text-sm float-right cursor-pointer"
-              @click="signaturePad.clear()"
-            >
-              Clear
-            </button>
           </div>
-          <canvas id="sign-canvas" class="border"></canvas>
+          <div class="sign-pad flex">
+            <div class="doc-sign-pad">
+              <button
+                class="clear text-red-400 text-sm float-right cursor-pointer"
+                @click="docSignaturePad.clear()"
+              >
+                Clear
+              </button>
+              <canvas id="doc-sign-canvas" class="border"></canvas>
+            </div>
+
+            <div class="patient-sign-pad mx-8">
+              <button
+                class="clear text-red-400 text-sm float-right cursor-pointer"
+                @click="patientSignaturePad.clear()"
+              >
+                Clear
+              </button>
+              <canvas id="patient-sign-canvas" class="border"></canvas>
+            </div>
+          </div>
         </div>
       </div>
       <div
@@ -67,7 +81,8 @@ export default {
   props: ['consentData', 'patientId'],
   data() {
     return {
-      signaturePad: false,
+      docSignaturePad: false,
+      patientSignaturePad: false,
       patient: false,
     }
   },
@@ -78,8 +93,11 @@ export default {
   },
   mounted() {
     this.fetchPatient()
-    const c = document.getElementById('sign-canvas')
-    this.signaturePad = new SignaturePad(c)
+    const c = document.getElementById('doc-sign-canvas')
+    const p = document.getElementById('patient-sign-canvas')
+
+    this.docSignaturePad = new SignaturePad(c)
+    this.patientSignaturePad = new SignaturePad(p)
   },
   methods: {
     async fetchPatient() {
@@ -90,14 +108,6 @@ export default {
           this.$toast.error(error.response.data.message)
         }
       }
-    },
-    doctorsSignature() {
-      const imgToExport = document.getElementById('sign-img')
-      const canvas = document.createElement('canvas')
-      canvas.width = imgToExport.width
-      canvas.height = imgToExport.height
-      canvas.getContext('2d').drawImage(imgToExport, 0, 0)
-      return canvas.toDataURL('image/png')
     },
     submitConsent() {
       if (!this.patient) {
@@ -116,7 +126,9 @@ export default {
         margin: 8,
       }))
 
-      const data = this.signaturePad.toDataURL()
+      const docSign = this.docSignaturePad.toDataURL()
+      const patientSign = this.patientSignaturePad.toDataURL()
+
       const docDefinition = {
         header: [
           {
@@ -142,13 +154,13 @@ export default {
             margin: [0, 32, 0, 0],
             columns: [
               {
-                image: this.doctorsSignature(),
+                image: docSign,
                 width: 150,
                 height: 100,
               },
 
               {
-                image: data,
+                image: patientSign,
                 width: 150,
                 height: 100,
               },
@@ -167,7 +179,7 @@ export default {
 
 <style lang="scss" scoped>
 #consent-signature {
-  height: 90%;
+  height: 100%;
 }
 .content {
   flex-grow: 1;
@@ -175,5 +187,21 @@ export default {
 .add-btn {
   width: 137px;
   height: 37px;
+}
+.sign-pad {
+  @include for-phone-only {
+    flex-direction: column;
+  }
+}
+.patient-sign-pad {
+  @include for-phone-only {
+    margin: 0;
+    margin-top: 16px;
+  }
+}
+.clear {
+  @include for-phone-only {
+    margin-right: 25px;
+  }
 }
 </style>
