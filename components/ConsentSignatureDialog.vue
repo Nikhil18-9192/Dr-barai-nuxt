@@ -31,10 +31,10 @@
           <div class="btns">
             <span class="text-sm">Signature Box-</span>
           </div>
-          <div class="sign-pad flex">
+          <div class="sign-pad flex relative">
             <div class="doc-sign-pad">
               <button
-                class="clear text-red-400 text-sm float-right cursor-pointer"
+                class="clear-btn w-full text-right text-red-400 text-sm mb-2 cursor-pointer"
                 @click="docSignaturePad.clear()"
               >
                 Clear
@@ -44,7 +44,7 @@
 
             <div class="patient-sign-pad mx-8">
               <button
-                class="clear text-red-400 text-sm float-right cursor-pointer"
+                class="clear-btn w-full text-right text-red-400 text-sm mb-2 cursor-pointer"
                 @click="patientSignaturePad.clear()"
               >
                 Clear
@@ -199,9 +199,9 @@ export default {
     margin-top: 16px;
   }
 }
-.clear {
+.clear-btn {
   @include for-phone-only {
-    margin-right: 25px;
+    padding-right: 30px;
   }
 }
 </style>
