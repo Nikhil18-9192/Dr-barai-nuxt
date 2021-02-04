@@ -5,8 +5,12 @@
       <Drawer v-if="$device.isDesktopOrTablet" />
       <div class="nuxt-view">
         <MenuBar class="z-5" />
+        <div
+          v-if="menuState"
+          class="menuModal"
+          @click="$store.commit('toggleMenuState')"
+        ></div>
         <MenuBotton v-if="$device.isMobile" />
-
         <transition name="phone-menu">
           <MobileMenu v-if="menuState" class="mobile-menu" />
         </transition>
@@ -74,6 +78,15 @@ export default {
   .phone-menu-leave-active {
     transition: 0.4s ease all;
     transform: translateX(-100%);
+  }
+  .menuModal {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    z-index: 100;
+    background: transparent;
+    top: 0;
+    left: 0;
   }
 }
 </style>
