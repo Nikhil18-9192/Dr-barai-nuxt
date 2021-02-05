@@ -147,11 +147,11 @@
           <p class="text-gray-600 text-xs font-normal border-b mb-3">
             Date:
             <span class="text-blue-600 text-base">{{
-              formatter.formatDate(appointment.date)
+              formatter.formatDate(appointment.startDateTime)
             }}</span>
           </p>
           <p class="text-gray-600 text-xs font-normal">
-            Time : {{ formatter.formatTime(appointment.date) }}
+            Time : {{ formatter.formatTime(appointment.startDateTime) }}
           </p>
           <p class="text-gray-600 text-xs font-normal">
             Reason :
