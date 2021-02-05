@@ -96,7 +96,8 @@
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
             >
               {{
-                appointment.clinicalNotes.complaints !== null
+                appointment.clinicalNotes &&
+                appointment.clinicalNotes.complaints
                   ? appointment.clinicalNotes.complaints
                   : '---'
               }}
@@ -255,7 +256,9 @@
         </div>
       </div>
     </div>
-    <h1 v-if="notifications.length" class="text-gray-400 text-center mt-6">----- FIN -----</h1>
+    <h1 v-if="notifications.length" class="text-gray-400 text-center mt-6">
+      ----- FIN -----
+    </h1>
   </div>
 </template>
 
