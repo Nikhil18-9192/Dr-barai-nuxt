@@ -31,10 +31,28 @@
           autocomplete="on"
         ></textarea>
         <label class="text-sm mr-2">SMS Type</label>
-        <select v-model="type">
+        <select
+          v-model="type"
+          class="outline-none border rounded border-gray-300"
+        >
           <option value="transaction">transaction</option>
           <option value="promotion">promotion</option>
         </select>
+        <br />
+        <br />
+        <label for="sendAll" class="text-sm mr-2">Scheduled For</label>
+        <input
+          v-if="!scheduled"
+          v-model="scheduled"
+          type="checkbox"
+          value="check"
+        />
+        <input
+          v-else
+          v-model="sendOn"
+          type="datetime-local"
+          class="border border-gray-300 rounded outline-none"
+        />
         <br />
         <br />
         <input
@@ -81,6 +99,8 @@ export default {
   },
   data() {
     return {
+      scheduled: false,
+      sendOn: null,
       count: 0,
       searchText: '', // If value is falsy, reset searchText & searchItem
       items: [],
@@ -186,12 +206,12 @@ export default {
         }
 
         this.loading = true
-
         const res = await this.$axios.$post(`/notifications`, {
           patients,
           message: this.message,
           sendToAll: this.sendToAll,
           type: this.type,
+          sendOn: this.sendOn,
         })
         this.loading = false
         this.$emit('dismiss')
@@ -200,6 +220,7 @@ export default {
       } catch (error) {
         this.loading = false
         this.$toast.error(error.message)
+        this.$emit('dismiss')
       }
     },
   },
