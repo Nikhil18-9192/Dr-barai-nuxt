@@ -96,7 +96,8 @@
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
             >
               {{
-                appointment.clinicalNotes.complaints !== null
+                appointment.clinicalNotes &&
+                appointment.clinicalNotes.complaints
                   ? appointment.clinicalNotes.complaints
                   : '---'
               }}
@@ -146,11 +147,11 @@
           <p class="text-gray-600 text-xs font-normal border-b mb-3">
             Date:
             <span class="text-blue-600 text-base">{{
-              formatter.formatDate(appointment.date)
+              formatter.formatDate(appointment.startDateTime)
             }}</span>
           </p>
           <p class="text-gray-600 text-xs font-normal">
-            Time : {{ formatter.formatTime(appointment.date) }}
+            Time : {{ formatter.formatTime(appointment.startDateTime) }}
           </p>
           <p class="text-gray-600 text-xs font-normal">
             Reason :
@@ -255,7 +256,9 @@
         </div>
       </div>
     </div>
-    <h1 v-if="notifications.length" class="text-gray-400 text-center mt-6">----- FIN -----</h1>
+    <h1 v-if="notifications.length" class="text-gray-400 text-center mt-6">
+      ----- FIN -----
+    </h1>
   </div>
 </template>
 
