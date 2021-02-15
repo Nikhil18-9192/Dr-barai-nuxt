@@ -17,7 +17,7 @@
           v-model="name"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
           type="text"
-          placeholder="Elon musk"
+          placeholder="Paracetomal"
           autocomplete="on"
         />
         <label for="drug type" class="text-sm font-normal text-gray-400"
