@@ -1,5 +1,10 @@
 <template>
   <div id="appointments-page">
+    <DeleteConfirmation
+      v-if="confirm == true"
+      @dismiss="confirm = false"
+      @confirm="deleteAppontment"
+    />
     <div class="title sm:flex justify-between my-4 sm:my-8">
       <h1 class="text-xl sm:text-2xl font-medium mb-4 sm:mb-0">Appointments</h1>
 
@@ -64,7 +69,7 @@
         <tr
           v-for="(appointment, i) in appointments"
           :key="i"
-          class="bg-gray-100 my-5 text-sm font-normal cursor-pointer"
+          class="relative bg-gray-100 my-5 text-sm font-normal cursor-pointer"
           @click="onAppointmentClick(appointment.id)"
         >
           <td class="py-3 pl-2">{{ appointment.id }}</td>
@@ -77,16 +82,51 @@
               formatter.formatTime(appointment.startDateTime)
             }}
           </td>
+          <td class="relative">
+            <img
+              class="delete-btn absolute right-4 top-4 hidden"
+              src="/delete_btn.svg"
+              alt=""
+              @click.stop="confirmation(appointment)"
+            />
+          </td>
         </tr>
         <tr>
           <td v-if="!appointments.length">No appointments Yet</td>
         </tr>
       </tbody>
     </table>
-    <AppointmentCardForPhone
-      v-if="$device.isMobile"
-      :card-info="appointments"
-    />
+    <div v-if="$device.isMobile">
+      <div
+        v-for="(item, i) in appointments"
+        :key="i"
+        class="relative card p-4 mb-4 border cursor-pointer rounded-lg shadow-lg"
+        @click="onAppointmentClick(item.id)"
+      >
+        <p class="text-gray-600 text-xs font-normal border-b mb-3">
+          Name:
+          <span class="text-blue-600 text-base">{{ item.patient.name }}</span>
+        </p>
+        <p class="text-gray-600 text-xs font-normal">
+          Mobile : {{ item.patient.mobile }}
+        </p>
+        <p class="text-gray-600 text-xs font-normal">
+          Date and Time :
+          {{
+            formatter.formatDate(item.startDateTime) +
+            ' at ' +
+            formatter.formatTime(item.startDateTime)
+          }}
+        </p>
+        <img
+          class="delete-btn absolute right-4 top-4"
+          src="/delete_btn.svg"
+          alt=""
+          @click.stop="confirmation(item)"
+        />
+      </div>
+    </div>
+
     <div v-if="appointments.length" class="pagination flex justify-between">
       <client-only>
         <paginate
@@ -133,10 +173,13 @@
 <script>
 import { appointments } from '@/apollo/queries/appointment/appointments.gql'
 import formatDateTime from '@/utils/formatDateTime'
+import { log } from 'pdfmake/build/pdfmake'
 export default {
   name: 'AppointmentsPage',
   data() {
     return {
+      confirm: false,
+      appointmentToDelete: false,
       addIcon: '/plus-circle.svg',
       totalItem: 0,
       appointments: [],
@@ -172,6 +215,25 @@ export default {
     this.fetchTotalappointmentsCount()
   },
   methods: {
+    confirmation(appointment) {
+      this.appointmentToDelete = appointment
+      this.confirm = true
+    },
+    async deleteAppontment() {
+      try {
+        const res = await this.$axios.delete(
+          `/appointments/${this.appointmentToDelete.id}`
+        )
+        const index = this.appointments.findIndex(
+          (a) => a.id === this.appointmentToDelete.id
+        )
+        this.appointments.splice(index, 1)
+        this.$toast.success('Delete Appointment successfully')
+        this.confirm = false
+      } catch (error) {
+        this.$toast.error(error.message)
+      }
+    },
     async clickCallback(selectedPage) {
       this.$store.commit('SET_LOADING')
       const { data } = await this.$apollo.query({
@@ -271,6 +333,13 @@ export default {
     th {
       text-align: left;
       font-weight: 600;
+    }
+    tr {
+      &:hover {
+        .delete-btn {
+          display: block;
+        }
+      }
     }
     td {
       text-align: left;
