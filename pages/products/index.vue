@@ -6,6 +6,11 @@
       @dismiss="newProduct"
       @updatedProduct="updatedProduct"
     />
+    <DeleteConfirmation
+      v-if="confirm == true"
+      @dismiss="confirm = false"
+      @confirm="deleteEntry"
+    />
     <div class="title flex justify-between my-8">
       <h1 class="text-xl sm:text-2xl font-medium mb-4">Product List</h1>
       <MyButton :icon="addBtnIcon" @click.native="addNew"
@@ -50,6 +55,14 @@
           <td class="p-3">{{ item.name }}</td>
           <td class="p-3">{{ item.stock }} {{ item.stockingUnit }}</td>
           <td class="p-3">{{ item.retailPrice }}</td>
+          <td class="relative">
+            <img
+              class="delete-btn absolute right-4 top-4 hidden"
+              src="/delete_btn.svg"
+              alt=""
+              @click.stop="confirmation(item)"
+            />
+          </td>
         </tr>
         <tr>
           <td v-if="!products.length">No products Yet</td>
@@ -60,7 +73,7 @@
       <div
         v-for="(item, i) in products"
         :key="i"
-        class="card p-4 mb-4 border cursor-pointer rounded-lg shadow-lg"
+        class="relative card p-4 mb-4 border cursor-pointer rounded-lg shadow-lg"
         @click="editProduct(item)"
       >
         <p class="text-gray-600 text-xs font-normal border-b mb-3">
@@ -72,7 +85,14 @@
         <p class="text-gray-600 text-xs font-normal">
           Price(INR) : {{ item.retailPrice }}
         </p>
+        <img
+          class="delete-btn absolute right-4 top-4"
+          src="/delete_btn.svg"
+          alt=""
+          @click.stop="confirmation(item)"
+        />
       </div>
+      <div v-if="!products.length"><p>No products Yet</p></div>
     </div>
     <div v-if="products.length" class="pagination flex justify-between">
       <client-only>
@@ -122,6 +142,8 @@ export default {
   name: 'ProductsPage',
   data() {
     return {
+      confirm: false,
+      productToDelete: false,
       addBtnIcon: '/plus-circle.svg',
       totalItem: 0,
       modal: false,
@@ -139,6 +161,25 @@ export default {
     this.fetchTotalProductsCount()
   },
   methods: {
+    confirmation(product) {
+      this.productToDelete = product
+      this.confirm = true
+    },
+    async deleteEntry() {
+      try {
+        const res = await this.$axios.delete(
+          `/products/${this.productToDelete.id}`
+        )
+        const index = this.products.findIndex(
+          (a) => a.id === this.productToDelete.id
+        )
+        this.products.splice(index, 1)
+        this.$toast.success('Delete Product successfully')
+        this.confirm = false
+      } catch (error) {
+        this.$toast.error(error.message)
+      }
+    },
     async clickCallback(selectedPage) {
       this.currentPage = selectedPage
       const { data } = await this.$apollo.query({
@@ -232,6 +273,13 @@ export default {
     th {
       text-align: left;
       font-weight: normal;
+    }
+    tr {
+      &:hover {
+        .delete-btn {
+          display: block;
+        }
+      }
     }
     td {
       text-align: left;

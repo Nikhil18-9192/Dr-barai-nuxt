@@ -5,6 +5,11 @@
       @dismiss="$store.commit('togglePatientModal')"
       @patientData="newPatient"
     />
+    <DeleteConfirmation
+      v-if="confirm == true"
+      @dismiss="confirm = false"
+      @confirm="deleteEntry"
+    />
     <div class="title flex justify-between my-8">
       <h1 class="text-xl sm:text-2xl font-medium mb-4">Patient List</h1>
       <MyButton
@@ -51,6 +56,14 @@
           <td class="py-3">{{ item.name }}</td>
           <td class="py-3">{{ item.mobile }}</td>
           <td class="py-3">{{ item.appointments.length }}</td>
+          <td class="relative">
+            <img
+              class="delete-btn absolute right-4 top-4 hidden"
+              src="/delete_btn.svg"
+              alt=""
+              @click.stop="confirmation(item)"
+            />
+          </td>
         </tr>
         <tr>
           <td v-if="!patients.length">No patients Yet</td>
@@ -61,7 +74,7 @@
       <div
         v-for="(item, i) in patients"
         :key="i"
-        class="card p-4 mb-4 border cursor-pointer rounded-lg shadow-lg"
+        class="relative card p-4 mb-4 border cursor-pointer rounded-lg shadow-lg"
         @click="patientInfo(item.id)"
       >
         <p class="text-gray-600 text-xs font-normal border-b mb-3">
@@ -73,6 +86,12 @@
         <p class="text-gray-600 text-xs font-normal">
           Session Count : {{ item.appointments.length }}
         </p>
+        <img
+          class="delete-btn absolute right-4 top-4"
+          src="/delete_btn.svg"
+          alt=""
+          @click.stop="confirmation(item)"
+        />
       </div>
     </div>
     <div v-if="patients.length" class="pagination flex justify-between">
@@ -124,6 +143,8 @@ export default {
   name: 'PatientsPage',
   data() {
     return {
+      confirm: false,
+      patientToDelete: false,
       addBtnIcon: '/plus-circle.svg',
       totalItem: 0,
       modal: false,
@@ -141,6 +162,25 @@ export default {
     this.fetchTotalPatientCount()
   },
   methods: {
+    confirmation(patient) {
+      this.patientToDelete = patient
+      this.confirm = true
+    },
+    async deleteEntry() {
+      try {
+        const res = await this.$axios.delete(
+          `/patients/${this.patientToDelete.id}`
+        )
+        const index = this.patients.findIndex(
+          (a) => a.id === this.patientToDelete.id
+        )
+        this.patients.splice(index, 1)
+        this.$toast.success('Delete Patient successfully')
+        this.confirm = false
+      } catch (error) {
+        this.$toast.error(error.message)
+      }
+    },
     async clickCallback(selectedPage) {
       this.currentPage = selectedPage
       const { data } = await this.$apollo.query({
@@ -219,6 +259,13 @@ export default {
     th {
       text-align: left;
       font-weight: normal;
+    }
+    tr {
+      &:hover {
+        .delete-btn {
+          display: block;
+        }
+      }
     }
     td {
       text-align: left;

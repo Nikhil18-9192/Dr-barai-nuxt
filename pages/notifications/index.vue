@@ -5,6 +5,11 @@
       @dismiss="$store.commit('toggleNotifyModal')"
       @addNotify="addNotify"
     />
+    <DeleteConfirmation
+      v-if="confirm == true"
+      @dismiss="confirm = false"
+      @confirm="deleteEntry"
+    />
     <div class="title flex justify-between my-8">
       <h1 class="text-xl sm:text-2xl font-medium mb-4">SMS Logs</h1>
       <MyButton
@@ -49,7 +54,7 @@
         >
           <td class="p-3">{{ item.id }}</td>
           <td class="p-3">
-            {{ getName(item.patients) }}
+            {{ item.patients[0] ? getName(item.patients) : '...' }}
           </td>
           <td class="p-3">{{ text_truncate(item.message) }}</td>
           <td class="p-3">
@@ -58,6 +63,14 @@
               ' at ' +
               formatter.formatTime(item.createdAt)
             }}
+          </td>
+          <td class="relative">
+            <img
+              class="delete-btn absolute right-4 top-4 hidden"
+              src="/delete_btn.svg"
+              alt=""
+              @click.stop="confirmation(item)"
+            />
           </td>
         </tr>
 
@@ -70,7 +83,7 @@
       <div
         v-for="(item, i) in notifications"
         :key="i"
-        class="card p-4 mb-4 border cursor-pointer rounded-lg shadow-lg"
+        class="relative card p-4 mb-4 border cursor-pointer rounded-lg shadow-lg"
         @click="viewNotification(item.id)"
       >
         <p class="text-gray-600 text-xs font-normal border-b mb-3">
@@ -90,6 +103,12 @@
             formatter.formatTime(item.createdAt)
           }}
         </p>
+        <img
+          class="delete-btn absolute right-4 top-4"
+          src="/delete_btn.svg"
+          alt=""
+          @click.stop="confirmation(item)"
+        />
       </div>
     </div>
     <div
@@ -143,6 +162,8 @@ export default {
 
   data() {
     return {
+      confirm: false,
+      notificationToDelete: false,
       modal: false,
       addBtnIcon: '/plus-circle.svg',
       totalItem: 0,
@@ -162,6 +183,25 @@ export default {
     this.fetchTotalNotificationCount()
   },
   methods: {
+    confirmation(product) {
+      this.notificationToDelete = product
+      this.confirm = true
+    },
+    async deleteEntry() {
+      try {
+        const res = await this.$axios.delete(
+          `/notifications/${this.notificationToDelete.id}`
+        )
+        const index = this.notifications.findIndex(
+          (a) => a.id === this.notificationToDelete.id
+        )
+        this.notifications.splice(index, 1)
+        this.$toast.success('Delete Notification successfully')
+        this.confirm = false
+      } catch (error) {
+        this.$toast.error(error.message)
+      }
+    },
     async clickCallback(selectedPage) {
       this.currentPage = selectedPage
       const { data } = await this.$apollo.query({
@@ -265,6 +305,13 @@ td {
   th {
     text-align: left;
     font-weight: normal;
+  }
+  tr {
+    &:hover {
+      .delete-btn {
+        display: block;
+      }
+    }
   }
 }
 button {

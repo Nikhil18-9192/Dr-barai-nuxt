@@ -3,7 +3,7 @@
     <DeleteConfirmation
       v-if="confirm == true"
       @dismiss="confirm = false"
-      @confirm="deleteAppontment"
+      @confirm="deleteEntry"
     />
     <div class="title sm:flex justify-between my-4 sm:my-8">
       <h1 class="text-xl sm:text-2xl font-medium mb-4 sm:mb-0">Appointments</h1>
@@ -73,8 +73,12 @@
           @click="onAppointmentClick(appointment.id)"
         >
           <td class="py-3 pl-2">{{ appointment.id }}</td>
-          <td class="py-3 px-0">{{ appointment.patient.name }}</td>
-          <td class="py-3 px-0">{{ appointment.patient.mobile }}</td>
+          <td class="py-3 px-0">
+            {{ appointment.patient ? appointment.patient.name : '...' }}
+          </td>
+          <td class="py-3 px-0">
+            {{ appointment.patient ? appointment.patient.mobile : '...' }}
+          </td>
           <td class="py-3 px-0">
             {{
               formatter.formatDate(appointment.startDateTime) +
@@ -219,7 +223,7 @@ export default {
       this.appointmentToDelete = appointment
       this.confirm = true
     },
-    async deleteAppontment() {
+    async deleteEntry() {
       try {
         const res = await this.$axios.delete(
           `/appointments/${this.appointmentToDelete.id}`

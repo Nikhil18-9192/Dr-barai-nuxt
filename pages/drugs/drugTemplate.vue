@@ -1,5 +1,10 @@
 <template>
   <div id="drugs-template">
+    <DeleteConfirmation
+      v-if="confirm == true"
+      @dismiss="confirm = false"
+      @confirm="deleteTemplate"
+    />
     <div class="title flex justify-between my-8">
       <h1 class="text-xl sm:text-2xl font-medium mb-2">Drugs Template</h1>
     </div>
@@ -19,7 +24,7 @@
             class="absolute right-2"
             src="/delete_btn.svg"
             alt=""
-            @click.stop="deleteTemplate(item)"
+            @click.stop="confirmation(item)"
           />
         </div>
         <p v-for="(temp, j) in item.template" :key="j">{{ temp.drug.name }}</p>
@@ -32,6 +37,8 @@
 export default {
   data() {
     return {
+      confirm: false,
+      templateToDelete: false,
       template: {},
       drugTemplates: [],
       modal: false,
@@ -51,6 +58,10 @@ export default {
     this.fetchTemplates()
   },
   methods: {
+    confirmation(template) {
+      this.templateToDelete = template
+      this.confirm = true
+    },
     async fetchTemplates() {
       try {
         const { data } = await this.$axios.get(`/drugs-templates`)
@@ -59,14 +70,15 @@ export default {
         this.$toast.error(error.message)
       }
     },
-    async deleteTemplate(item) {
+    async deleteTemplate() {
       try {
         const response = await this.$axios.$delete(
-          `/drugs-templates/${item.id}`
+          `/drugs-templates/${this.templateToDelete.id}`
         )
         if (response) {
           this.$toast.success('Template deleted.')
           this.fetchTemplates()
+          this.confirm = false
         }
       } catch (error) {
         this.$toast.error(error.message)

@@ -37,6 +37,9 @@ export default {
   .add-btn {
     width: 180px;
     height: 37px;
+    @include for-phone-only {
+      width: 135px;
+    }
   }
   .cancel-btn {
     background: #f3f4f6;
