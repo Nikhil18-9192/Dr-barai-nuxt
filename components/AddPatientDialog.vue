@@ -172,47 +172,36 @@ export default {
         const validation = AddPatientValidation({
           name,
           mobile,
-          email,
-          gender,
-          birthDate,
           address,
-          pincode,
-          city,
-          bloodGroup,
         })
         if (validation.error) {
           this.loading = false
           this.$toast.error(validation.error.message)
           return
         }
-
+        let data = {
+          name,
+          mobile,
+          email,
+          gender,
+          address,
+          pincode,
+          city,
+          bloodGroup,
+        }
+        if (birthDate) {
+          data.birthDate = birthDate
+        }
         if (!this.patient) {
-          const result = await this.$axios.$post(`/patients`, {
-            name,
-            mobile,
-            email,
-            gender,
-            birthDate,
-            address,
-            pincode,
-            city,
-            bloodGroup,
-          })
+          const result = await this.$axios.$post(`/patients`, data)
           this.$emit('dismiss')
           this.$emit('patientData', result)
           this.$toast.success('Patient Added.')
         } else {
-          const res = await this.$axios.$put(`/patients/${this.patient.id}`, {
-            name,
-            mobile,
-            email,
-            gender,
-            birthDate,
-            address,
-            pincode,
-            city,
-            bloodGroup,
-          })
+          const res = await this.$axios.$put(
+            `/patients/${this.patient.id}`,
+            data
+          )
           this.$emit('dismiss')
           this.$emit('patientData', res)
           this.$toast.success('Done.')
