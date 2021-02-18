@@ -14,6 +14,23 @@
         </h1>
       </div>
       <div class="form px-4 sm:px-12 md:px-8 flex-grow overflow-y-scroll">
+        <div id="update-profile">
+          <img
+            id="upload-img"
+            class="placeholder-img"
+            :src="imageUrl ? imageUrl : '/profile-placeholder.jpg'"
+            alt=""
+            @click="$refs.fileInput.click()"
+          />
+        </div>
+        <input
+          id="add-image"
+          ref="fileInput"
+          type="file"
+          accept="image/*"
+          @change="onImageAdded"
+        />
+        <br />
         <label for="name" class="text-sm font-normal text-gray-400">Name</label>
         <input
           v-model="name"
@@ -22,6 +39,7 @@
           placeholder="Elon musk"
           autocomplete="on"
         />
+
         <label for="mobile" class="text-sm font-normal text-gray-400"
           >Mobile</label
         >
@@ -124,6 +142,7 @@
 
 <script>
 import { AddPatientValidation } from '@/utils/validation'
+import { log } from 'pdfmake/build/pdfmake'
 export default {
   // eslint-disable-next-line
   props: ['patient'],
@@ -139,6 +158,8 @@ export default {
       pincode: '',
       city: '',
       bloodGroup: 'Select Blood Group',
+      profile: false,
+      imageUrl: false,
     }
   },
   mounted() {
@@ -152,9 +173,18 @@ export default {
       this.pincode = this.patient.pincode
       this.city = this.patient.city
       this.bloodGroup = this.patient.bloodGroup
+      if (this.patient.profile) {
+        this.imageUrl = this.patient.profile.url
+        console.log(this.imageUrl)
+      }
     }
   },
   methods: {
+    onImageAdded(event) {
+      const images = this.$refs.fileInput.files
+      this.profile = images[0]
+      this.imageUrl = URL.createObjectURL(images[0])
+    },
     async addPatient() {
       this.loading = true
       try {
@@ -194,22 +224,47 @@ export default {
         }
         if (!this.patient) {
           const result = await this.$axios.$post(`/patients`, data)
-          this.$emit('dismiss')
+
+          if (this.profile) {
+            await this.uploadImage(result.id)
+          }
           this.$emit('patientData', result)
+          this.$emit('dismiss')
           this.$toast.success('Patient Added.')
         } else {
-          const res = await this.$axios.$put(
-            `/patients/${this.patient.id}`,
-            data
-          )
-          this.$emit('dismiss')
+          let res = await this.$axios.$put(`/patients/${this.patient.id}`, data)
+          if (this.patient.profile) {
+            await this.$axios.$delete(
+              `/upload/files/${this.patient.profile.id}`
+            )
+          }
+          if (this.profile) {
+            const result = await this.uploadImage(this.patient.id)
+            res = result
+          }
           this.$emit('patientData', res)
+          this.$emit('dismiss')
           this.$toast.success('Done.')
         }
       } catch (error) {
         this.$toast.error(error.message)
       }
       this.loading = false
+    },
+    async uploadImage(id) {
+      const data = {
+        ref: 'appointments',
+        field: 'profile',
+        refId: id,
+      }
+      const fd = new FormData()
+      fd.append(`files.profile`, this.profile, this.profile.name)
+      fd.append('data', JSON.stringify(data))
+      return this.$axios.$put(`/patients/${id}`, fd, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
     },
   },
 }
@@ -247,6 +302,16 @@ export default {
     &::-webkit-scrollbar-thumb {
       background: #888;
     }
+  }
+  .placeholder-img {
+    height: 200px;
+    width: 200px;
+    margin: 0 auto;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+  input[type='file'] {
+    display: none;
   }
 }
 </style>

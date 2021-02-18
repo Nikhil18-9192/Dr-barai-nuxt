@@ -57,7 +57,9 @@
       <div
         class="action w-full h-20 bg-white pb-4 flex items-center justify-center"
       >
-        <MyButton @click.native="submitConsent">Submit</MyButton>
+        <MyButton :loading="loading" @click.native="submitConsent"
+          >Submit</MyButton
+        >
         <MyButton
           class="ml-4"
           :secondary="true"
@@ -84,6 +86,7 @@ export default {
       docSignaturePad: false,
       patientSignaturePad: false,
       patient: false,
+      loading: false,
     }
   },
   computed: {
@@ -168,7 +171,7 @@ export default {
           },
         ],
       }
-
+      this.loading = true
       pdfMake.createPdf(docDefinition).getBlob((blob) => {
         this.$emit('dismiss', blob)
       })

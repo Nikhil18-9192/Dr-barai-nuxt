@@ -10,6 +10,10 @@ query patients($id: ID!) {
     email
     pincode
     city
+    profile {
+      id
+      url
+    }
     appointments(sort: "createdAt:desc") {
       id
       clinicalNotes {

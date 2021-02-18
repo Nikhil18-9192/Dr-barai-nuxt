@@ -289,6 +289,7 @@ export default {
     patientUpdated(val) {
       if (val) {
         this.patient = val
+        console.log(this.patient)
         const birthday = +new Date(this.patient.birthDate)
         this.age = ~~((Date.now() - birthday) / 31557600000)
       }
