@@ -1,12 +1,22 @@
 <template>
   <div id="search">
-    <input
-      type="text"
-      class="search-input border outline-none rounded-lg p-2"
-      placeholder="Search Patient"
-      v-model="search"
-      @input="runSearch"
-    />
+    <div class="search-input relative">
+      <input
+        type="text"
+        class="search-input border outline-none rounded-lg p-2"
+        placeholder="Search Patient"
+        v-model="search"
+        @input="runSearch"
+      />
+      <img
+        v-if="search"
+        class="absolute right-2 top-3 cursor-pointer"
+        src="/delete_btn.svg"
+        alt=""
+        @click="clearSearch"
+      />
+    </div>
+
     <div
       v-if="searchPatients.length"
       class="result sm:fixed bg-white border rounded-lg"
@@ -57,6 +67,10 @@ export default {
         },
       })
       this.searchPatients = data.patients
+    },
+    clearSearch() {
+      this.search = ''
+      this.searchPatients = []
     },
   },
 }
