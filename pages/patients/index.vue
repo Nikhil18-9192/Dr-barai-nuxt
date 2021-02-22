@@ -28,11 +28,6 @@
           <th
             class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
           >
-            ID
-          </th>
-          <th
-            class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
-          >
             Profile
           </th>
           <th
@@ -57,8 +52,7 @@
           class="bg-gray-100 my-6 text-sm font-normal cursor-pointer"
           @click="patientInfo(item.id)"
         >
-          <td class="py-3">{{ item.id }}</td>
-          <td class="py-3">
+          <td class="py-3 pl-3">
             <img
               v-if="item.profile"
               class="profile-img"
@@ -99,13 +93,13 @@
         <div class="profile">
           <img
             v-if="item.profile"
-            class="profile-img"
+            class="profile-phone"
             :src="item.profile ? item.profile.url : ''"
             alt=""
           />
           <img
             v-else
-            class="profile-img"
+            class="profile-phone"
             src="/profile-placeholder.jpg"
             alt=""
           />
@@ -316,6 +310,13 @@ export default {
     width: 60px;
     border-radius: 50%;
     object-fit: cover;
+  }
+  .profile-phone {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto;
   }
 }
 </style>
