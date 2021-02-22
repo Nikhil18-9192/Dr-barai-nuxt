@@ -33,6 +33,11 @@
           <th
             class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
           >
+            Profile
+          </th>
+          <th
+            class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
+          >
             Patient’s Name
           </th>
           <th
@@ -53,12 +58,26 @@
           @click="patientInfo(item.id)"
         >
           <td class="py-3">{{ item.id }}</td>
+          <td class="py-3">
+            <img
+              v-if="item.profile"
+              class="profile-img"
+              :src="item.profile ? item.profile.url : ''"
+              alt=""
+            />
+            <img
+              v-else
+              class="profile-img"
+              src="/profile-placeholder.jpg"
+              alt=""
+            />
+          </td>
           <td class="py-3">{{ item.name }}</td>
           <td class="py-3">{{ item.mobile }}</td>
           <td class="py-3">{{ item.appointments.length }}</td>
           <td class="relative">
             <img
-              class="delete-btn absolute right-4 top-4 hidden"
+              class="delete-btn absolute right-4 top-8 hidden"
               src="/delete_btn.svg"
               alt=""
               @click.stop="confirmation(item)"
@@ -77,6 +96,20 @@
         class="relative card p-4 mb-4 border cursor-pointer rounded-lg shadow-lg"
         @click="patientInfo(item.id)"
       >
+        <div class="profile">
+          <img
+            v-if="item.profile"
+            class="profile-img"
+            :src="item.profile ? item.profile.url : ''"
+            alt=""
+          />
+          <img
+            v-else
+            class="profile-img"
+            src="/profile-placeholder.jpg"
+            alt=""
+          />
+        </div>
         <p class="text-gray-600 text-xs font-normal border-b mb-3">
           Name: <span class="text-blue-600 text-base">{{ item.name }}</span>
         </p>
@@ -225,6 +258,7 @@ export default {
       this.totalPages = Math.ceil(this.totalItem / this.perPage)
     },
     newPatient(val) {
+      console.log(val)
       if (val) {
         this.patients.unshift(val)
       }
@@ -276,6 +310,12 @@ export default {
   }
   button {
     outline: none;
+  }
+  .profile-img {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    object-fit: cover;
   }
 }
 </style>

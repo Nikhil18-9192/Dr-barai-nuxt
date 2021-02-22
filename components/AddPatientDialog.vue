@@ -223,17 +223,18 @@ export default {
           data.birthDate = birthDate
         }
         if (!this.patient) {
-          const result = await this.$axios.$post(`/patients`, data)
+          let result = await this.$axios.$post(`/patients`, data)
 
           if (this.profile) {
-            await this.uploadImage(result.id)
+            const res = await this.uploadImage(result.id)
+            result = res
           }
           this.$emit('patientData', result)
           this.$emit('dismiss')
           this.$toast.success('Patient Added.')
         } else {
           let res = await this.$axios.$put(`/patients/${this.patient.id}`, data)
-          if (this.patient.profile) {
+          if (this.patient.profile && this.profile) {
             await this.$axios.$delete(
               `/upload/files/${this.patient.profile.id}`
             )

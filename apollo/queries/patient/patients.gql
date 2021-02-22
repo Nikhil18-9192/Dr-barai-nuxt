@@ -4,6 +4,10 @@ query patients($limit: Int, $start: Int) {
     mobile
     name
     createdAt
+    profile {
+      id
+      url
+    }
     appointments {
       id
     }

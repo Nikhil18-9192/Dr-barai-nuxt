@@ -32,7 +32,7 @@
           v-model="itemcode"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
           type="number"
-          placeholder=""
+          placeholder="Enter Item Code"
           autocomplete="on"
         />
         <label for="item type" class="text-sm font-normal text-gray-400"
@@ -54,7 +54,7 @@
           v-model="manufacturer"
           type="text"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none"
-          placeholder="Eon musk"
+          placeholder="Enter manufacturer name"
           autocomplete="on"
         />
         <label for="stock" class="text-sm font-normal text-gray-400"
