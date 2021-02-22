@@ -1,0 +1,11 @@
+query($search: String!) {
+  patients(where: { _q: $search }) {
+    id
+    name
+    mobile
+    profile {
+      id
+      url
+    }
+  }
+}

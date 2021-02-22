@@ -11,7 +11,11 @@
       @confirm="deleteEntry"
     />
     <div class="title flex justify-between my-8">
-      <h1 class="text-xl sm:text-2xl font-medium mb-4">Patient List</h1>
+      <div class="title flex">
+        <h1 class="text-xl sm:text-2xl font-medium mb-4">Patient List</h1>
+        <SearchInput class="sm:ml-6 mb-6 sm:mb-0" />
+      </div>
+
       <MyButton
         :icon="addBtnIcon"
         @click.native="$store.commit('togglePatientModal')"
