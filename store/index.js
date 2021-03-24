@@ -55,7 +55,8 @@ export const actions = {
       const user = await this.$axios.$get('/users/me')
       commit('SET_USER', { email: user.email })
     } catch (error) {
-      this.$toast.error('nuxtClient', error.message)
+      Cookies.remove('jwt')
+      redirect('/login')
     }
   },
 }
