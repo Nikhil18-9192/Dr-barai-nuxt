@@ -18,7 +18,13 @@
         <label for="gender" class="text-sm font-light text-gray-400"
           >Drug</label
         >
-        <select
+        <model-select
+          v-model="selectedDrugId"
+          :options="drugs"
+          placeholder="Search Drug"
+          autocomplete="on"
+        />
+        <!-- <select
           v-model="selectedDrug"
           class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
         >
@@ -26,7 +32,7 @@
           <option v-for="(item, i) in drugs" :key="i" :value="item">
             {{ item.name }}
           </option>
-        </select>
+        </select> -->
         <label for="gender" class="text-sm font-light text-gray-400"
           >Frequency</label
         >
@@ -96,8 +102,12 @@
 import { dosageFrequency, durationUnits } from '@/utils'
 import { AddPrescriptionValidation } from '@/utils/validation'
 import query from '@/apollo/queries/drug/drug.gql'
+import { ModelSelect } from 'vue-search-select'
 
 export default {
+  components: {
+    ModelSelect,
+  },
   props: {
     editPrescription: {
       type: Object,
@@ -108,11 +118,17 @@ export default {
     return {
       selectedDurationUnitIndex: 0,
       selectedDrug: 'Select Drugs',
-      dosageFrequency: 'Select Dosage',
+      dosageFrequency: false,
       intake: '',
-      duration: '',
-      drugs: false,
+      duration: 0,
+      drugs: [
+        {
+          value: false,
+          text: 'Loading...',
+        },
+      ],
       instructions: '',
+      selectedDrugId: '',
     }
   },
   computed: {
@@ -141,21 +157,30 @@ export default {
   },
   methods: {
     submitPrescriptionData() {
-      const { dosageFrequency, intake, duration, instructions } = this
-      const validation = AddPrescriptionValidation({
+      const {
+        selectedDrugId,
         dosageFrequency,
         intake,
         duration,
         instructions,
+      } = this
+      const validation = AddPrescriptionValidation({
+        selectedDrugId,
+        // dosageFrequency,
+        // intake,
+        // duration,
+        // instructions,
       })
       if (validation.error) {
         this.$toast.error(validation.error.message)
         return
       }
+      const drug = this.drugs.find((drug) => drug.value == this.selectedDrugId)
+
       const respData = {
         drug: {
-          id: this.selectedDrug.id,
-          name: this.selectedDrug.name,
+          id: this.selectedDrugId,
+          name: drug.text,
         },
         frequency: {
           frequency: this.dosageFrequency,
@@ -165,6 +190,9 @@ export default {
           instructions,
         },
       }
+      if (!respData.frequency.frequency) {
+        delete respData.frequency.frequency
+      }
       if (this.editPrescription) {
         this.$emit('updatePrescription', respData)
         return
@@ -172,10 +200,26 @@ export default {
       this.$emit('addPrescription', respData)
     },
     async fetchDrugs() {
-      const { data } = await this.$apollo.query({
-        query,
-      })
-      this.drugs = data.drugs
+      this.drugs = []
+
+      try {
+        const { data } = await this.$apollo.query({
+          query,
+          fetchPolicy: 'network-only',
+        })
+
+        for (let i = 0; i < data.drugs.length; i++) {
+          const obj = {}
+          obj.value = data.drugs[i].id
+          obj.text = data.drugs[i].name
+          this.drugs.push(obj)
+        }
+      } catch (error) {
+        const obj = {}
+        obj.value = false
+        obj.text = error.message
+        this.drugs.push(obj)
+      }
     },
   },
 }

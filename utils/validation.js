@@ -11,11 +11,11 @@ const AddPatientValidation = (data) => {
 }
 const AddPrescriptionValidation = (data) => {
   const formSchema = Joi.object({
-    // selectedDrug: Joi.string().min(3).max(50).label('Drugs').required(),
-    dosageFrequency: Joi.string().min(3).max(50).label('Dosage & Frequency'),
-    intake: Joi.string().min(3).max(50).label('Intake'),
-    duration: Joi.number().min(0).label('Duration'),
-    instructions: Joi.string().min(3).max(250).label('Instruction'),
+    selectedDrugId: Joi.string().min(3).max(50).label('Drugs').required(),
+    // dosageFrequency: Joi.string().min(3).max(50).label('Dosage & Frequency'),
+    // intake: Joi.string().min(3).max(50).label('Intake'),
+    // duration: Joi.number().min(0).label('Duration'),
+    // instructions: Joi.string().min(3).max(250).label('Instruction'),
   }).required()
 
   return formSchema.validate(data)
