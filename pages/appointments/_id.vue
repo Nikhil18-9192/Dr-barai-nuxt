@@ -34,12 +34,7 @@
       </h4>
       <iframe :src="consentDoc.url" frameborder="0"></iframe>
     </div>
-    <!-- <ConsentView
-      v-else
-      :patient-id="patient.id"
-      class="my-4"
-      @onConsentSigned="onConsentSigned"
-    /> -->
+
     <Prescription v-model="prescription" />
     <br />
     <MyButton :loading="loading" class="mb-4" @click.native="submit"
@@ -70,7 +65,7 @@ export default {
       loading: false,
       consentDoc: false,
       nativeProducts: [],
-      consentBlob: false,
+
       showProductSelector: true,
     }
   },
@@ -78,9 +73,6 @@ export default {
     this.fetchAppointment()
   },
   methods: {
-    // onConsentSigned(blob) {
-    //   this.consentBlob = blob
-    // },
     async fetchAppointment() {
       const id = this.$route.params.id
       this.$store.commit('SET_LOADING')
@@ -158,9 +150,6 @@ export default {
           })),
         })
 
-        // if (this.consentBlob) {
-        //   await this.uploadConsentFileAsync()
-        // }
         this.$toast.success('Appointment updated.')
         this.$router.go(-1)
       } catch (error) {
@@ -170,41 +159,6 @@ export default {
       this.loading = false
     },
 
-    uploadConsentFileAsync() {
-      // eslint-disable-next-line no-async-promise-executor
-      return new Promise(async (resolve, reject) => {
-        const data = {
-          ref: 'appointments',
-          field: 'consent',
-          refId: this.$route.params.id,
-        }
-        const fd = new FormData()
-        fd.append(
-          'files.consent',
-          this.consentBlob,
-          `${this.$route.params.id}.pdf`
-        )
-
-        fd.append('data', JSON.stringify(data))
-        try {
-          const res = await this.$axios.$put(
-            `/appointments/${this.$route.params.id}`,
-            fd,
-            {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-            }
-          )
-          resolve(res)
-        } catch (error) {
-          if (error.response) {
-            this.$toast.error(error.response.data.message)
-          }
-          reject(error)
-        }
-      })
-    },
     async initImageDelete(imageId) {
       try {
         this.$store.commit('SET_LOADING')

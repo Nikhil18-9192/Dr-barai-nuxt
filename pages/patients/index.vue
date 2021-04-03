@@ -243,6 +243,7 @@ export default {
       this.$store.commit('SET_LOADING')
       const { data } = await this.$apollo.query({
         query: patients,
+        fetchPolicy: 'network-only',
         variables: {
           limit: this.perPage,
           start: this.currentPage * this.perPage - this.perPage,

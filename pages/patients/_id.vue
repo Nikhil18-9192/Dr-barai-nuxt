@@ -311,14 +311,16 @@ export default {
       this.modal = false
     },
     async fetchPatient() {
-      // const { data } = await this.$apollo.query({
-      //   query,
-      //   variables: {
-      //     id: this.$route.params.id,
-      //   },
-      // })
-      const res = await this.$axios.$get(`/patients/${this.$route.params.id}`)
-      this.patient = res
+      const { data } = await this.$apollo.query({
+        query,
+        fetchPolicy: 'network-only',
+        variables: {
+          id: this.$route.params.id,
+        },
+        fetch,
+      })
+
+      this.patient = data.patient
       const birthday = +new Date(this.patient.birthDate)
       this.age = ~~((Date.now() - birthday) / 31557600000)
 
@@ -368,7 +370,7 @@ export default {
           )
 
           this.patient = res
-          console.log('put', this.patient.consent.id)
+
           resolve(res)
         } catch (error) {
           if (error.response) {

@@ -80,16 +80,15 @@ export default {
     async fetchPatients() {
       this.patients = []
       try {
-        // const { data } = await this.$apollo.query({
-        //   query: getPatientNames,
-        // })
+        const { data } = await this.$apollo.query({
+          query: getPatientNames,
+          fetchPolicy: 'network-only',
+        })
 
-        const res = await this.$axios.$get('/patients')
-        console.log(res)
-        for (let i = 0; i < res.length; i++) {
+        for (let i = 0; i < data.patients.length; i++) {
           const obj = {}
-          obj.value = res[i].id
-          obj.text = res[i].name
+          obj.value = data.patients[i].id
+          obj.text = data.patients[i].name
           this.patients.push(obj)
         }
       } catch (error) {
