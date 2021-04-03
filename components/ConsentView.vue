@@ -28,7 +28,9 @@
         class="consent-action absolute top-1 right-2 cursor-pointer"
         @click="signDialog = true"
       >
-        <p v-if="blob" class="text-sm text-green-500 m-w-10">Consent Signed</p>
+        <p v-if="blob.size > 15150" class="text-sm text-green-500 m-w-10">
+          Consent Signed
+        </p>
         <p v-else class="text-sm text-blue-600">Take Signature</p>
       </div>
     </div>
@@ -81,12 +83,16 @@ export default {
 
   .collapse-view {
     background: rgb(235, 235, 235);
-
+    width: 50%;
+    @include for-phone-only {
+      width: 100%;
+    }
     span {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       padding: 8px;
-      font-size: 12px;
+      font-size: 14px;
 
       p {
         margin-right: 12px;

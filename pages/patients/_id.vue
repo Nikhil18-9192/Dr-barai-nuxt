@@ -37,14 +37,25 @@
           >Notify</MyButton
         >
         <MyButton
-          class="edit-btn"
+          class="edit-btn mb-4"
           :icon="editBtnIcon"
           @click.native="$store.commit('togglePatientModal')"
           >Edit Profile</MyButton
         >
       </div>
     </div>
-
+    <div class="consent-view">
+      <ConsentView
+        :patient-id="patient.id || 0"
+        class="mb-4 consentView"
+        @onConsentSigned="onConsentSigned"
+      />
+      <div class="download" v-if="patient.consent">
+        <a target="_blank" :href="patient.consent.url"
+          ><img src="/doc-download.svg" alt=""
+        /></a>
+      </div>
+    </div>
     <div class="appintment">
       <h4>Appointment History</h4>
       <table v-if="$device.isDesktopOrTablet" class="patient-list">
@@ -274,6 +285,7 @@ export default {
       age: false,
       patient: false,
       notifications: false,
+      consentBlob: null,
     }
   },
   computed: {
@@ -286,25 +298,30 @@ export default {
   },
 
   methods: {
+    async onConsentSigned(blob) {
+      this.consentBlob = blob
+      await this.uploadConsentFileAsync()
+    },
     patientUpdated(val) {
       if (val) {
         this.patient = val
-        console.log(this.patient)
         const birthday = +new Date(this.patient.birthDate)
         this.age = ~~((Date.now() - birthday) / 31557600000)
       }
       this.modal = false
     },
     async fetchPatient() {
-      const { data } = await this.$apollo.query({
-        query,
-        variables: {
-          id: this.$route.params.id,
-        },
-      })
-      this.patient = data.patient
+      // const { data } = await this.$apollo.query({
+      //   query,
+      //   variables: {
+      //     id: this.$route.params.id,
+      //   },
+      // })
+      const res = await this.$axios.$get(`/patients/${this.$route.params.id}`)
+      this.patient = res
       const birthday = +new Date(this.patient.birthDate)
       this.age = ~~((Date.now() - birthday) / 31557600000)
+
       this.fetchNotifications()
     },
     async fetchNotifications() {
@@ -321,6 +338,45 @@ export default {
     },
     newNotify(val) {
       this.notifications.unshift(val)
+    },
+    uploadConsentFileAsync() {
+      // eslint-disable-next-line no-async-promise-executor
+      return new Promise(async (resolve, reject) => {
+        const data = {
+          ref: 'patients',
+          field: 'consent',
+          refId: this.patient.id,
+        }
+        const fd = new FormData()
+        fd.append('files.consent', this.consentBlob, `${this.patient.id}.pdf`)
+
+        fd.append('data', JSON.stringify(data))
+        try {
+          if (this.patient.consent) {
+            await this.$axios.$delete(
+              `http://localhost:1337/upload/files/${this.patient.consent.id}`
+            )
+          }
+          const res = await this.$axios.$put(
+            `/patients/${this.patient.id}`,
+            fd,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            }
+          )
+
+          this.patient = res
+          console.log('put', this.patient.consent.id)
+          resolve(res)
+        } catch (error) {
+          if (error.response) {
+            this.$toast.error(error.response.data.message)
+          }
+          reject(error)
+        }
+      })
     },
   },
 }
@@ -347,6 +403,22 @@ export default {
     .edit-btn {
       background: #f3f3f3;
       color: #52525b;
+    }
+  }
+  .consent-view {
+    display: flex;
+    border: 0.5px solid #d3d3d3;
+    padding: 15px;
+    margin-bottom: 15px;
+    @include for-phone-only {
+      flex-wrap: wrap;
+    }
+    .download {
+      img {
+        width: 35px;
+        height: 35px;
+        object-fit: contain;
+      }
     }
   }
 }

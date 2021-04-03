@@ -20,11 +20,6 @@
     <Files v-model="files" class="new my-4" />
     <hr />
 
-    <ConsentView
-      :patient-id="patientInfo.selectedPatientId || 0"
-      class="my-4"
-      @onConsentSigned="onConsentSigned"
-    />
     <hr />
     <Prescription v-model="prescriptionInfo" class="my-4" />
     <hr />
@@ -53,9 +48,6 @@ export default {
     }
   },
   methods: {
-    onConsentSigned(blob) {
-      this.consentBlob = blob
-    },
     async submitAppointment() {
       if (!this.patientInfo.selectedPatientId) {
         this.$toast.error('Select Patient')
@@ -101,9 +93,7 @@ export default {
             },
           })
         }
-        if (this.consentBlob) {
-          await this.uploadConsentFileAsync()
-        }
+
         this.$toast.success('Done.')
         this.$router.go(-1)
       } catch (error) {
@@ -112,42 +102,6 @@ export default {
       }
       this.loading = false
       this.$store.commit('UNSET_LOADING')
-    },
-
-    uploadConsentFileAsync() {
-      // eslint-disable-next-line no-async-promise-executor
-      return new Promise(async (resolve, reject) => {
-        const data = {
-          ref: 'appointments',
-          field: 'consent',
-          refId: this.appointmentId,
-        }
-        const fd = new FormData()
-        fd.append(
-          'files.consent',
-          this.consentBlob,
-          `${this.appointmentId}.pdf`
-        )
-
-        fd.append('data', JSON.stringify(data))
-        try {
-          const res = await this.$axios.$put(
-            `/appointments/${this.appointmentId}`,
-            fd,
-            {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-            }
-          )
-          resolve(res)
-        } catch (error) {
-          if (error.response) {
-            this.$toast.error(error.response.data.message)
-          }
-          reject(error)
-        }
-      })
     },
   },
 }

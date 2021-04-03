@@ -52,10 +52,6 @@ query appointments($id: ID!) {
       url
     }
 
-    consent {
-      url
-    }
-
     nativeProducts {
       quantity
       product {

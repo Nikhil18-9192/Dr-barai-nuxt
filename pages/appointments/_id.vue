@@ -34,12 +34,12 @@
       </h4>
       <iframe :src="consentDoc.url" frameborder="0"></iframe>
     </div>
-    <ConsentView
+    <!-- <ConsentView
       v-else
       :patient-id="patient.id"
       class="my-4"
       @onConsentSigned="onConsentSigned"
-    />
+    /> -->
     <Prescription v-model="prescription" />
     <br />
     <MyButton :loading="loading" class="mb-4" @click.native="submit"
@@ -78,9 +78,9 @@ export default {
     this.fetchAppointment()
   },
   methods: {
-    onConsentSigned(blob) {
-      this.consentBlob = blob
-    },
+    // onConsentSigned(blob) {
+    //   this.consentBlob = blob
+    // },
     async fetchAppointment() {
       const id = this.$route.params.id
       this.$store.commit('SET_LOADING')
@@ -158,9 +158,9 @@ export default {
           })),
         })
 
-        if (this.consentBlob) {
-          await this.uploadConsentFileAsync()
-        }
+        // if (this.consentBlob) {
+        //   await this.uploadConsentFileAsync()
+        // }
         this.$toast.success('Appointment updated.')
         this.$router.go(-1)
       } catch (error) {

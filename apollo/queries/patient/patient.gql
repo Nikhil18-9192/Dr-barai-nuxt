@@ -9,6 +9,10 @@ query patients($id: ID!) {
     birthDate
     email
     pincode
+    consent {
+      id
+      url
+    }
     city
     profile {
       id

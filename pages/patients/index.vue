@@ -248,6 +248,7 @@ export default {
           start: this.currentPage * this.perPage - this.perPage,
         },
       })
+
       this.patients = data.patients
       this.$store.commit('UNSET_LOADING')
     },
