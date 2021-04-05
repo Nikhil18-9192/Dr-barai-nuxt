@@ -59,6 +59,7 @@ query appointments($id: ID!) {
       product {
         id
         name
+        retailPrice
       }
     }
   }

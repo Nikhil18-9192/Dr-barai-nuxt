@@ -102,6 +102,7 @@ export default {
       this.products = []
       const result = await this.$apollo.query({
         query,
+        fetchPolicy: 'network-only',
         variables: { search: `${this.search}` },
       })
       const products = result.data.products ? result.data.products : []

@@ -1,11 +1,21 @@
 <template>
   <div id="appointment">
+    <CashMemoModal
+      v-if="memoModal"
+      @dismiss="memoModal = false"
+      :products="products"
+      :prescriptions="prescription"
+    />
     <AppointmentTitle
       :appointment-info="appointmentInfo"
       :patient="patient"
       @updatedPatient="updatedData"
     />
-
+    <div class="cash-memo flex sm:justify-end">
+      <MyButton :loading="loading" class="mb-4" @click.native="memoModal = true"
+        >Generate Memo</MyButton
+      >
+    </div>
     <div class="title-container flex mt-6">
       <h1 class="text-xl font-medium">Products</h1>
       <AddButton @click.native="showProductSelector = !showProductSelector" />
@@ -66,6 +76,8 @@ export default {
       consentDoc: false,
       nativeProducts: [],
       showProductSelector: true,
+      memoModal: false,
+      products: [],
     }
   },
   mounted() {
@@ -84,8 +96,10 @@ export default {
           },
         })
         const result = data.appointment
+        this.products = result.nativeProducts
         this.patient = result.patient
         this.prescription = result.prescription
+        console.log(this.prescription)
         this.vitalSigns = result.vitalSigns
         this.clinicalNotes = result.clinicalNotes
         for (const i in result.files) {

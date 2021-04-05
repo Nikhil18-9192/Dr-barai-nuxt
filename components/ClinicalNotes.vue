@@ -51,12 +51,7 @@
 
 <script>
 export default {
-  props: {
-    value: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
+  props: ['value'],
   data() {
     return {
       notesModal: false,
@@ -87,6 +82,7 @@ export default {
     },
     deleteNotes() {
       this.currentNotes = {}
+
       this.$emit('input', this.currentNotes)
     },
   },
