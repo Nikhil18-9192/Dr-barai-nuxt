@@ -12,23 +12,19 @@ const AddPatientValidation = (data) => {
 const AddPrescriptionValidation = (data) => {
   const formSchema = Joi.object({
     selectedDrugId: Joi.string().min(3).max(50).label('Drugs').required(),
-    // dosageFrequency: Joi.string().min(3).max(50).label('Dosage & Frequency'),
-    // intake: Joi.string().min(3).max(50).label('Intake'),
-    // duration: Joi.number().min(0).label('Duration'),
-    // instructions: Joi.string().min(3).max(250).label('Instruction'),
   }).required()
 
   return formSchema.validate(data)
 }
 const AddVitalSignValidation = (data) => {
   const formSchema = Joi.object({
-    weight: Joi.number().label('Weight'),
-    systolic: Joi.number().label('systolic'),
-    diastolic: Joi.number().label('diastolic'),
-    temperature: Joi.number().label('temperature'),
-    respiration: Joi.number().label('respiration'),
-    pulse: Joi.number().label('respiration'),
-  }).required()
+    weight: Joi.string().label('Weight'),
+    systolic: Joi.string().label('systolic'),
+    diastolic: Joi.string().label('diastolic'),
+    temperature: Joi.string().label('temperature'),
+    respiration: Joi.string().label('respiration'),
+    pulse: Joi.string().label('pulse'),
+  })
 
   return formSchema.validate(data)
 }
@@ -61,9 +57,17 @@ const consentFormValidation = (data) => {
 const addDrugsValidation = (data) => {
   return Joi.object({
     name: Joi.string().required().min(3).max(25).label('Drug Name'),
-    drugType: Joi.string().required().label('Drug Type'),
-    strength: Joi.number().required().label('Drug Strength'),
   }).validate(data)
+}
+
+const AddProductValidation = (data) => {
+  const formSchema = Joi.object({
+    name: Joi.string().min(3).max(50).label('Name').required(),
+    stock: Joi.number().label('Stock').required(),
+    retailPrice: Joi.number().label('Price').required(),
+  }).required()
+
+  return formSchema.validate(data)
 }
 
 export {
@@ -74,4 +78,5 @@ export {
   SendSmsModal,
   consentFormValidation,
   addDrugsValidation,
+  AddProductValidation,
 }

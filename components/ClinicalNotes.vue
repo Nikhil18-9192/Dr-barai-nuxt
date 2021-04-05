@@ -13,21 +13,22 @@
         @click.native="notesModal = true"
       />
     </div>
-    <div v-if="currentNotes.observations" class="container relative text-sm">
+    <div v-if="currentNotes" class="container relative text-sm">
       <p class="my-3 font-normal">
         <span class="text-blue-600">Complaints</span>:
-        {{ currentNotes.complaints }}
+        {{ currentNotes.complaints ? currentNotes.complaints : '' }}
       </p>
       <p class="my-3 font-normal">
         <span class="text-blue-600">Observations</span>:
-        {{ currentNotes.observations }}
+        {{ currentNotes.observations ? currentNotes.observations : '' }}
       </p>
       <p class="my-3 font-normal">
         <span class="text-blue-600">Diagnosis</span>:
-        {{ currentNotes.diagnoses }}
+        {{ currentNotes.diagnoses ? currentNotes.diagnoses : '' }}
       </p>
       <p class="my-3 font-normal">
-        <span class="text-blue-600">Notes</span>: {{ currentNotes.notes }}
+        <span class="text-blue-600">Notes</span>:
+        {{ currentNotes.notes ? currentNotes.notes : '' }}
       </p>
       <div class="line"></div>
       <div class="edit-btns absolute flex bottom-0 right-0">
@@ -59,7 +60,7 @@ export default {
   data() {
     return {
       notesModal: false,
-      currentNotes: {},
+      currentNotes: false,
       path: '',
     }
   },

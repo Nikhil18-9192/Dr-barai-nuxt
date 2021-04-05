@@ -57,8 +57,11 @@
             <td class="p-3">
               {{ drug.name }}
             </td>
-            <td class="p-3">{{ drug.drugType }}</td>
-            <td class="p-3">{{ drug.strength }} {{ drug.dosageUnit }}</td>
+            <td class="p-3">{{ drug.drugType ? drug.drugType : '---' }}</td>
+            <td class="p-3">
+              {{ drug.strength ? drug.strength : '---' }}
+              {{ drug.strength ? drug.dosageUnit : '' }}
+            </td>
             <td class="relative">
               <img
                 class="delete-btn absolute right-4 top-4 hidden"

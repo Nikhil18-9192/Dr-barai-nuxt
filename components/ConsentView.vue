@@ -28,7 +28,10 @@
         class="consent-action absolute top-1 right-2 cursor-pointer"
         @click="signDialog = true"
       >
-        <p v-if="blob.size > 15150" class="text-sm text-green-500 m-w-10">
+        <p
+          v-if="blob && blob.size > 15150"
+          class="text-sm text-green-500 m-w-10"
+        >
           Consent Signed
         </p>
         <p v-else class="text-sm text-blue-600">Take Signature</p>

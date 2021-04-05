@@ -19,8 +19,9 @@
             {{ patient.name }}
           </h1>
           <p class="text-gray-400 text-sm font-normal">
-            <span>{{ patient.gender }},</span
-            ><span class="mx-1">{{ age }} Years,</span
+            <span>{{ patient.gender ? patient.gender + ',' : '' }}</span
+            ><span class="mx-1"
+              >{{ patient.birthDate ? age + 'Years,' : '' }} </span
             ><span>{{ patient.bloodGroup }}</span>
           </p>
         </div>
@@ -177,7 +178,7 @@
             {{
               appointment.clinicalNotes !== null
                 ? appointment.clinicalNotes.observations
-                : ''
+                : '---'
             }}
           </p>
           <p class="text-gray-600 text-xs font-normal">
@@ -185,7 +186,7 @@
             {{
               appointment.clinicalNotes !== null
                 ? appointment.clinicalNotes.diagnoses
-                : ''
+                : '---'
             }}
           </p>
         </div>

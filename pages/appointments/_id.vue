@@ -65,7 +65,6 @@ export default {
       loading: false,
       consentDoc: false,
       nativeProducts: [],
-
       showProductSelector: true,
     }
   },

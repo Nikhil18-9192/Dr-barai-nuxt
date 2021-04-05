@@ -175,7 +175,6 @@ export default {
       this.bloodGroup = this.patient.bloodGroup
       if (this.patient.profile) {
         this.imageUrl = this.patient.profile.url
-        console.log(this.imageUrl)
       }
     }
   },
@@ -218,6 +217,13 @@ export default {
           pincode,
           city,
           bloodGroup,
+        }
+        if (
+          data.gender == 'Select Gender' &&
+          data.bloodGroup == 'Select Blood Group'
+        ) {
+          data.gender = ''
+          data.bloodGroup = ''
         }
         if (birthDate) {
           data.birthDate = birthDate

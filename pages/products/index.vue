@@ -53,8 +53,11 @@
         >
           <td class="p-3">{{ item.id }}</td>
           <td class="p-3">{{ item.name }}</td>
-          <td class="p-3">{{ item.stock }} {{ item.stockingUnit }}</td>
-          <td class="p-3">{{ item.retailPrice }}</td>
+          <td class="p-3">
+            {{ item.stock ? item.stock : '---' }}
+            {{ item.stock ? item.stockingUnit : '' }}
+          </td>
+          <td class="p-3">{{ item.retailPrice ? item.retailPrice : '---' }}</td>
           <td class="relative">
             <img
               class="delete-btn absolute right-4 top-4 hidden"

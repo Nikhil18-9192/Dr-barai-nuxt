@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import { ClinicalNotesValidation } from '@/utils/validation'
+// import { ClinicalNotesValidation } from '@/utils/validation'
 
 export default {
   // eslint-disable-next-line
@@ -129,16 +129,16 @@ export default {
   methods: {
     submitClinicalNotes() {
       const { complaints, observations, diagnoses, notes } = this
-      const validation = ClinicalNotesValidation({
-        complaints,
-        observations,
-        diagnoses,
-        notes,
-      })
-      if (validation.error) {
-        this.$toast.error(validation.error.message)
-        return
-      }
+      // const validation = ClinicalNotesValidation({
+      //   complaints,
+      //   observations,
+      //   diagnoses,
+      //   notes,
+      // })
+      // if (validation.error) {
+      //   this.$toast.error(validation.error.message)
+      //   return
+      // }
       const clinicalNotesData = {
         complaints,
         observations,
@@ -220,7 +220,7 @@ export default {
     }
   }
   .add-modal {
-    height: 90vh;
+    height: 80vh;
   }
   .btn {
     height: 37px;

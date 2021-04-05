@@ -293,6 +293,9 @@ export default {
     th {
       text-align: left;
       font-weight: normal;
+      &:first-child {
+        width: 115px;
+      }
     }
     tr {
       &:hover {

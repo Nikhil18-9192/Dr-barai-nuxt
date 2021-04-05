@@ -44,8 +44,8 @@
         >
           <option disabled value="Select Item type">Select Item type</option>
           <option value="drug">drug</option>
-          <option value="equipment">equipment</option>
-          <option value="supplies">supplies</option>
+          <option value="equipment">equip</option>
+          <option value="supplies">suppliment</option>
         </select>
         <label for="manufacturer" class="text-sm font-normal text-gray-400"
           >Manufacturer</label
@@ -130,7 +130,7 @@
 
 <script>
 import { StockUnits } from '@/utils'
-
+import { AddProductValidation } from '@/utils/validation'
 export default {
   props: {
     product: {
@@ -170,7 +170,13 @@ export default {
       this.serviceTax = this.product.serviceTax
       this.sbcTax = this.product.sbcTax
       this.kkcTax = this.product.kkcTax
-      this.stockUnitsIndex = this.stockUnits.indexOf(this.product.stockingUnit)
+      if (!this.product.stockingUnit) {
+        this.stockUnitsIndex = 0
+      } else {
+        this.stockUnitsIndex = this.stockUnits.indexOf(
+          this.product.stockingUnit
+        )
+      }
     }
   },
   methods: {
@@ -189,7 +195,7 @@ export default {
       } = this
       try {
         if (!this.product) {
-          const result = await this.$axios.$post('/products', {
+          const data = {
             name,
             itemcode,
             itemType,
@@ -201,12 +207,34 @@ export default {
             sbcTax,
             kkcTax,
             retailPrice,
+          }
+          const validation = AddProductValidation({
+            name,
+            stock,
+            retailPrice,
           })
+          if (validation.error) {
+            this.$toast.error(validation.error.message)
+            return
+          }
+
+          if (this.itemType == 'Select Item type') {
+            delete data.itemType
+          }
+
+          if (!stock) {
+            delete data.stockingUnit
+          }
+          if (!retailPrice) {
+            data.retailPrice = 0
+          }
+          const result = await this.$axios.$post('/products', data)
+
           this.$emit('dismiss', result)
           this.$toast.success('Product Added')
           this.$router.push('/products')
         } else {
-          const res = await this.$axios.$put(`/products/${this.product.id}`, {
+          const data = {
             name,
             itemcode,
             itemType,
@@ -218,7 +246,24 @@ export default {
             sbcTax,
             kkcTax,
             retailPrice,
-          })
+          }
+          if (!stock) {
+            data.stock = 0
+            delete data.stockingUnit
+          }
+          if (!reorderLevel) {
+            data.reorderLevel = 0
+          }
+          if (!retailPrice) {
+            data.retailPrice = 0
+          }
+          if (this.itemType == 'Select Item type') {
+            delete data.itemType
+          }
+          const res = await this.$axios.$put(
+            `/products/${this.product.id}`,
+            data
+          )
           this.$emit('dismiss')
           this.$toast.success('Product Updated')
           this.$emit('updatedProduct', res)

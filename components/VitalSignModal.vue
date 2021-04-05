@@ -113,7 +113,7 @@
 
 <script>
 import { bpMeasurementPositions, tempMeasurementPositions } from '@/utils'
-import { AddVitalSignValidation } from '@/utils/validation'
+// import { AddVitalSignValidation } from '@/utils/validation'
 export default {
   // eslint-disable-next-line
   props: ['vitalsToEdit'],
@@ -163,18 +163,18 @@ export default {
         respiration,
         pulse,
       } = this
-      const validation = AddVitalSignValidation({
-        weight,
-        systolic,
-        diastolic,
-        temperature,
-        respiration,
-        pulse,
-      })
-      if (validation.error) {
-        this.$toast.error(validation.error.message)
-        return
-      }
+      // const validation = AddVitalSignValidation({
+      //   weight,
+      //   systolic,
+      //   diastolic,
+      //   temperature,
+      //   respiration,
+      //   pulse,
+      // })
+      // if (validation.error) {
+      //   this.$toast.error(validation.error.message)
+      //   return
+      // }
       const vitalSignData = {
         weight,
         respRate: this.respiration,
@@ -218,7 +218,7 @@ export default {
     }
   }
   .add-modal {
-    height: 90vh;
+    height: 80vh;
   }
   input {
     &::placeholder {

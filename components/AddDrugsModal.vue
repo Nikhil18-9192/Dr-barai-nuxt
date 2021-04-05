@@ -104,8 +104,6 @@ export default {
       const { name, drugType, strength } = this
       const validation = addDrugsValidation({
         name,
-        drugType,
-        strength,
       })
       if (validation.error) {
         this.loading = false
@@ -114,21 +112,32 @@ export default {
       }
       try {
         if (!this.drug) {
-          const res = await this.$axios.$post(`/drugs`, {
+          const data = {
             name,
             drugType,
             strength,
             dosageUnit: this.dosageUnits[this.selectedDosageUnitIndex],
-          })
+          }
+          if (this.drugType == 'Select Drug Type') {
+            delete data.drugType
+          }
+          if (strength == '') {
+            delete data.strength
+          }
+          const res = await this.$axios.$post(`/drugs`, data)
           this.$emit('dismiss')
           this.$emit('submitedDrug', res)
         } else {
-          const res = await this.$axios.$put(`/drugs/${this.drug.id}`, {
+          const data = {
             name,
             drugType,
             strength,
             dosageUnit: this.dosageUnits[this.selectedDosageUnitIndex],
-          })
+          }
+          if (!strength) {
+            data.strength = 0
+          }
+          const res = await this.$axios.$put(`/drugs/${this.drug.id}`, data)
           this.$emit('dismiss')
           this.$emit('editedDrug', res)
         }

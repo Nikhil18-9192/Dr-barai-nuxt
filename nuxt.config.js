@@ -66,7 +66,7 @@ export default {
         httpEndpoint:
           process.env.NODE_ENV === 'production'
             ? 'https://dr-barai-practo.appspot.com/graphql'
-            : 'http://localhost:1337/graphql',
+            : 'http://192.168.29.182:1337/graphql',
         tokenName: 'jwt',
       },
     },
@@ -83,7 +83,7 @@ export default {
     baseURL:
       process.env.NODE_ENV === 'production'
         ? 'https://dr-barai-practo.appspot.com/'
-        : 'http://localhost:1337',
+        : 'http://192.168.29.182:1337',
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
