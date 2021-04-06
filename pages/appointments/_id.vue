@@ -99,7 +99,6 @@ export default {
         this.products = result.nativeProducts
         this.patient = result.patient
         this.prescription = result.prescription
-        console.log(this.prescription)
         this.vitalSigns = result.vitalSigns
         this.clinicalNotes = result.clinicalNotes
         for (const i in result.files) {

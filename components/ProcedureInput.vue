@@ -2,16 +2,18 @@
   <div id="procedure-input">
     <input
       @input="onNameInput"
-      class="border rounded border-gray-300 p-2 mt-1 mb-2 outline-none"
+      class="border rounded border-gray-300 p-2 w-5/12 mt-1 mb-2 outline-none text-sm"
       type="text"
+      :value="procedure.name ? procedure.name : ''"
       placeholder="Procedure Name"
       autocomplete="on"
     />
     -
     <input
       @input="onPriceInput"
-      class="border rounded border-gray-300 p-2 mt-1 mb-2 outline-none"
+      class="border rounded border-gray-300 p-2 w-5/12 mt-1 mb-2 outline-none text-sm"
       type="number"
+      :value="procedure.price ? procedure.price : ''"
       placeholder="Procedure charge"
       autocomplete="on"
     />
@@ -21,6 +23,7 @@
 <script>
 export default {
   name: 'ProcedureInput',
+  props: ['procedure'],
   data() {
     return {
       currentProcedure: {
@@ -42,4 +45,4 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped></style>

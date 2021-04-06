@@ -60,6 +60,7 @@ export default {
           drug: item.drug.id,
           frequency: item.frequency,
         }))
+
         const response = await this.$axios.$post(`/appointments`, {
           patient: this.patientInfo.selectedPatientId,
           startDateTime: this.$dayjs(

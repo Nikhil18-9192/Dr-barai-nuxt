@@ -13,7 +13,7 @@
         @click.native="notesModal = true"
       />
     </div>
-    <div v-if="currentNotes" class="container relative text-sm">
+    <div v-if="currentNotes.complaints" class="container relative text-sm">
       <p class="my-3 font-normal">
         <span class="text-blue-600">Complaints</span>:
         {{ currentNotes.complaints ? currentNotes.complaints : '' }}
@@ -55,7 +55,7 @@ export default {
   data() {
     return {
       notesModal: false,
-      currentNotes: false,
+      currentNotes: {},
       path: '',
     }
   },
@@ -82,7 +82,6 @@ export default {
     },
     deleteNotes() {
       this.currentNotes = {}
-
       this.$emit('input', this.currentNotes)
     },
   },

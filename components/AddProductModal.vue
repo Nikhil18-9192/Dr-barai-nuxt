@@ -44,7 +44,7 @@
         >
           <option disabled value="Select Item type">Select Item type</option>
           <option value="drug">drug</option>
-          <option value="equipment">equip</option>
+          <option value="equipment">equipment</option>
           <option value="supplies">suppliment</option>
         </select>
         <label for="manufacturer" class="text-sm font-normal text-gray-400"
