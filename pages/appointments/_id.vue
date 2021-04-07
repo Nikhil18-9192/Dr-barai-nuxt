@@ -4,6 +4,7 @@
       v-if="memoModal"
       @dismiss="memoModal = false"
       :products="products"
+      :patient="patient"
       :prescriptions="prescription"
     />
     <AppointmentTitle

@@ -24,15 +24,7 @@
           placeholder="Search Drug"
           autocomplete="on"
         />
-        <!-- <select
-          v-model="selectedDrug"
-          class="border rounded border-gray-300 p-2 w-full mt-1 mb-2 outline-none placeholder-gray-400::placeholder text-sm"
-        >
-          <option disabled value="Select Drugs">Select Drugs</option>
-          <option v-for="(item, i) in drugs" :key="i" :value="item">
-            {{ item.name }}
-          </option>
-        </select> -->
+
         <label for="gender" class="text-sm font-light text-gray-400"
           >Frequency</label
         >
@@ -117,7 +109,7 @@ export default {
   data() {
     return {
       selectedDurationUnitIndex: 0,
-      selectedDrug: 'Select Drugs',
+
       dosageFrequency: false,
       intake: '',
       duration: 0,
@@ -142,10 +134,7 @@ export default {
   mounted() {
     this.fetchDrugs()
     if (this.editPrescription) {
-      this.selectedDrug = {}
-      this.selectedDrug.__typename = 'Drug'
-      this.selectedDrug.id = this.editPrescription.drug.id
-      this.selectedDrug.name = this.editPrescription.drug.name
+      this.selectedDrugId = this.editPrescription.drug.id
       this.dosageFrequency = this.editPrescription.frequency.frequency
       this.intake = this.editPrescription.frequency.intake
       this.instructions = this.editPrescription.frequency.instructions

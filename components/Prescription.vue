@@ -82,7 +82,7 @@
             class="row my-6 text-sm font-normal text-center"
           >
             <td v-if="item" class="p-3">
-              {{ item.name ? item.name : item.drug.name }}
+              {{ item.drug.name }}
             </td>
             <td class="p-3">
               {{
@@ -271,7 +271,11 @@ export default {
     parsePrescriptionIntoRow(item) {
       return [
         item.drug.name,
-        `${item.frequency.frequency.replaceAll('_', ' ')}`,
+        `${
+          item.frequency.frequency
+            ? item.frequency.frequency.replaceAll('_', ' ')
+            : '---'
+        }`,
         `${item.frequency.drugDuration} ${item.frequency.drugDurationFor}`,
         item.frequency.instructions,
       ]

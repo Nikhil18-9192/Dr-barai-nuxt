@@ -67,7 +67,7 @@ export default {
         display: none;
       }
       @include for-phone-only {
-        padding: 0 30px;
+        padding: 0 30px 20px 30px;
       }
     }
   }

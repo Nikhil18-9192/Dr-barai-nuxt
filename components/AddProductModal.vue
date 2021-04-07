@@ -100,7 +100,7 @@
           autocomplete="on"
         />
         <br />
-        <input
+        <!-- <input
           id="serviceTax"
           v-model="serviceTax"
           type="checkbox"
@@ -116,7 +116,7 @@
         <input id="kkcTax" v-model="kkcTax" type="checkbox" value="kkcTax" />
         <label for="kkcTax" class="text-sm font-normal text-gray-400"
           >Krishi kalyan Cess</label
-        >
+        > -->
       </div>
       <div class="mt-8 flex btn px-4 sm:px-12 md:px-8">
         <MyButton class="mr-4" @click.native="submitProduct">Submit</MyButton>
@@ -291,7 +291,7 @@ export default {
     color: #000;
   }
   .add-modal {
-    height: 90vh;
+    height: 85vh;
   }
   .heading {
     min-height: 30px;

@@ -84,7 +84,7 @@
               class="border w-24 sm:w-28 p-2 text-center rounded cursor-pointer"
               placeholder="Price"
             />
-            -
+            *
             <input
               v-model="memoProducts[i].quantity"
               type="number"
@@ -170,7 +170,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts'
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 export default {
   name: 'CashMemoModal',
-  props: ['products', 'prescriptions'],
+  props: ['products', 'prescriptions', 'patient'],
   data() {
     return {
       loading: false,
@@ -192,11 +192,16 @@ export default {
       this.procedures.splice(i, 1)
     },
     createMemo() {
+      console.log(this.patient)
+      const patientInfo = [
+        `Patient Name: ${this.patient.name}`,
+        `Phone: ${this.patient.mobile}`,
+        `Address: ${this.patient.address}`,
+      ]
       const casePaper = this.casePaper
       const fuPrice = this.fuPrice
       const procedures = this.procedures
       const procedureTotal = this.proceduresTotal
-      console.log(this.products)
       const docDefinition = {
         header: [
           {
@@ -212,28 +217,58 @@ export default {
             margin: 16,
             text: '',
           },
-          { text: `Case Paper  -:  ${casePaper} Rs`, margin: [8, 0, 0, 4] },
-          { text: `F.U  -:  ${fuPrice} Rs`, margin: [8, 0, 0, 4] },
+          ...patientInfo.map((info) => ({ text: info, margin: [8, 0, 0, 4] })),
           {
             margin: 8,
             text: '',
           },
-          { text: `Procedurs :`, margin: [8, 0, 0, 4], bold: true },
-          ...procedures.map((p) => ({
-            text: `Name : ${p.name} ,  Charge : ${p.price} Rs`,
-            margin: [8, 0, 0, 4],
-          })),
           {
-            text: `Procedure Total : ${procedureTotal} Rs`,
-            margin: [8, 8, 0, 4],
-            bold: true,
+            margin: 16,
+            text: '',
+          },
+          {
+            text: `Case Paper  -: Rs ${casePaper} `,
+            margin: [0, 0, 0, 4],
+            alignment: 'right',
+          },
+          {
+            text: `F.U  -: Rs ${fuPrice} `,
+            margin: [0, 0, 0, 4],
+            alignment: 'right',
+          },
+          {
+            margin: 8,
+            text: '',
+          },
+          { text: `Procedures :`, margin: [0, 0, 0, 4], bold: true },
+          {
+            layout: 'lightHorizontalLines',
+            table: {
+              headerRows: 1,
+              widths: ['*', 'auto', '*', 'auto'],
+
+              body: [
+                ['Name', '', '', 'Charge'],
+                ...procedures.map((p) => this.parseProcedursIntoRow(p)),
+                [
+                  '',
+                  '',
+                  '',
+                  {
+                    text: `Procedure Total : Rs ${procedureTotal}`,
+                    bold: true,
+                    alignment: 'right',
+                  },
+                ],
+              ],
+            },
           },
 
           {
             margin: 8,
             text: '',
           },
-          { text: `Products :`, margin: [8, 0, 0, 4], bold: true },
+          { text: `Products :`, margin: [0, 0, 0, 4], bold: true },
           {
             layout: 'lightHorizontalLines',
             table: {
@@ -248,8 +283,9 @@ export default {
                   '',
                   '',
                   {
-                    text: `Product Total : ${this.productsTotal} Rs`,
+                    text: `Product Total : Rs ${this.productsTotal} `,
                     bold: true,
+                    alignment: 'right',
                   },
                 ],
                 [
@@ -259,6 +295,7 @@ export default {
                   {
                     text: `Discount : ${this.discount}%`,
                     bold: true,
+                    alignment: 'right',
                   },
                 ],
                 [
@@ -266,8 +303,9 @@ export default {
                   '',
                   '',
                   {
-                    text: `Final Products Total : ${this.afterDiscountTotal} Rs`,
+                    text: `After Discount : Rs ${this.afterDiscountTotal} `,
                     bold: true,
+                    alignment: 'right',
                   },
                 ],
               ],
@@ -277,7 +315,7 @@ export default {
             margin: 8,
             text: '',
           },
-          { text: `Prescriptions :`, margin: [8, 0, 0, 4], bold: true },
+          { text: `Prescriptions :`, margin: [0, 0, 0, 4], bold: true },
           {
             layout: 'lightHorizontalLines',
             table: {
@@ -297,9 +335,10 @@ export default {
             text: '',
           },
           {
-            text: `Final Total : ${this.grandTotal} Rs`,
-            margin: [8, 0, 0, 4],
+            text: `Final Amount : Rs ${this.grandTotal} `,
+            margin: [0, 0, 0, 4],
             bold: true,
+            alignment: 'right',
           },
         ],
       }
@@ -308,18 +347,25 @@ export default {
     parseProductIntoRow(item) {
       return [
         item.product.name,
-        item.product.retailPrice,
+        `Rs ${item.product.retailPrice}`,
         item.quantity,
-        item.product.retailPrice * item.quantity,
+        `Rs ${item.product.retailPrice * item.quantity}`,
       ]
     },
     parsePrescriptionsIntoRow(item) {
       return [
         item.drug.name,
-        item.frequency.frequency,
+        `${
+          item.frequency.frequency
+            ? item.frequency.frequency.replaceAll('_', ' ')
+            : '---'
+        }`,
         `${item.frequency.drugDuration} ${item.frequency.drugDurationFor}`,
         item.frequency.instructions,
       ]
+    },
+    parseProcedursIntoRow(item) {
+      return [item.name, '', '', `Rs ${item.price}`]
     },
   },
   computed: {
@@ -369,7 +415,7 @@ export default {
     color: #000;
   }
   .add-modal {
-    height: 90vh;
+    height: 85vh;
   }
   .btn {
     min-height: 30px;
