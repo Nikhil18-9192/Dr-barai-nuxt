@@ -9,6 +9,7 @@
       @click.stop=""
     >
       <div class="heading">
+        <img id="logo-img" src="/header-image.png" style="display: none" />
         <h1 class="text-lg font-medium text-center mb-2 sm:mb-4">CASH MEMO</h1>
       </div>
       <div class="form px-4 sm:px-12 md:px-8 flex-grow overflow-y-scroll">
@@ -185,6 +186,15 @@ export default {
     this.memoProducts = this.products
   },
   methods: {
+    createBlob() {
+      const imgToExport = document.getElementById('logo-img')
+      const canvas = document.createElement('canvas')
+      canvas.width = imgToExport.width
+      canvas.height = imgToExport.height
+      canvas.getContext('2d').drawImage(imgToExport, 0, 0)
+      return canvas.toDataURL('image/png')
+    },
+
     addEmptyProcedure() {
       this.procedures.push({})
     },
@@ -192,7 +202,6 @@ export default {
       this.procedures.splice(i, 1)
     },
     createMemo() {
-      console.log(this.patient)
       const patientInfo = [
         `Patient Name: ${this.patient.name}`,
         `Phone: ${this.patient.mobile}`,
@@ -202,17 +211,28 @@ export default {
       const fuPrice = this.fuPrice
       const procedures = this.procedures
       const procedureTotal = this.proceduresTotal
+
       const docDefinition = {
         header: [
           {
-            text: 'CASH MEMO',
+            image: this.createBlob(),
+            width: 250,
             alignment: 'center',
-            margin: [0, 12, 0, 32],
-            fontSize: 22,
-            bold: true,
+            margin: [0, 16, 0, 0],
           },
         ],
         content: [
+          {
+            margin: 16,
+            text: '',
+          },
+          {
+            text: 'CASH MEMO',
+            alignment: 'center',
+            margin: [0, 36, 0, 4],
+            fontSize: 22,
+            bold: true,
+          },
           {
             margin: 16,
             text: '',
@@ -320,7 +340,7 @@ export default {
             layout: 'lightHorizontalLines',
             table: {
               headerRows: 1,
-              widths: ['*', 'auto', '*', 'auto'],
+              widths: ['auto', 'auto', 'auto', 'auto'],
 
               body: [
                 ['Drug', 'Dosage & Frequency', 'Duration', 'Instructions'],
@@ -349,7 +369,10 @@ export default {
         item.product.name,
         `Rs ${item.product.retailPrice}`,
         item.quantity,
-        `Rs ${item.product.retailPrice * item.quantity}`,
+        {
+          text: `Rs ${item.product.retailPrice * item.quantity}`,
+          alignment: 'right',
+        },
       ]
     },
     parsePrescriptionsIntoRow(item) {
@@ -365,7 +388,12 @@ export default {
       ]
     },
     parseProcedursIntoRow(item) {
-      return [item.name, '', '', `Rs ${item.price}`]
+      return [
+        item.name,
+        '',
+        '',
+        { text: `Rs ${item.price}`, alignment: 'right' },
+      ]
     },
   },
   computed: {
