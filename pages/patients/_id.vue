@@ -287,6 +287,7 @@ export default {
       patient: false,
       notifications: false,
       consentBlob: null,
+      loading: false,
     }
   },
   computed: {
@@ -343,6 +344,7 @@ export default {
       this.notifications.unshift(val)
     },
     uploadConsentFileAsync() {
+      this.$store.commit('SET_LOADING')
       // eslint-disable-next-line no-async-promise-executor
       return new Promise(async (resolve, reject) => {
         const data = {
@@ -369,10 +371,9 @@ export default {
               },
             }
           )
-
           this.patient = res
-
           resolve(res)
+          this.$store.commit('UNSET_LOADING')
         } catch (error) {
           if (error.response) {
             this.$toast.error(error.response.data.message)

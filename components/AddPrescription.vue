@@ -239,7 +239,7 @@ export default {
     }
   }
   .add-modal {
-    height: 95vh;
+    height: 85vh;
   }
   .btn {
     height: 37px;
