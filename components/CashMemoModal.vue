@@ -208,6 +208,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.products)
     this.memoProducts = this.products
   },
   methods: {
@@ -326,17 +327,17 @@ export default {
             margin: 8,
             text: '',
           },
-          { text: `Products :`, margin: [0, 0, 0, 4], bold: true },
+          { text: `product prescription :`, margin: [0, 0, 0, 4], bold: true },
           {
             layout: 'lightHorizontalLines',
             table: {
               headerRows: 1,
-              widths: ['*', 'auto', '*', 'auto'],
-
+              widths: ['*', 'auto', 'auto', 'auto', '*'],
               body: [
-                ['Name', 'Price', 'Quantity', 'Total'],
+                ['Name', 'Price', 'Quantity', 'Frequency', 'Total'],
                 ...this.memoProducts.map((p) => this.parseProductIntoRow(p)),
                 [
+                  '',
                   '',
                   '',
                   '',
@@ -350,6 +351,7 @@ export default {
                   '',
                   '',
                   '',
+                  '',
                   {
                     text: `Discount = ${this.discount}%`,
                     bold: true,
@@ -357,6 +359,7 @@ export default {
                   },
                 ],
                 [
+                  '',
                   '',
                   '',
                   '',
@@ -373,12 +376,12 @@ export default {
             margin: 8,
             text: '',
           },
-          { text: `Prescriptions :`, margin: [0, 0, 0, 4], bold: true },
+          { text: `Other Prescriptions :`, margin: [0, 0, 0, 4], bold: true },
           {
             layout: 'lightHorizontalLines',
             table: {
               headerRows: 1,
-              widths: ['auto', 'auto', 'auto', 'auto'],
+              widths: ['*', 'auto', '*', 'auto'],
 
               body: [
                 ['Drug', 'Dosage & Frequency', 'Duration', 'Instructions'],
@@ -407,6 +410,7 @@ export default {
         item.product.name,
         `Rs ${item.product.retailPrice}`,
         item.quantity,
+        item.frequency.frequency,
         {
           text: `Rs ${item.product.retailPrice * item.quantity}`,
           alignment: 'right',

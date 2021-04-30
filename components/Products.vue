@@ -12,41 +12,6 @@
         <h1 class="text-xl font-medium">Products</h1>
         <AddButton @click.native="productModal = true" />
       </div>
-      <div class="flex selection">
-        <div class="template-selector">
-          <div class="search-select">
-            <div class="search-input">
-              <div class="collapse">
-                <input
-                  v-model="search"
-                  class="border p-2 rounded-lg cursor-pointer"
-                  placeholder="Search template"
-                  @input="onSearch"
-                />
-                <div
-                  v-if="search.length > 0 && templates.length > 0"
-                  class="results"
-                >
-                  <div
-                    v-for="template in templates"
-                    :key="template.id"
-                    class="item cursor-pointer"
-                    @click="onSelect(template)"
-                  >
-                    <!-- <h4>{{ template.name }}</h4> -->
-                  </div>
-                </div>
-                <div v-if="loading" class="text-sm spinner">Loading ...</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <img
-          src="/doc-download.svg"
-          class="w-5 absolute right-12 generatePdf"
-          @click="generatePDF"
-        />
-      </div>
     </div>
     <div ref="content">
       <table
@@ -89,9 +54,7 @@
             <td v-if="item" class="p-3">
               {{ item.product.name }}
             </td>
-            <td v-if="item" class="p-3">
-              {{ item.quantity }}
-            </td>
+            <td v-if="item" class="p-3">{{ item.quantity }}</td>
             <td class="p-3">
               {{
                 item.frequency == null || item.frequency.frequency == null
@@ -215,7 +178,6 @@ export default {
   watch: {
     value: {
       handler(val) {
-        console.log('val', val)
         if (val.length > 0) {
           this.product = val
         }
@@ -258,7 +220,6 @@ export default {
       pdfMake.createPdf(docDefinition).open()
     },
     submitProductData(val) {
-      console.log(val)
       if (val) {
         this.product.push(val)
       }
@@ -296,27 +257,6 @@ export default {
         `${item.frequency.drugDuration} ${item.frequency.drugDurationFor}`,
         item.frequency.instructions,
       ]
-    },
-    onSelect(template) {
-      for (let i = 0; i < template.template.length; i++) {
-        this.product.push(template.template[i])
-      }
-      this.search = ''
-      this.$emit('input', this.product)
-    },
-    onSearch() {
-      this.search.length > 0 ? this.fetchTemplate() : (this.templates = [])
-    },
-    async fetchTemplate() {
-      this.loading = true
-      this.templates = []
-      const { data } = await this.$apollo.query({
-        query,
-        variables: { search: `${this.search}` },
-      })
-      const template = data.drugsTemplates || []
-      this.templates = template
-      this.loading = false
     },
   },
 }

@@ -99,7 +99,6 @@ export default {
           },
         })
         const result = data.appointment
-        console.log('result', result)
         this.products = result.nativeProducts
         this.patient = result.patient
         this.prescription = result.prescription
@@ -155,7 +154,6 @@ export default {
           drug: item.drug.id,
           frequency: item.frequency,
         }))
-        console.log(this.products)
         this.sanitizedProduct = this.products.map((item) => ({
           product: item.product.id,
           quantity: item.quantity,

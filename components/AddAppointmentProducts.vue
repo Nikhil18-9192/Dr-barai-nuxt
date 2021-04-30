@@ -35,6 +35,7 @@
           placeholder="10"
           autocomplete="on"
         />
+
         <br />
         <label for="gender" class="text-sm font-light text-gray-400"
           >Frequency</label
@@ -145,7 +146,6 @@ export default {
   mounted() {
     this.fetchDrugs()
     if (this.editProduct) {
-      console.log('editproduct', this.editProduct)
       this.selectedProductId = this.editProduct.product.id
       this.quantity = this.editProduct.quantity
       this.dosageFrequency = this.editProduct.frequency.frequency
@@ -180,8 +180,6 @@ export default {
       const product = this.products.find(
         (product) => product.value == this.selectedProductId
       )
-      console.log('test', this.selectedDurationUnitIndex)
-      console.log('test2', this.duration)
       const respData = {
         product: {
           id: this.selectedProductId,
