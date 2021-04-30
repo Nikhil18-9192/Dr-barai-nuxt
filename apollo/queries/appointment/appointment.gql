@@ -61,6 +61,13 @@ query appointments($id: ID!) {
         name
         retailPrice
       }
+      frequency{
+        frequency
+        drugDuration
+        drugDurationFor
+        instructions
+        intake
+      }
     }
   }
 }

@@ -3,7 +3,7 @@
     <AddAppointment v-model="patientInfo" class="new" />
     <hr />
 
-    <div class="title-container flex my-4 sm:mt-6">
+    <!-- <div class="title-container flex my-4 sm:mt-6">
       <h1 class="text-xl font-medium">Products</h1>
       <AddButton @click.native="showProductSelector = !showProductSelector" />
     </div>
@@ -12,6 +12,8 @@
       v-model="nativeProducts"
       class="my-4"
     />
+    <hr /> -->
+    <Products v-model="productInfo" class="my-4" />
     <hr />
     <VitalSigns v-model="vitalSignInfo" class="my-4" />
     <hr />
@@ -36,6 +38,7 @@ export default {
     return {
       nativeProducts: [],
       prescriptionInfo: [],
+      productInfo: [],
       vitalSignInfo: {},
       clinicalNoteInfo: {},
       patientInfo: {},
@@ -60,6 +63,12 @@ export default {
           drug: item.drug.id,
           frequency: item.frequency,
         }))
+        console.log('product info', this.productInfo)
+        this.sanitizedProduct = this.productInfo.map((item) => ({
+          product: item.product.id,
+          quantity: item.quantity,
+          frequency: item.frequency,
+        }))
 
         const response = await this.$axios.$post(`/appointments`, {
           patient: this.patientInfo.selectedPatientId,
@@ -69,10 +78,11 @@ export default {
           prescription: this.sanitizedPrescription,
           vitalSigns: this.vitalSignInfo,
           clinicalNotes: this.clinicalNoteInfo,
-          nativeProducts: this.nativeProducts.map((p) => ({
-            product: p.product.id,
-            quantity: p.quantity,
-          })),
+          // nativeProducts: this.nativeProducts.map((p) => ({
+          //   product: p.product.id,
+          //   quantity: p.quantity,
+          // })),
+          nativeProducts: this.sanitizedProduct,
         })
         this.appointmentId = response.id
         if (this.files.length) {

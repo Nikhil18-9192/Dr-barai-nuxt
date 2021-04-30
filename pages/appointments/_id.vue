@@ -17,7 +17,7 @@
         >Generate Memo</MyButton
       >
     </div>
-    <div class="title-container flex mt-6">
+    <!-- <div class="title-container flex mt-6">
       <h1 class="text-xl font-medium">Products</h1>
       <AddButton @click.native="showProductSelector = !showProductSelector" />
     </div>
@@ -25,7 +25,8 @@
       v-if="showProductSelector"
       class="my-4"
       v-model="nativeProducts"
-    />
+    /> -->
+    <Products v-model="products" class="my-4" />
     <br />
     <VitalSigns v-model="vitalSigns" />
     <br />
@@ -68,6 +69,7 @@ export default {
       },
       prescription: [],
       sanitizedPrescription: [],
+      sanitizedProduct: [],
       vitalSigns: {},
       clinicalNotes: {},
       files: [],
@@ -97,6 +99,7 @@ export default {
           },
         })
         const result = data.appointment
+        console.log('result', result)
         this.products = result.nativeProducts
         this.patient = result.patient
         this.prescription = result.prescription
@@ -152,15 +155,22 @@ export default {
           drug: item.drug.id,
           frequency: item.frequency,
         }))
+        console.log(this.products)
+        this.sanitizedProduct = this.products.map((item) => ({
+          product: item.product.id,
+          quantity: item.quantity,
+          frequency: item.frequency,
+        }))
 
         await this.$axios.$put(`/appointments/${this.$route.params.id}`, {
           prescription: this.sanitizedPrescription,
           vitalSigns: this.vitalSigns,
           clinicalNotes: this.clinicalNotes,
-          nativeProducts: this.nativeProducts.map((p) => ({
-            product: p.product.id,
-            quantity: p.quantity,
-          })),
+          // nativeProducts: this.nativeProducts.map((p) => ({
+          //   product: p.product.id,
+          //   quantity: p.quantity,
+          // })),
+          nativeProducts: this.sanitizedProduct,
         })
 
         this.$toast.success('Appointment updated.')

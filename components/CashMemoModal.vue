@@ -239,7 +239,6 @@ export default {
       const fuPrice = this.fuPrice
       const procedures = this.procedures
       const procedureTotal = this.proceduresTotal
-      console.log(this.inputDate)
       const date = this.$dayjs(this.inputDate).format('DD/MM/YYYY')
 
       const docDefinition = {

@@ -16,6 +16,13 @@ const AddPrescriptionValidation = (data) => {
 
   return formSchema.validate(data)
 }
+const AddProductsValidation = (data) => {
+  const formSchema = Joi.object({
+    selectedProductId: Joi.string().min(3).max(50).label('Product').required(),
+  }).required()
+
+  return formSchema.validate(data)
+}
 const AddVitalSignValidation = (data) => {
   const formSchema = Joi.object({
     weight: Joi.string().label('Weight'),
@@ -79,4 +86,5 @@ export {
   consentFormValidation,
   addDrugsValidation,
   AddProductValidation,
+  AddProductsValidation,
 }
