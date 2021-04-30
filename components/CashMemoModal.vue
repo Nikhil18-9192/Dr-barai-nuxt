@@ -334,7 +334,7 @@ export default {
               headerRows: 1,
               widths: ['*', 'auto', 'auto', 'auto', '*'],
               body: [
-                ['Name', 'Price', 'Quantity', 'Frequency', 'Total'],
+                ['Name', 'Quantity', 'Frequency', 'Price', 'Total'],
                 ...this.memoProducts.map((p) => this.parseProductIntoRow(p)),
                 [
                   '',
@@ -408,9 +408,9 @@ export default {
     parseProductIntoRow(item) {
       return [
         item.product.name,
-        `Rs ${item.product.retailPrice}`,
         item.quantity,
         item.frequency.frequency,
+        `Rs ${item.product.retailPrice}`,
         {
           text: `Rs ${item.product.retailPrice * item.quantity}`,
           alignment: 'right',
