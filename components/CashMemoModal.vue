@@ -92,7 +92,7 @@
 
         <div class="products-wrapper mt-4">
           <label for="city" class="text-base font-normal text-gray-400"
-            >Products :</label
+            >Product Prescription :</label
           >
           <div
             class="products sm:flex flex-wrap justify-between items-center my-4"
@@ -327,7 +327,7 @@ export default {
             margin: 8,
             text: '',
           },
-          { text: `product prescription :`, margin: [0, 0, 0, 4], bold: true },
+          { text: `Product Prescription :`, margin: [0, 0, 0, 4], bold: true },
           {
             layout: 'lightHorizontalLines',
             table: {
