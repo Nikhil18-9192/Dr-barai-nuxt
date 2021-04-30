@@ -15,6 +15,28 @@
       <div class="form px-4 sm:px-12 md:px-8 flex-grow overflow-y-scroll">
         <div class="w-full mb-4 flex items-center">
           <label for="city" class="text-base font-normal text-gray-400 w-3/12"
+            >Memo Title :</label
+          >
+          <input
+            v-model="title"
+            class="border rounded border-gray-300 p-2 w-1/2 mt-1 mb-2 outline-none w-9/12"
+            type="text"
+            autocomplete="on"
+          />
+        </div>
+        <div class="w-full mb-4 flex items-center">
+          <label for="city" class="text-base font-normal text-gray-400 w-3/12"
+            >Date :</label
+          >
+          <input
+            v-model="inputDate"
+            class="border rounded border-gray-300 p-2 w-1/2 mt-1 mb-2 outline-none w-9/12"
+            type="date"
+            autocomplete="on"
+          />
+        </div>
+        <div class="w-full mb-4 flex items-center">
+          <label for="city" class="text-base font-normal text-gray-400 w-3/12"
             >Case Paper :</label
           >
           <input
@@ -169,11 +191,14 @@
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
 pdfMake.vfs = pdfFonts.pdfMake.vfs
+
 export default {
   name: 'CashMemoModal',
   props: ['products', 'prescriptions', 'patient'],
   data() {
     return {
+      title: 'Cash Memo',
+      inputDate: this.getDate(),
       loading: false,
       casePaper: 500,
       fuPrice: 100,
@@ -194,6 +219,9 @@ export default {
       canvas.getContext('2d').drawImage(imgToExport, 0, 0)
       return canvas.toDataURL('image/png')
     },
+    getDate() {
+      return this.$dayjs().format('YYYY-MM-DD')
+    },
 
     addEmptyProcedure() {
       this.procedures.push({})
@@ -211,6 +239,8 @@ export default {
       const fuPrice = this.fuPrice
       const procedures = this.procedures
       const procedureTotal = this.proceduresTotal
+      console.log(this.inputDate)
+      const date = this.$dayjs(this.inputDate).format('DD/MM/YYYY')
 
       const docDefinition = {
         header: [
@@ -227,7 +257,7 @@ export default {
             text: '',
           },
           {
-            text: 'CASH MEMO',
+            text: this.title,
             alignment: 'center',
             margin: [0, 36, 0, 4],
             fontSize: 22,
@@ -235,6 +265,15 @@ export default {
           },
           {
             margin: 16,
+            text: '',
+          },
+          {
+            text: `Date : ${date} `,
+            margin: [8, 0, 8, 4],
+            alignment: 'left',
+          },
+          {
+            margin: 4,
             text: '',
           },
           ...patientInfo.map((info) => ({ text: info, margin: [8, 0, 0, 4] })),
@@ -247,12 +286,12 @@ export default {
             text: '',
           },
           {
-            text: `Case Paper  -: Rs ${casePaper} `,
+            text: `Case Paper = Rs ${casePaper} `,
             margin: [0, 0, 0, 4],
             alignment: 'right',
           },
           {
-            text: `F.U  -: Rs ${fuPrice} `,
+            text: `F.U  = Rs ${fuPrice} `,
             margin: [0, 0, 0, 4],
             alignment: 'right',
           },
@@ -260,7 +299,7 @@ export default {
             margin: 8,
             text: '',
           },
-          { text: `Procedures :`, margin: [0, 0, 0, 4], bold: true },
+          { text: `Procedures : `, margin: [0, 0, 0, 4], bold: true },
           {
             layout: 'lightHorizontalLines',
             table: {
@@ -275,7 +314,7 @@ export default {
                   '',
                   '',
                   {
-                    text: `Procedure Total : Rs ${procedureTotal}`,
+                    text: `Procedure Total = Rs ${procedureTotal}`,
                     bold: true,
                     alignment: 'right',
                   },
@@ -303,7 +342,7 @@ export default {
                   '',
                   '',
                   {
-                    text: `Product Total : Rs ${this.productsTotal} `,
+                    text: `Product Total = Rs ${this.productsTotal} `,
                     bold: true,
                     alignment: 'right',
                   },
@@ -313,7 +352,7 @@ export default {
                   '',
                   '',
                   {
-                    text: `Discount : ${this.discount}%`,
+                    text: `Discount = ${this.discount}%`,
                     bold: true,
                     alignment: 'right',
                   },
@@ -323,7 +362,7 @@ export default {
                   '',
                   '',
                   {
-                    text: `After Discount : Rs ${this.afterDiscountTotal} `,
+                    text: `After Discount = Rs ${this.afterDiscountTotal} `,
                     bold: true,
                     alignment: 'right',
                   },
@@ -355,7 +394,7 @@ export default {
             text: '',
           },
           {
-            text: `Final Amount : Rs ${this.grandTotal} `,
+            text: `Final Amount = Rs ${this.grandTotal} `,
             margin: [0, 0, 0, 4],
             bold: true,
             alignment: 'right',
