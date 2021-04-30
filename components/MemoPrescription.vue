@@ -2,7 +2,7 @@
   <div>
     <div class="prescription-wrapper my-8">
       <label for="city" class="text-base font-normal text-gray-400"
-        >Prescriptions :</label
+        >Other Prescriptions :</label
       >
       <table
         v-if="prescriptions.length && $device.isDesktopOrTablet"

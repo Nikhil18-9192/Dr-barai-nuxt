@@ -381,7 +381,7 @@ export default {
             layout: 'lightHorizontalLines',
             table: {
               headerRows: 1,
-              widths: ['*', 'auto', '*', 'auto'],
+              widths: ['*', 'auto', '*', '*'],
 
               body: [
                 ['Drug', 'Dosage & Frequency', 'Duration', 'Instructions'],
