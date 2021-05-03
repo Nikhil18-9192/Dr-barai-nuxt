@@ -412,11 +412,8 @@ export default {
     parseProductIntoRow(item) {
       return [
         item.product.name,
-        { text: `${item.quantity}`, alignment: 'center' },
-        {
-          text: `${item?.frequency?.frequency.replaceAll('_', ' ') || '---'}`,
-        },
-
+        item.quantity,
+        item.frequency?.frequency || '',
         `Rs ${item.product.retailPrice}`,
         {
           text: `Rs ${item.product.retailPrice * item.quantity}`,
