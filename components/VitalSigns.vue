@@ -48,35 +48,32 @@
         </tr>
         <tr class="row my-6 text-sm font-normal text-center">
           <td class="p-3">
-            {{ currentVitals.weight == null ? '---' : currentVitals.weight }}
+            {{ currentVitals.weight ? currentVitals.weight : '---' }}
           </td>
           <td class="p-3">
             {{
-              currentVitals.bp == null ||
-              currentVitals.bp.bpSystolic == null ||
-              currentVitals.bp.bpDiastolic == null
-                ? '---'
-                : currentVitals.bp.bpSystolic +
+              currentVitals.bp &&
+              currentVitals.bp.bpSystolic &&
+              currentVitals.bp.bpDiastolic
+                ? currentVitals.bp.bpSystolic +
                   '/' +
                   currentVitals.bp.bpDiastolic
+                : '---'
             }}
           </td>
           <td class="p-3">
             {{
-              currentVitals.temperature == null ||
-              currentVitals.temperature.temperature == null
-                ? '---'
-                : currentVitals.temperature.temperature
+              currentVitals.temperature && currentVitals.temperature.temperature
+                ? currentVitals.temperature.temperature
+                : '---'
             }}
           </td>
           <td class="p-3">
-            {{ currentVitals.pulse == null ? '---' : currentVitals.pulse }}
+            {{ currentVitals.pulse ? currentVitals.pulse : '---' }}
           </td>
           <td class="p-3 flex justify-center">
             <p>
-              {{
-                currentVitals.respRate == null ? '---' : currentVitals.respRate
-              }}
+              {{ currentVitals.respRate ? currentVitals.respRate : '---' }}
             </p>
             <img
               class="absolute ml-36 hidden"

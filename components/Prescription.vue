@@ -86,26 +86,26 @@
             </td>
             <td class="p-3">
               {{
-                item.frequency == null || item.frequency.frequency == null
-                  ? '---'
-                  : item.frequency.frequency
+                item.frequency && item.frequency.frequency
+                  ? item.frequency.frequency
+                  : '---'
               }}
             </td>
             <td class="p-3">
               {{
-                item.frequency == null || item.frequency.drugDuration == null
-                  ? '---'
-                  : item.frequency.drugDuration +
+                item.frequency && item.frequency.drugDuration
+                  ? item.frequency.drugDuration +
                     ' ' +
                     item.frequency.drugDurationFor
+                  : '---'
               }}
             </td>
             <td class="p-3 flex mr-20 instructions-container">
               <p>
                 {{
-                  item.frequency == null || item.frequency.instructions == null
-                    ? '---'
-                    : item.frequency.instructions
+                  item.frequency && item.frequency.instructions
+                    ? item.frequency.instructions
+                    : '---'
                 }}
               </p>
               <img
@@ -157,27 +157,27 @@
           <p class="text-gray-600 text-xs font-normal">
             DOSAGE & FREQUENCY :
             {{
-              item.frequency == null || item.frequency.frequency == null
-                ? '---'
-                : item.frequency.frequency
+              item.frequency && item.frequency.frequency
+                ? item.frequency.frequency
+                : '---'
             }}
           </p>
           <p class="text-gray-600 text-xs font-normal">
             DURATION :
             {{
-              item.frequency == null || item.frequency.drugDuration == null
-                ? '---'
-                : item.frequency.drugDuration +
+              item.frequency && item.frequency.drugDuration
+                ? item.frequency.drugDuration +
                   ' ' +
                   item.frequency.drugDurationFor
+                : '---'
             }}
           </p>
           <p class="instructions text-gray-600 text-xs font-normal">
             INSTRUCTIONS :
             {{
-              item.frequency == null || item.frequency.instructions == null
-                ? '---'
-                : item.frequency.instructions
+              item.frequency && item.frequency.instructions
+                ? item.frequency.instructions
+                : '---'
             }}
           </p>
         </div>

@@ -18,10 +18,10 @@
       class="date-time border-b sm:border-r sm:border-b-0 sm:absolute sm:ml-5 py-4 pr-5"
     >
       <h2 class="text-gray-600 text-lg font-medium mt-1">
-        {{ appointmentInfo.date == null ? '---' : appointmentInfo.date }}
+        {{ appointmentInfo.date ? appointmentInfo.date : '---' }}
       </h2>
       <p class="text-sm font-medium text-gray-400">
-        {{ appointmentInfo.time == null ? '---' : appointmentInfo.time }}
+        {{ appointmentInfo.time ? appointmentInfo.time : '---' }}
       </p>
     </div>
     <div class="patient-info sm:ml-48 mt-2 mb-2 sm:mb-0 sm:mt-4">

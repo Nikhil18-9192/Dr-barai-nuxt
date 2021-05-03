@@ -118,7 +118,7 @@
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
             >
               {{
-                appointment.clinicalNotes.observations !== null
+                appointment.clinicalNotes.observations
                   ? appointment.clinicalNotes.observations
                   : '---'
               }}
@@ -127,7 +127,7 @@
               class="py-3 border border-t-0 border-l-0 border-r-0 border-gray-200"
             >
               {{
-                appointment.clinicalNotes.diagnoses !== null
+                appointment.clinicalNotes.diagnoses
                   ? appointment.clinicalNotes.diagnoses
                   : '---'
               }}
@@ -168,7 +168,7 @@
           <p class="text-gray-600 text-xs font-normal">
             Reason :
             {{
-              appointment.clinicalNotes !== null
+              appointment.clinicalNotes
                 ? appointment.clinicalNotes.complaints
                 : ''
             }}
@@ -176,7 +176,7 @@
           <p class="text-gray-600 text-xs font-normal">
             Observation :
             {{
-              appointment.clinicalNotes !== null
+              appointment.clinicalNotes
                 ? appointment.clinicalNotes.observations
                 : '---'
             }}
@@ -184,7 +184,7 @@
           <p class="text-gray-600 text-xs font-normal">
             Diagnoses :
             {{
-              appointment.clinicalNotes !== null
+              appointment.clinicalNotes
                 ? appointment.clinicalNotes.diagnoses
                 : '---'
             }}

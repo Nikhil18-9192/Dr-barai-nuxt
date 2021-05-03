@@ -3,30 +3,27 @@
     <div v-if="cardInfo" class="card relative p-4 mb-4 border cursor-pointer">
       <p class="text-gray-600 text-xs font-normal">
         WEIGHT (KG)
-        {{ cardInfo.weight == null ? '---' : cardInfo.weight }}
+        {{ cardInfo.weight ? cardInfo.weight : '---' }}
       </p>
       <p class="text-gray-600 text-xs font-normal">
         B.P. (mmHg) :
         {{
-          cardInfo.bp == null ||
-          cardInfo.bp.bpSystolic == null ||
-          cardInfo.bp.bpDiastolic == null
-            ? '---'
-            : cardInfo.bp.bpSystolic + '/' + cardInfo.bp.bpDiastolic
+          cardInfo.bp && cardInfo.bp.bpSystolic && cardInfo.bp.bpDiastolic
+            ? cardInfo.bp.bpSystolic + '/' + cardInfo.bp.bpDiastolic
+            : '---'
         }}
       </p>
       <p class="text-gray-600 text-xs font-normal">
         TEMPERATURE (°C) :
         {{
-          cardInfo.temperature == null ||
-          cardInfo.temperature.temperature == null
-            ? '---'
-            : cardInfo.temperature.temperature
+          cardInfo.temperature && cardInfo.temperature.temperature
+            ? cardInfo.temperature.temperature
+            : '---'
         }}
       </p>
       <p class="text-gray-600 text-xs font-normal">
         PULSE (Heart beats/min) :
-        {{ cardInfo.pulse == null ? '---' : cardInfo.pulse }}
+        {{ cardInfo.pulse ? cardInfo.pulse : '---' }}
       </p>
       <p class="text-gray-600 text-xs font-normal">
         RESP. RATE (Breaths/min) :
