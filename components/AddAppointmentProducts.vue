@@ -148,12 +148,12 @@ export default {
     if (this.editProduct) {
       this.selectedProductId = this.editProduct.product.id
       this.quantity = this.editProduct.quantity
-      this.dosageFrequency = this.editProduct.frequency.frequency
-      this.intake = this.editProduct.frequency.intake
-      this.instructions = this.editProduct.frequency.instructions
-      this.duration = this.editProduct.frequency.drugDuration
+      this.dosageFrequency = this.editProduct?.frequency?.frequency
+      this.intake = this.editProduct?.frequency?.intake
+      this.instructions = this.editProduct?.frequency?.instructions
+      this.duration = this.editProduct?.frequency?.drugDuration
       this.selectedDurationUnitIndex = this.durationUnits.indexOf(
-        this.editProduct.frequency.drugDurationFor
+        this.editProduct?.frequency?.drugDurationFor
       )
     }
   },

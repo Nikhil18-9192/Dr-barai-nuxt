@@ -92,7 +92,7 @@
 
         <div class="products-wrapper mt-4">
           <label for="city" class="text-base font-normal text-gray-400"
-            >Product Prescription :</label
+            >Product Prescriptions :</label
           >
           <div
             class="products sm:flex flex-wrap justify-between items-center my-4"
@@ -208,7 +208,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.products)
     this.memoProducts = this.products
   },
   methods: {
@@ -243,23 +242,21 @@ export default {
       const date = this.$dayjs(this.inputDate).format('DD/MM/YYYY')
 
       const docDefinition = {
-        header: [
-          {
-            image: this.createBlob(),
-            width: 250,
-            alignment: 'center',
-            margin: [0, 16, 0, 0],
-          },
-        ],
         content: [
           {
-            margin: 16,
-            text: '',
+            stack: [
+              {
+                image: this.createBlob(),
+                width: 250,
+                alignment: 'center',
+              },
+            ],
+            style: 'header',
           },
           {
             text: this.title,
             alignment: 'center',
-            margin: [0, 36, 0, 4],
+            margin: [0, 36, 0, 0],
             fontSize: 22,
             bold: true,
           },
@@ -303,11 +300,10 @@ export default {
           {
             layout: 'lightHorizontalLines',
             table: {
-              headerRows: 1,
               widths: ['*', 'auto', '*', 'auto'],
 
               body: [
-                ['Name', '', '', 'Charge'],
+                ['Name', '', '', { text: 'Charge', alignment: 'right' }],
                 ...procedures.map((p) => this.parseProcedursIntoRow(p)),
                 [
                   '',
@@ -327,14 +323,19 @@ export default {
             margin: 8,
             text: '',
           },
-          { text: `Product Prescription :`, margin: [0, 0, 0, 4], bold: true },
+          { text: `Product Prescriptions :`, margin: [0, 0, 0, 4], bold: true },
           {
             layout: 'lightHorizontalLines',
             table: {
-              headerRows: 1,
               widths: ['*', 'auto', 'auto', 'auto', '*'],
               body: [
-                ['Name', 'Quantity', 'Frequency', 'Price', 'Total'],
+                [
+                  'Name',
+                  'Quantity',
+                  'Frequency',
+                  'Price',
+                  { text: 'Total', alignment: 'right' },
+                ],
                 ...this.memoProducts.map((p) => this.parseProductIntoRow(p)),
                 [
                   '',
@@ -380,11 +381,14 @@ export default {
           {
             layout: 'lightHorizontalLines',
             table: {
-              headerRows: 1,
-              widths: ['*', 'auto', '*', '*'],
-
+              widths: ['*', 'auto', 'auto', '*'],
               body: [
-                ['Drug', 'Dosage & Frequency', 'Duration', 'Instructions'],
+                [
+                  'Drug',
+                  'Dosage & Frequency',
+                  'Duration',
+                  { text: 'Instructions', alignment: 'center' },
+                ],
                 ...this.prescriptions.map((p) =>
                   this.parsePrescriptionsIntoRow(p)
                 ),
@@ -408,8 +412,11 @@ export default {
     parseProductIntoRow(item) {
       return [
         item.product.name,
-        item.quantity,
-        item.frequency.frequency,
+        { text: `${item.quantity}`, alignment: 'center' },
+        {
+          text: `${item?.frequency?.frequency.replaceAll('_', ' ') || '---'}`,
+        },
+
         `Rs ${item.product.retailPrice}`,
         {
           text: `Rs ${item.product.retailPrice * item.quantity}`,
