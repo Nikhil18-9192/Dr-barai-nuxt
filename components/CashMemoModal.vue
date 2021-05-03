@@ -409,7 +409,7 @@ export default {
       return [
         item.product.name,
         item.quantity,
-        item.frequency.frequency,
+        item.frequency?.frequency || '',
         `Rs ${item.product.retailPrice}`,
         {
           text: `Rs ${item.product.retailPrice * item.quantity}`,
